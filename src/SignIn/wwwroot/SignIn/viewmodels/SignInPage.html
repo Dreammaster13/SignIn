@@ -23,11 +23,6 @@
         font-size: 14px;
     }
 
-    .left-expand {
-        right: 0;
-        margin-right: -25px;
-    }
-
     .signin-popup-window__control,
     .signin-popup-window__control.form-control {
         background: #ffffff;
@@ -78,7 +73,7 @@
             <!-- User signed in -->
             <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
                 <juicy-popover position="bottom left">
-                    <div slot="handle" class="signin-popup-handle" on-mousedown="handleClick">
+                    <div slot="handle" class="signin-popup-handle">
                         <div class="signin-popup-user-image">
                             <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                         </div>
@@ -98,7 +93,7 @@
             <!-- User NOT signed in -->
             <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
                 <juicy-popover class="signin-popover" position="bottom left">
-                    <div slot="handle" class="signin-popup-handle signin-popup-user-image" on-mousedown="handleClick">
+                    <div slot="handle" class="signin-popup-handle signin-popup-user-image">
                         <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                     </div>
                     <div slot="expendable" class="signin-popup-window">
@@ -180,17 +175,6 @@
 
                 e.currentTarget.setAttribute("href", href);
             };
-
-            template.handleClick = function (e) {
-                var signinPopupUserImage = document.getElementsByClassName("signin-popup-user-image")[0];
-                if (signinPopupUserImage) {
-
-                    // 325 = 350 - 25 (width of signin-popup-window + margin-right
-                    if(window.innerWidth - signinPopupUserImage.getBoundingClientRect().right < 325) {
-                        document.getElementsByClassName("signin-popup-window")[0].classList.add("left-expand");
-                    }
-                }
-            }
         })();
     </script>
     <template is="declarative-shadow-dom">
