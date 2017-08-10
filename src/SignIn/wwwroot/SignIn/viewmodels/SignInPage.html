@@ -8,8 +8,6 @@
     }
 
     .signin-popup-window {
-        right: 0;
-        margin-right: -25px;
         width: 350px;
         position: absolute;
         z-index: 1;
@@ -23,6 +21,11 @@
         padding: 20px;
         background: #f0f0f0;
         font-size: 14px;
+    }
+
+    .left-expand {
+        right: 0;
+        margin-right: -25px;
     }
 
     .signin-popup-window__control,
@@ -75,7 +78,7 @@
             <!-- User signed in -->
             <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
                 <juicy-popover position="bottom left">
-                    <div slot="handle" class="signin-popup-handle">
+                    <div slot="handle" class="signin-popup-handle" on-mousedown="handleClicked">
                         <div class="signin-popup-user-image">
                             <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                         </div>
@@ -177,6 +180,17 @@
 
                 e.currentTarget.setAttribute("href", href);
             };
+
+            template.handleClicked = function (e) {
+                var signinPopupUserImage = document.getElementsByClassName("signin-popup-user-image")[0];
+                if (signinPopupUserImage) {
+
+                    // 325 = 350 - 25 (width of signin-popup-window + margin-right
+                    if(window.innerWidth - signinPopupUserImage.getBoundingClientRect().right < 325) {
+                        document.getElementsByClassName("signin-popup-window")[0].classList.add("left-expand");
+                    }
+                }
+            }
         })();
     </script>
     <template is="declarative-shadow-dom">
