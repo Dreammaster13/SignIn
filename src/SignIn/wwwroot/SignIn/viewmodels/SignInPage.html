@@ -78,7 +78,7 @@
             <!-- User signed in -->
             <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
                 <juicy-popover position="bottom left">
-                    <div slot="handle" class="signin-popup-handle" on-mousedown="handleClicked">
+                    <div slot="handle" class="signin-popup-handle" on-mousedown="handleClick">
                         <div class="signin-popup-user-image">
                             <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                         </div>
@@ -98,7 +98,7 @@
             <!-- User NOT signed in -->
             <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
                 <juicy-popover class="signin-popover" position="bottom left">
-                    <div slot="handle" class="signin-popup-handle signin-popup-user-image">
+                    <div slot="handle" class="signin-popup-handle signin-popup-user-image" on-mousedown="handleClick">
                         <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                     </div>
                     <div slot="expendable" class="signin-popup-window">
@@ -181,7 +181,7 @@
                 e.currentTarget.setAttribute("href", href);
             };
 
-            template.handleClicked = function (e) {
+            template.handleClick = function (e) {
                 var signinPopupUserImage = document.getElementsByClassName("signin-popup-user-image")[0];
                 if (signinPopupUserImage) {
 
