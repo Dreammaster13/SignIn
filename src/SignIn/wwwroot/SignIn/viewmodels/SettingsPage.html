@@ -4,70 +4,70 @@
 
 <template>
     <template is="dom-bind">
-        <sgb-property-metadata items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
+        <sgb-property-metadata slot="SignIn/settings-property-metadata" items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
         <template is="dom-if" if="{{model.SuccessMessage}}">
-            <div class="alert alert-success">
+            <div slot="SignIn/settings-success-message" class="alert alert-success">
                 {{model.SuccessMessage}}
             </div>
         </template>
-        <h3>General</h3>
-        <div class="form-horizontal">
+        <h3 slot="SignIn/settings-general-header">General</h3>
+        <div slot="SignIn/settings-site-host-label" class="form-horizontal">
             <label class="control-label" for="SiteHost$">Site Host</label>
         </div>
-        <div>
+        <div slot="SignIn/settings-site-host-input">
             <input id="SiteHost$" type="text" value="{{model.SiteHost$::change}}" placeholder="Site host name" class="form-control" />
         </div>
-        <div class="form-horizontal">
+        <div slot="SignIn/settings-site-port-label" class="form-horizontal">
             <label class="control-label" for="SitePort$">Site Port</label>
         </div>
-        <div>
+        <div slot="SignIn/settings-site-port-input">
             <input id="SitePort$" type="number" value="{{model.SitePort$::change}}" placeholder="Site Port" class="form-control" />
         </div>
-        <h3>Mail Server</h3>
-        <div>
+        <h3 slot="SignIn/settings-mail-servel-header">Mail Server</h3>
+        <div slot="SignIn/settings-mail-server-enabled">
             <label>
                 <input id="Enabled$" type="checkbox" checked="{{model.Enabled$::change}}" />
                 <span>Enabled</span>
             </label>
         </div>
-        <div class="form-horizontal">
+        <div slot="SignIn/settings-host-label" class="form-horizontal">
             <label class="control-label" for="Host$">Host</label>
         </div>
-        <div>
+        <div slot="SignIn/settings-host-input">
             <input id="Host$" type="text" disabled$="{{!model.Enabled$}}" value="{{model.Host$::change}}" placeholder="Host" class="form-control" />
         </div>
-        <div class="form-horizontal">
+        <div slot="SignIn/settings-port-label" class="form-horizontal">
             <label class="control-label" for="Port$">Port</label>
         </div>
-        <div>
+        <div slot="SignIn/settings-port-input">
             <input id="Port$" type="number" disabled$="{{!model.Enabled$}}" value="{{model.Port$::change}}" placeholder="Port" class="form-control" />
         </div>
-        <div>
+        <div slot="SignIn/settings-port-feedback-message">
             <template is="dom-if" if="{{isFeedbackVisible(model.Port_Feedback.TypeNo)}}">
                 <span class="{{getFeedbackClass(model.Port_Feedback.Type)}}">{{model.Port_Feedback.Message}}</span>
             </template>
         </div>
-        <div>
+        <div slot="SignIn/enable-ssl">
             <label for="EnableSsl$">
                 <input id="EnableSsl$" type="checkbox" disabled$="{{!model.Enabled$}}" checked="{{model.EnableSsl$::change}}" />
                 <span>Enable SSL</span>
             </label>
         </div>
-        <div class="form-horizontal">
+        <div slot="SignIn/username-label" class="form-horizontal">
             <label class="control-label" for="Username$">Username</label>
         </div>
-        <div>
+        <div slot="SignIn/settings-username-input">
             <input id="Username$" type="text" disabled$="{{!model.Enabled$}}" value="{{model.Username$::change}}" placeholder="Username" class="form-control" />
         </div>
-        <div class="form-horizontal">
+        <div slot="SignIn/settings-password-label" class="form-horizontal">
             <label class="control-label" for="Password$">Password</label>
         </div>
-        <div>
+        <div slot="SignIn/settings-password-input">
             <input id="Password$" type="password" disabled$="{{!model.Enabled$ }}" value="{{model.Password$::change}}" placeholder="Password" class="form-control" />
         </div>
-        <button class="btn btn-primary" disabled$="{{isSaveDisabled(model.IsInvalid, model.IsPristine)}}" onmousedown="++this.value;" value="{{model.Save$::click}}">Save</button>
-        <button class="btn btn-default" disabled$="{{model.IsPristine}}" onmousedown="++this.value;" value="{{model.Rollback$::click}}">Undo</button>
-        <button class="btn btn-default" onmousedown="++this.value;" value="{{model.Close$::click}}">Close</button>
+        <button slot="SignIn/settings-save-btn" class="btn btn-primary" disabled$="{{isSaveDisabled(model.IsInvalid, model.IsPristine)}}" onmousedown="++this.value;" value="{{model.Save$::click}}">Save</button>
+        <button slot="SignIn/settings-undo-btn" class="btn btn-default" disabled$="{{model.IsPristine}}" onmousedown="++this.value;" value="{{model.Rollback$::click}}">Undo</button>
+        <button slot="SignIn/settings-close-btn" class="btn btn-default" onmousedown="++this.value;" value="{{model.Close$::click}}">Close</button>
         <link is="puppet-redirect" history url$="{{model.RedirectUrl}}" />
     </template>
     <script>
@@ -85,4 +85,28 @@
             };
         })(document.currentScript.previousElementSibling);
     </script>
+    <template is="declarative-shadow-dom">
+        <slot name="SignIn/settings-property-metadata"></slot>
+        <slot name="SignIn/settings-success-message"></slot>
+        <slot name="SignIn/settings-general-header"></slot>
+        <slot name="SignIn/settings-site-host-label"></slot>
+        <slot name="SignIn/settings-site-host-input"></slot>
+        <slot name="SignIn/settings-site-port-label"></slot>
+        <slot name="SignIn/settings-site-port-input"></slot>
+        <slot name="SignIn/settings-mail-servel-header"></slot>
+        <slot name="SignIn/settings-mail-server-enabled"></slot>
+        <slot name="SignIn/settings-host-label"></slot>
+        <slot name="SignIn/settings-host-input"></slot>
+        <slot name="SignIn/settings-port-label"></slot>
+        <slot name="SignIn/settings-port-input"></slot>
+        <slot name="SignIn/settings-port-feedback-message"></slot>
+        <slot name="SignIn/enable-ssl"></slot>
+        <slot name="SignIn/username-label"></slot>
+        <slot name="SignIn/settings-username-input"></slot>
+        <slot name="SignIn/settings-password-label"></slot>
+        <slot name="SignIn/settings-password-input"></slot>
+        <slot name="SignIn/settings-save-btn"></slot>
+        <slot name="SignIn/settings-undo-btn"></slot>
+        <slot name="SignIn/settings-close-btn"></slot>
+    </template>
 </template>
