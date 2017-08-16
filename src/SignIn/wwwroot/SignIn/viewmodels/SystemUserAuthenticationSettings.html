@@ -9,7 +9,7 @@
 
 <template>
     <template is="dom-bind">
-        <div class="signin-auth-settings">
+        <div slot="SignIn/auth-settings" class="signin-auth-settings">
             <sgb-property-metadata items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
 
             <template is="dom-if" if="{{model.Message}}">
@@ -27,5 +27,8 @@
                 <starcounter-include partial="{{model.UserPassword}}"></starcounter-include>
             </template>
         </div>
+    </template>
+    <template is="declarative-shadow-dom">
+        <slot name="SignIn/auth-settings"></slot>
     </template>
 </template>
