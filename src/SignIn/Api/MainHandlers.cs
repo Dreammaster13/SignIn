@@ -81,10 +81,10 @@ namespace SignIn
 
             }, new HandlerOptions() { SkipRequestFilters = true });
 
-            Handle.GET("/signin/admin/settings", (Request request) =>
+            Handle.GET("/signin/settings", (Request request) =>
             {
                 Json page;
-                if (!AuthorizationHelper.TryNavigateTo("/signin/admin/settings", request, out page))
+                if (!AuthorizationHelper.TryNavigateTo("/signin/settings", request, out page))
                 {
                     return page;
                 }
