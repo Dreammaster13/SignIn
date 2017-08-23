@@ -76,7 +76,7 @@
     <Compile Include="Helpers\DataHelper.cs" />
     <Compile Include="Helpers\MailSettingsHelper.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
-    <Compile Include="Helpers\SignInOut.cs" />
+    <Compile Include="Models\SystemAdminUser.cs" />
     <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Program.cs" />
@@ -105,6 +105,9 @@
     <Compile Include="ViewModels\RestorePasswordFormPage.json.cs">
       <DependentUpon>RestorePasswordFormPage.json</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CreateAdminUserViewModel.json.cs">
+      <DependentUpon>CreateAdminUserViewModel.json</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\SetPasswordPage.json.cs">
       <DependentUpon>SetPasswordPage.json</DependentUpon>
     </Compile>
@@ -131,6 +134,9 @@
     <TypedJSON Include="ViewModels\AppName.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
+    <TypedJSON Include="ViewModels\CreateAdminUserViewModel.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
     <None Include="wwwroot\SignIn\viewmodels\ResetPasswordPage.html" />
     <Content Include="wwwroot\SignIn\css\empty_user.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -153,6 +159,7 @@
     </TypedJSON>
     <None Include="wwwroot\SignIn\viewmodels\SettingsPage.html" />
     <None Include="wwwroot\SignIn\viewmodels\SetPasswordPage.html" />
+    <None Include="wwwroot\SignIn\viewmodels\CreateAdminUserFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\UserImagePage.html" />
