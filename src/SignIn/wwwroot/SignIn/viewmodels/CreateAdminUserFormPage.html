@@ -41,11 +41,9 @@
                 });
             };
             template.setMessageStyle = function (isAlert, msg) {
-debugger;
-                if(!msg && !isAlert) {
+                if(!msg) {
                     return "";
                 }
-                debugger;
                 if (isAlert) {
                     return "alert alert-danger";
                 }
