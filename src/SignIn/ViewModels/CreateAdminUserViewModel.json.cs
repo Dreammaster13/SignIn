@@ -72,11 +72,14 @@ protected override void OnData()
         {
             
             string message = null;
-            if(IsValid(this.PasswordToSet, this.PasswordRepeat, out message))
+            this.IsAlert = true;
+            if (IsValid(this.PasswordToSet, this.PasswordRepeat, out message))
             {
                 SystemAdminUser.CreateAdminSystemUserIfMissing(this.PasswordRepeat, out message);
+                this.IsAlert = false;
             }
             this.Message = message;
+
 
         }
         private void ValidatePassword()
@@ -88,7 +91,7 @@ protected override void OnData()
         private void ValidateRepeatedPassword()
         {
             string message = null;
-            IsValid(this.PasswordToSet, this.PasswordRepeat, out message);
+            this.IsAlert = !(IsValid(this.PasswordToSet, this.PasswordRepeat, out message));
             this.Message = message;
         }
         protected bool IsValid(string password, string repeatedPassword, out string message)

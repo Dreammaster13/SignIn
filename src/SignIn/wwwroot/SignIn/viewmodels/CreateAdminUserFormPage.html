@@ -1,10 +1,11 @@
 ﻿<link rel="import" href="/sys/polymer/polymer.html">
+<link rel="import" href="/sys/puppet-redirect/puppet-redirect.html" />
 
 <template>
     <template is="dom-bind">
         <h2 slot="SignIn/header">Create Admin user</h2>
         <template is="dom-if" if="{{model.Message}}">
-            <p slot="SignIn/message" class="alert alert-danger" >{{model.Message}}</p>
+            <p slot="SignIn/message" class$="{{setMessageStyle(model.IsAlert, model.Message)}}" >{{model.Message}}</p>
         </template>
         <label slot="SignIn/username-label" for="txtUsername">Username</label>
         <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{model.Username::input}}" disabled="disabled" placeholder="Username" class="form-control"  />
@@ -39,6 +40,17 @@
                     template.set("model.OkClick$", template.model.OkClick$ + 1);
                 });
             };
+            template.setMessageStyle = function (isAlert, msg) {
+debugger;
+                if(!msg && !isAlert) {
+                    return "";
+                }
+                debugger;
+                if (isAlert) {
+                    return "alert alert-danger";
+                }
+                return "alert alert-success";
+            }
         })();
     </script>
     <template is="declarative-shadow-dom">

@@ -15,19 +15,14 @@ namespace SignIn.Models
         internal static string AdminGroupDescription = "System User Administrator Group";
         internal static string AdminUsername = "admin";
         internal static string AdminEmail = "admin@starcounter.com";
-
-        private bool? _canCreateAdminUser;
+        
 
    
         public bool CanCreateAdminUser
         {
             get
             {
-                if(_canCreateAdminUser == null)
-                {
-                    _canCreateAdminUser = GetCanCreateAdminUser();
-                }
-                return   _canCreateAdminUser.Value;
+                return GetCanCreateAdminUser();
             }
         }
 

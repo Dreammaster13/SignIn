@@ -4,6 +4,7 @@
   "Username": "",
   "CanCreateAdminUser": false,
   "IsAdminCreated": false,
+  "IsAlert": false,
   "RedirectUrl": "",
   "PasswordToSet$": "",
   "PasswordRepeat$": "",
