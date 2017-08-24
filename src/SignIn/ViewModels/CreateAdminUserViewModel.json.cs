@@ -8,44 +8,45 @@ namespace SignIn.ViewModels
 {
     partial class CreateAdminUserViewModel : Json, IBound<SystemAdminUser>
     {
-        private string OldPassword;
-        private string OldPasswordSalt;
 
-        public bool IsAdminCreated
-        {
-            get
-            {
-                return !this.CanCreateAdminUser;
-            }
-        }
-        public bool CanCreateAdminUser
-        {
-            get
-            {
-                return this.Data == null ? false : this.Data.CanCreateAdminUser;
-            }
-}
 
-protected override void OnData()
+        protected override void OnData()
         {
             base.OnData();
             if (this.Data == null)
                 return;
 
-            this.OldPassword = this.Data.Password;
-            this.OldPasswordSalt = this.Data.PasswordSalt;
+ 
         }
 
-        private void Handle(Input.PasswordToSet action)
+        private void Handle(Input.Password action)
         {
-            this.PasswordToSet = action.Value;
-            this.ValidatePassword();
+            string message = null;
+            bool isValid = false;
+            this.Password = action.Value;
+            if (this.Data != null)
+            {
+                isValid = this.Data.IsValidPassword( out message);
+            }
+            this.IsAlert = !isValid;
+            this.Message = message;
+   
         }
 
         private void Handle(Input.PasswordRepeat action)
         {
+            string message = null;
+            bool isAlert = true;
             this.PasswordRepeat = action.Value;
-            this.ValidateRepeatedPassword();
+
+            if (this.Data != null)
+            {
+                isAlert = !this.Data.IsEqualPassword(this.PasswordRepeat, out message);
+            }
+            this.IsAlert = isAlert;
+            this.Message = message;
+
+
         }
         private void Handle(Input.OkClick action)
         {
@@ -65,65 +66,19 @@ protected override void OnData()
             this.RedirectUrl = "/signin/signinuser";
         }
 
-
-
-
         private void CreateAdminUser()
         {
-            
             string message = null;
-            this.IsAlert = true;
-            if (IsValid(this.PasswordToSet, this.PasswordRepeat, out message))
+            bool isAlert = true;
+            if (this.Data != null)
             {
-                SystemAdminUser.CreateAdminSystemUserIfMissing(this.PasswordRepeat, out message);
-                this.IsAlert = false;
+                this.Data.CreateAdminUser(this.PasswordRepeat, out message, out isAlert);
             }
             this.Message = message;
+            this.IsAlert = isAlert;
+        }
 
 
-        }
-        private void ValidatePassword()
-        {
-            string message = null;
-            IsValidPassword(this.PasswordToSet, out message);
-            this.Message = message;
-        }
-        private void ValidateRepeatedPassword()
-        {
-            string message = null;
-            this.IsAlert = !(IsValid(this.PasswordToSet, this.PasswordRepeat, out message));
-            this.Message = message;
-        }
-        protected bool IsValid(string password, string repeatedPassword, out string message)
-        {
-            message = null;
-            bool isValid = false;
-            if (string.IsNullOrEmpty(password))
-            {
-                message = "Password must not be empty!";
-            }
-            else if (password != repeatedPassword)
-            {
-                message = "Passwords do not match!";
-            }
-            else
-            {
-                isValid = true;
-            }
-            return isValid;
-        }
-        protected bool IsValidPassword(string password, out string message)
-        {
-            message = null;
-            bool isValid = true;
-            if (string.IsNullOrEmpty(password))
-            {
-                message = "Password must not be empty!";
-                isValid = false;
-            }
-            return isValid;
-
-        }
 
 
 

@@ -68,16 +68,26 @@ namespace SignIn
            
             }, new HandlerOptions() { SkipRequestFilters = true });
 
-            Handle.GET("/signin/createadminuser", (Request request) =>
+            Handle.GET("/signin/partial/createadminuser", (Request request) =>
             {
                 SystemAdminUser adminUser = SystemAdminUser.Create(request.ClientIpAddress.ToString());
                 return new CreateAdminUserViewModel()
-                  {
-                      Data = adminUser
+                {
+                    Data = adminUser
                 };
             }, new HandlerOptions() { SkipRequestFilters = true });
 
-         
+            Handle.GET("/signin/createadminuser", () =>
+            {
+                MasterPage master = this.GetMaster();
+
+                master.RequireSignIn = false;
+                master.Open("/signin/partial/createadminuser");
+
+                return master;
+            });
+
+
 
 
 

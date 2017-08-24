@@ -22,29 +22,68 @@ namespace SignIn.Models
         {
             get
             {
-                return GetCanCreateAdminUser();
+                return GetCanCreateAdminUser(this.ClientRootAddress);
+            }
+        }
+        public bool IsAdminCreated
+        {
+            get
+            {
+                return !this.CanCreateAdminUser;
+            }
+        }
+
+
+        public string ClientRootAddress { get; private set; }
+        public string Username { get; private set; }
+        public string Password { get;  set; }
+
+        public string PasswordRepeat { get; set; }
+        
+
+
+
+        internal static SystemAdminUser Create(string clientRootAddress)
+        {
+            return new SystemAdminUser()
+            {
+                Username = AdminUsername,
+                ClientRootAddress = clientRootAddress
+            };
+        }
+
+
+        internal static bool GetCanCreateAdminUser(string clientRootAddress)
+        {
+            return IsLocal(clientRootAddress) && !HasUsers() && !HasAdminUser();
+        }
+
+
+        internal void CreateAdminUser(string repeatedPassword, out string message, out bool isAlert)
+        {
+            message = String.Empty;
+            bool isValid = IsValidPassword( out message) && IsEqualPassword(repeatedPassword, out message);
+            isAlert = !isValid;
+            if (isValid)
+            {
+                CreateAdminSystemUserIfMissing(this.Password, out message, out isAlert);
             }
         }
 
       
-        public string ClientRootAddress { get; private set; }
-        public string Username { get; private set; }
-        public string Password { get; internal set; }
-        public string PasswordSalt { get; internal set; }
-
-
-
         /// <summary>
         /// Creates Admin User if missing and adds it to the admin group.  
         /// </summary>
-        internal static void CreateAdminSystemUserIfMissing(string adminPassword, out string message)
+        private void CreateAdminSystemUserIfMissing(string adminPassword, out string message, out bool isAlert)
         {
             message = String.Empty;
+            isAlert = false;
             SystemUser user = GetAdminUser();
             SystemUserGroup group = GetAdminUserGroup();
-            if (HasAdminUser(user, group))
+            if (IsInGroup(user, group))
             {
                 message = "There is already an Admin user created";
+                isAlert = true;
                 return;//Do nothing if there's already an admin user
             }
 
@@ -78,25 +117,31 @@ namespace SignIn.Models
             });
             message = $"Admin user with username = '{AdminUsername}' was created";
         }
-
-        internal static SystemAdminUser Create(string clientRootAddress)
+       
+        internal bool IsEqualPassword(string repeatedPassword, out string message)
         {
-            return  new SystemAdminUser()
+            message = String.Empty;
+            if (this.Password != repeatedPassword)
             {
-                Username = AdminUsername,
-                ClientRootAddress = clientRootAddress
-            };
-        }
-
-        private  bool GetCanCreateAdminUser()
-        {
-            return GetCanCreateAdminUser(this.ClientRootAddress);
-        }
-        internal static bool GetCanCreateAdminUser(string clientRootAddress)
-        {
-            return IsLocal(clientRootAddress) && !HasUsers() && !HasAdminUser();
+                message = "Passwords do not match";
+                return false;
+            }
+            return true;
         }
        
+       
+        internal bool IsValidPassword(out string message)
+        {
+            message = String.Empty;
+            bool isValid = true;
+            if (string.IsNullOrEmpty(this.Password))
+            {
+                message = "Password cannot be empty";
+                isValid = false;
+            }
+            return isValid;
+
+        }
         private static bool HasUsers()
         {
             return (Db.SQL("SELECT o FROM Simplified.Ring3.SystemUser o").First != null);
@@ -115,9 +160,9 @@ namespace SignIn.Models
         {
             SystemUser user = GetAdminUser();
             SystemUserGroup group = GetAdminUserGroup();
-            return HasAdminUser(user, group);
+            return IsInGroup(user, group);
         }
-        private static bool HasAdminUser(SystemUser user, SystemUserGroup group)
+        private static bool IsInGroup(SystemUser user, SystemUserGroup group)
         {
             return (group != null && user != null && SystemUser.IsMemberOfGroup(user, group));
         }

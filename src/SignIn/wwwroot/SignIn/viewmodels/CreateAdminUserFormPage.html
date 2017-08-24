@@ -1,5 +1,4 @@
 ﻿<link rel="import" href="/sys/polymer/polymer.html">
-<link rel="import" href="/sys/puppet-redirect/puppet-redirect.html" />
 
 <template>
     <template is="dom-bind">
@@ -9,18 +8,18 @@
         </template>
         <label slot="SignIn/username-label" for="txtUsername">Username</label>
         <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{model.Username::input}}" disabled="disabled" placeholder="Username" class="form-control"  />
-        <template is="dom-if" if="{{model.CanCreateAdminUser}}">
+        <template is="dom-if" if="{{model.CanCreateAdminUser$}}">
 
             <label slot="SignIn/password-label" class="control-label" for="Password">Password</label>
-            <input slot="SignIn/password-input" id="Password" type="password" value="{{model.PasswordToSet$::change}}" placeholder="Password" class="form-control" />
+            <input slot="SignIn/password-input" id="Password" type="password" value="{{model.Password$::input}}" placeholder="Password" class="form-control" />
             <label slot="SignIn/passwordRepeat-label" class="control-label" for="PasswordRepeat">Repeat Password</label>
-            <input slot="SignIn/passwordRepeat-input" id="PasswordRepeat" type="password" value="{{model.PasswordRepeat$::change}}" placeholder="Repeat Password" class="form-control" />
-            <template is="dom-if" if="{{model.CanCreateAdminUser}}">
+            <input slot="SignIn/passwordRepeat-input" id="PasswordRepeat" type="password" value="{{model.PasswordRepeat$::input}}" placeholder="Repeat Password" class="form-control" />
+            <template is="dom-if" if="{{model.CanCreateAdminUser$}}">
                 <button slot="SignIn/ok-button" type="submit" class="btn btn-primary" value="{{model.OkClick$::click}}"  onmouseup="++this.value;">Ok</button>
                 <button slot="SignIn/cancel-button" type="button" class="btn btn-link" value="{{model.CancelClick$::click}}" onmouseup="++this.value;">Cancel</button>
             </template>
         </template>
-        <template is="dom-if" if="{{model.IsAdminCreated}}">
+        <template is="dom-if" if="{{model.IsAdminCreated$}}">
             <button slot="SignIn/back-button" type="submit" class="btn btn-primary" value="{{model.BackClick$::click}}" onmouseup="++this.value;">Back</button>
         </template>
         <link is="puppet-redirect" history url$="{{model.RedirectUrl}}" />
@@ -57,7 +56,6 @@
         </style>
         <slot name="SignIn/header"></slot>
         <div class="signin-page">
-            <slot name="SignIn/message"></slot>
             <div class="signin-form">
                 <div class="signin-form__row">
                     <div class="signin-form__label">
@@ -90,6 +88,7 @@
                 <slot name="SignIn/cancel-button"></slot>
                 <slot name="SignIn/back-button"></slot>
             </div>
+            <slot name="SignIn/message"></slot>
         </div>
     </template>
 </template>
