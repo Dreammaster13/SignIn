@@ -37,7 +37,7 @@ namespace SignIn.Api
                 return new SignInFormPage()
                 {
                     Data = null,
-                    CanCreateAdminUser = SystemAdminUser.GetCanCreateAdminUser(request.ClientIpAddress.ToString())
+                    CanCreateAdminUser = SystemAdminUser.GetCanCreateAdminUser(request.ClientIpAddress)
                 };
             }, internalOption);
             Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null }, internalOption);

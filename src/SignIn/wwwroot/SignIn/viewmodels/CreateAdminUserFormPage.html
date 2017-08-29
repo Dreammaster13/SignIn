@@ -7,13 +7,13 @@
             <p slot="SignIn/message" class$="{{setMessageStyle(model.IsAlert, model.Message)}}" >{{model.Message}}</p>
         </template>
         <label slot="SignIn/username-label" for="txtUsername">Username</label>
-        <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{model.Username::input}}" disabled="disabled" placeholder="Username" class="form-control"  />
+        <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{model.Username}}" disabled="disabled" placeholder="Username" class="form-control"  />
         <template is="dom-if" if="{{model.CanCreateAdminUser$}}">
 
             <label slot="SignIn/password-label" class="control-label" for="Password">Password</label>
             <input slot="SignIn/password-input" id="Password" type="password" value="{{model.Password$::input}}" placeholder="Password" class="form-control" />
-            <label slot="SignIn/passwordRepeat-label" class="control-label" for="PasswordRepeat">Repeat Password</label>
-            <input slot="SignIn/passwordRepeat-input" id="PasswordRepeat" type="password" value="{{model.PasswordRepeat$::input}}" placeholder="Repeat Password" class="form-control" />
+            <label slot="SignIn/password-repeat-label" class="control-label" for="PasswordRepeat">Repeat Password</label>
+            <input slot="SignIn/password-repeat-input" id="PasswordRepeat" type="password" value="{{model.PasswordRepeat$::input}}" placeholder="Repeat Password" class="form-control" />
             <template is="dom-if" if="{{model.CanCreateAdminUser$}}">
                 <button slot="SignIn/ok-button" type="submit" class="btn btn-primary" value="{{model.OkClick$::click}}"  onmouseup="++this.value;">Ok</button>
                 <button slot="SignIn/cancel-button" type="button" class="btn btn-link" value="{{model.CancelClick$::click}}" onmouseup="++this.value;">Cancel</button>
@@ -75,10 +75,10 @@
                 </div>
                 <div class="signin-form__row">
                     <div class="signin-form__label">
-                        <slot name="SignIn/passwordRepeat-label"></slot>
+                        <slot name="SignIn/password-repeat-label"></slot>
                     </div>
                     <div class="signin-profile__input">
-                        <slot name="SignIn/passwordRepeat-input"></slot>
+                        <slot name="SignIn/password-repeat-input"></slot>
                     </div>
                 </div>
             </div>

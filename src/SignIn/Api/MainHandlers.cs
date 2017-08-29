@@ -63,17 +63,17 @@ namespace SignIn
 
             Handle.GET("/signin/generateadminuser", (Request request) =>
             {
-               Handle.SetOutgoingStatusCode(403);
-               return "Create the admin user by going to '/signin/signinuser' and pressing the 'Create Admin' button.";
-           
+                return new Response()
+                {
+                     Body = "Create the admin user by going to '/signin/signinuser' and pressing the 'Create Admin' button.",
+                };
             }, new HandlerOptions() { SkipRequestFilters = true });
 
             Handle.GET("/signin/partial/createadminuser", (Request request) =>
             {
-                SystemAdminUser adminUser = SystemAdminUser.Create(request.ClientIpAddress.ToString());
                 return new CreateAdminUserViewModel()
                 {
-                    Data = adminUser
+                    Data = SystemAdminUser.Create(request.ClientIpAddress)
                 };
             }, new HandlerOptions() { SkipRequestFilters = true });
 
@@ -88,8 +88,6 @@ namespace SignIn
             });
 
 
-                return master;
-            });
 
 
 

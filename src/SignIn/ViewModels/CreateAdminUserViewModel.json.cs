@@ -8,45 +8,17 @@ namespace SignIn.ViewModels
 {
     partial class CreateAdminUserViewModel : Json, IBound<SystemAdminUser>
     {
-
-
-        protected override void OnData()
-        {
-            base.OnData();
-            if (this.Data == null)
-                return;
-
- 
-        }
-
         private void Handle(Input.Password action)
         {
-            string message = null;
-            bool isValid = false;
             this.Password = action.Value;
-            if (this.Data != null)
-            {
-                isValid = this.Data.IsValidPassword( out message);
-            }
-            this.IsAlert = !isValid;
+            this.IsAlert = !this.Data.IsValidPassword(out string message);
             this.Message = message;
-   
         }
-
         private void Handle(Input.PasswordRepeat action)
         {
-            string message = null;
-            bool isAlert = true;
             this.PasswordRepeat = action.Value;
-
-            if (this.Data != null)
-            {
-                isAlert = !this.Data.IsEqualPassword(this.PasswordRepeat, out message);
-            }
-            this.IsAlert = isAlert;
+            this.IsAlert = !this.Data.IsEqualPassword(this.PasswordRepeat, out string message);
             this.Message = message;
-
-
         }
         private void Handle(Input.OkClick action)
         {
@@ -68,19 +40,9 @@ namespace SignIn.ViewModels
 
         private void CreateAdminUser()
         {
-            string message = null;
-            bool isAlert = true;
-            if (this.Data != null)
-            {
-                this.Data.CreateAdminUser(this.PasswordRepeat, out message, out isAlert);
-            }
+            this.Data.CreateAdminUser( out string  message, out  bool isAlert);
             this.Message = message;
             this.IsAlert = isAlert;
         }
-
-
-
-
-
     }
 }

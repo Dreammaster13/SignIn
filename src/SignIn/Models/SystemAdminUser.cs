@@ -1,73 +1,73 @@
 ﻿using System;
-using System.Web;
 using Starcounter;
-using Starcounter.Internal;
 using Simplified.Ring2;
 using Simplified.Ring3;
-using Simplified.Ring5;
-using SignIn.Helpers;
+using System.Net;
 
 namespace SignIn.Models
 {
+    /// <summary>
+    /// The SystemAdminUser Model is responsible for validating and creating an Admin user that's part of the admin group.
+    /// </summary>
     public class SystemAdminUser
     {
-        internal static string AdminGroupName = "Admin (System Users)";
-        internal static string AdminGroupDescription = "System User Administrator Group";
-        internal static string AdminUsername = "admin";
-        internal static string AdminEmail = "admin@starcounter.com";
+        private  const string _adminGroupName = "Admin (System Users)";
+        private const string _adminGroupDescription = "System User Administrator Group";
+        private const string _adminUsername = "admin";
+        private const string _adminEmail = "admin@starcounter.com";
         
-
-   
-        public bool CanCreateAdminUser
-        {
-            get
-            {
-                return GetCanCreateAdminUser(this.ClientRootAddress);
-            }
-        }
-        public bool IsAdminCreated
-        {
-            get
-            {
-                return !this.CanCreateAdminUser;
-            }
-        }
-
-
-        public string ClientRootAddress { get; private set; }
+        public bool CanCreateAdminUser => GetCanCreateAdminUser(this.ClientRootAddress);
+     
+        public bool IsAdminCreated => !this.CanCreateAdminUser;
+        
+        public IPAddress ClientRootAddress { get; private set; }
         public string Username { get; private set; }
         public string Password { get;  set; }
 
         public string PasswordRepeat { get; set; }
-        
 
 
 
-        internal static SystemAdminUser Create(string clientRootAddress)
+        /// <summary>
+        /// Factory method to create a new SystemAdminUser
+        /// </summary>
+        /// <param name="clientRootAddress"></param>
+        /// <returns></returns>
+        internal static SystemAdminUser Create(IPAddress clientRootAddress)
         {
             return new SystemAdminUser()
             {
-                Username = AdminUsername,
+                Username = _adminUsername,
                 ClientRootAddress = clientRootAddress
             };
         }
 
-
-        internal static bool GetCanCreateAdminUser(string clientRootAddress)
+        /// <summary>
+        /// Get if an Admin user can be created or not
+        /// </summary>
+        /// <param name="clientRootAddress"></param>
+        /// <returns></returns>
+        internal static  bool GetCanCreateAdminUser(IPAddress clientRootAddress)
         {
-            return IsLocal(clientRootAddress) && !HasUsers() && !HasAdminUser();
+            return IPAddress.IsLoopback(clientRootAddress) && !HasUsers() && !HasAdminUser();
         }
 
 
-        internal void CreateAdminUser(string repeatedPassword, out string message, out bool isAlert)
+        internal void CreateAdminUser(out string message, out bool isAlert)
         {
             message = String.Empty;
-            bool isValid = IsValidPassword( out message) && IsEqualPassword(repeatedPassword, out message);
-            isAlert = !isValid;
-            if (isValid)
+            isAlert = false;
+            if (!IsValidPassword(out message))
             {
-                CreateAdminSystemUserIfMissing(this.Password, out message, out isAlert);
+                isAlert = true;
+                return;
             }
+            if (!IsEqualPassword(this.PasswordRepeat, out message))
+            {
+                isAlert = true;
+                return;
+            }
+            CreateAdminSystemUserIfMissing(this.Password, out message, out isAlert);
         }
 
       
@@ -93,29 +93,29 @@ namespace SignIn.Models
                 if (group == null)
                 {
                     group = new SystemUserGroup();
-                    group.Name = AdminGroupName;
-                    group.Description = AdminGroupDescription;
+                    group.Name = _adminGroupName;
+                    group.Description = _adminGroupDescription;
                 }
 
                 if (user == null)
                 {
                     Person person = new Person()
                     {
-                        FirstName = AdminUsername,
-                        LastName = AdminUsername
+                        FirstName = _adminUsername,
+                        LastName = _adminUsername
                     };
 
-                    user = SystemUser.RegisterSystemUser(AdminUsername, AdminEmail, adminPassword);
+                    user = SystemUser.RegisterSystemUser(_adminUsername, _adminEmail, adminPassword);
                     user.WhatIs = person;
                 }
 
                 // Add the admin group to the system admin user
-                SystemUserGroupMember member = new Simplified.Ring3.SystemUserGroupMember();
+                SystemUserGroupMember member = new SystemUserGroupMember();
 
                 member.WhatIs = user;
                 member.ToWhat = group;
             });
-            message = $"Admin user with username = '{AdminUsername}' was created";
+            message = $"Admin user with username = '{_adminUsername}' was created";
         }
        
         internal bool IsEqualPassword(string repeatedPassword, out string message)
@@ -144,17 +144,8 @@ namespace SignIn.Models
         }
         private static bool HasUsers()
         {
-            return (Db.SQL("SELECT o FROM Simplified.Ring3.SystemUser o").First != null);
+            return (Db.SQL("SELECT o FROM {typeof(SystemUser).FullName} o").First != null);
         
-        }
-
-        private static  bool IsLocal(string ip)
-        {
-            if (string.IsNullOrEmpty(ip))
-                return false;
-
-            return (ip == "127.0.0.1" || ip.Equals( "localhost", StringComparison.CurrentCultureIgnoreCase));
- 
         }
         private static bool HasAdminUser()
         {
@@ -168,12 +159,12 @@ namespace SignIn.Models
         }
         private static SystemUser GetAdminUser()
         {
-            SystemUser user =  Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.Username = ?", AdminUsername).First;
+            SystemUser user =  Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser).FullName} o WHERE o.{nameof(SystemUser.Username)} = ?", _adminUsername).First;
             return user;
         }
         private static SystemUserGroup GetAdminUserGroup()
         {
-            SystemUserGroup group = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",AdminGroupName).First;
+            SystemUserGroup group = Db.SQL<SystemUserGroup>($"SELECT o FROM {typeof(SystemUserGroup).FullName} o WHERE o.{nameof(SystemUser.Name)} = ?", _adminGroupName).First;
             return group;
         }
     }
