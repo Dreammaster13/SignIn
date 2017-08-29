@@ -8,7 +8,7 @@
   "Password$": "",
   "PasswordRepeat$": "",
   "RedirectUrl": "",
-  "OkClick$": 0,
-  "CancelClick$": 0,
-  "BackClick$": 0
+  "OkTrigger$": 0,
+  "CancelTrigger$": 0,
+  "BackTrigger$": 0
 }

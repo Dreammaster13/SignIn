@@ -15,12 +15,12 @@
             <label slot="SignIn/password-repeat-label" class="control-label" for="PasswordRepeat">Repeat Password</label>
             <input slot="SignIn/password-repeat-input" id="PasswordRepeat" type="password" value="{{model.PasswordRepeat$::input}}" placeholder="Repeat Password" class="form-control" />
             <template is="dom-if" if="{{model.CanCreateAdminUser$}}">
-                <button slot="SignIn/ok-button" type="submit" class="btn btn-primary" value="{{model.OkClick$::click}}"  onmouseup="++this.value;">Ok</button>
-                <button slot="SignIn/cancel-button" type="button" class="btn btn-link" value="{{model.CancelClick$::click}}" onmouseup="++this.value;">Cancel</button>
+                <button slot="SignIn/ok-button" type="submit" class="btn btn-primary" value="{{model.OkTrigger$::click}}"  onmouseup="++this.value;">Ok</button>
+                <button slot="SignIn/cancel-button" type="button" class="btn btn-link" value="{{model.CancelTrigger$::click}}" onmouseup="++this.value;">Cancel</button>
             </template>
         </template>
         <template is="dom-if" if="{{model.IsAdminCreated$}}">
-            <button slot="SignIn/back-button" type="submit" class="btn btn-primary" value="{{model.BackClick$::click}}" onmouseup="++this.value;">Back</button>
+            <button slot="SignIn/back-button" type="submit" class="btn btn-primary" value="{{model.BackTrigger$::click}}" onmouseup="++this.value;">Back</button>
         </template>
         <link is="puppet-redirect" history url$="{{model.RedirectUrl}}" />
     </template>
@@ -36,7 +36,7 @@
                 }
 
                 setTimeout(function () {
-                    template.set("model.OkClick$", template.model.OkClick$ + 1);
+                    template.set("model.OkTrigger$", template.model.OkTrigger$ + 1);
                 });
             };
             template.setMessageStyle = function (isAlert, msg) {

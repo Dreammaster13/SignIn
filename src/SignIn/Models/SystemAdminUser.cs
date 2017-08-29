@@ -144,8 +144,7 @@ namespace SignIn.Models
         }
         private static bool HasUsers()
         {
-            return (Db.SQL("SELECT o FROM {typeof(SystemUser).FullName} o").First != null);
-        
+            return (Db.SQL($"SELECT o FROM {typeof(SystemUser).FullName} o").First != null);
         }
         private static bool HasAdminUser()
         {

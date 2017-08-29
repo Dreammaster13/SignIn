@@ -20,15 +20,15 @@ namespace SignIn.ViewModels
             this.IsAlert = !this.Data.IsEqualPassword(this.PasswordRepeat, out string message);
             this.Message = message;
         }
-        private void Handle(Input.OkClick action)
+        private void Handle(Input.OkTrigger action)
         {
             CreateAdminUser();
         }
-        private void Handle(Input.CancelClick action)
+        private void Handle(Input.CancelTrigger action)
         {
             GoBack();
         }
-        private void Handle(Input.BackClick action)
+        private void Handle(Input.BackTrigger action)
         {
             GoBack();
         }
