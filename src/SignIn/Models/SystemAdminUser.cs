@@ -3,6 +3,7 @@ using Starcounter;
 using Simplified.Ring2;
 using Simplified.Ring3;
 using System.Net;
+using System.Linq;
 
 namespace SignIn.Models
 {
@@ -55,14 +56,15 @@ namespace SignIn.Models
 
         internal void CreateAdminUser(out string message, out bool isAlert)
         {
-            message = String.Empty;
             isAlert = false;
-            if (!IsValidPassword(out message))
+            message = GetPasswordValidationMessage();
+            if (!String.IsNullOrEmpty(message))
             {
                 isAlert = true;
                 return;
             }
-            if (!IsEqualPassword(this.PasswordRepeat, out message))
+            message = this.GetPasswordRepeatValidationMessage();
+            if (!String.IsNullOrEmpty(message))
             {
                 isAlert = true;
                 return;
@@ -118,53 +120,27 @@ namespace SignIn.Models
             message = $"Admin user with username = '{_adminUsername}' was created";
         }
        
-        internal bool IsEqualPassword(string repeatedPassword, out string message)
+        internal string GetPasswordRepeatValidationMessage()
         {
-            message = String.Empty;
-            if (this.Password != repeatedPassword)
-            {
-                message = "Passwords do not match";
-                return false;
-            }
-            return true;
+            return this.Password != this.PasswordRepeat ? "Passwords do not match" : String.Empty;
         }
-       
-       
-        internal bool IsValidPassword(out string message)
+        internal string GetPasswordValidationMessage()
         {
-            message = String.Empty;
-            bool isValid = true;
-            if (string.IsNullOrEmpty(this.Password))
-            {
-                message = "Password cannot be empty";
-                isValid = false;
-            }
-            return isValid;
-
+            return string.IsNullOrEmpty(this.Password) ?  "Password cannot be empty" : String.Empty;
         }
-        private static bool HasUsers()
-        {
-            return (Db.SQL($"SELECT o FROM {typeof(SystemUser).FullName} o").First != null);
-        }
+        private static bool HasUsers() => (Db.SQL($"SELECT o FROM {typeof(SystemUser).FullName} o").FirstOrDefault() != null);
+        
         private static bool HasAdminUser()
         {
-            SystemUser user = GetAdminUser();
-            SystemUserGroup group = GetAdminUserGroup();
-            return IsInGroup(user, group);
+            return IsInGroup(GetAdminUser(), GetAdminUserGroup());
         }
         private static bool IsInGroup(SystemUser user, SystemUserGroup group)
         {
             return (group != null && user != null && SystemUser.IsMemberOfGroup(user, group));
         }
-        private static SystemUser GetAdminUser()
-        {
-            SystemUser user =  Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser).FullName} o WHERE o.{nameof(SystemUser.Username)} = ?", _adminUsername).First;
-            return user;
-        }
-        private static SystemUserGroup GetAdminUserGroup()
-        {
-            SystemUserGroup group = Db.SQL<SystemUserGroup>($"SELECT o FROM {typeof(SystemUserGroup).FullName} o WHERE o.{nameof(SystemUser.Name)} = ?", _adminGroupName).First;
-            return group;
-        }
+       
+        private static SystemUser GetAdminUser() => Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser).FullName} o WHERE o.{nameof(SystemUser.Username)} = ?", _adminUsername).FirstOrDefault();
+        private static SystemUserGroup GetAdminUserGroup() => Db.SQL<SystemUserGroup>($"SELECT o FROM {typeof(SystemUserGroup).FullName} o WHERE o.{nameof(SystemUser.Name)} = ?", _adminGroupName).FirstOrDefault();
+        
     }
 }

@@ -31,7 +31,6 @@ namespace SignIn
         void Handle(Input.CreateAdminClick action)
         {
             RedirectUrl = "/signin/createadminuser";
-            this.Submit++;
         }
 
         protected MainFormPage MainForm
