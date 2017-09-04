@@ -7,6 +7,8 @@ using Simplified.Ring3;
 using Simplified.Ring2;
 using Simplified.Ring6;
 using SignIn.Helpers;
+using SignIn.ViewModels;
+using SignIn.Models;
 
 namespace SignIn
 {
@@ -61,25 +63,33 @@ namespace SignIn
 
             Handle.GET("/signin/generateadminuser", (Request request) =>
             {
-                if (Db.SQL("SELECT o FROM Simplified.Ring3.SystemUser o").First != null)
+                return new Response()
                 {
-                    Handle.SetOutgoingStatusCode(403);
-                    return "Unable to generate admin user: database is not empty!";
-                }
-
-                string ip = request.ClientIpAddress.ToString();
-
-                if (ip == "127.0.0.1" || ip == "localhost")
-                {
-                    SignInOut.AssureAdminSystemUser();
-
-                    return "Default admin user has been successfully generated.";
-                }
-
-                Handle.SetOutgoingStatusCode(403);
-                return "Access denied.";
-
+                     Body = "Create the admin user by going to '/signin/signinuser' and pressing the 'Create Admin' button.",
+                };
             }, new HandlerOptions() { SkipRequestFilters = true });
+
+            Handle.GET("/signin/partial/createadminuser", (Request request) =>
+            {
+                return new CreateAdminUserViewModel()
+                {
+                    Data = SystemAdminUser.Create(request.ClientIpAddress)
+                };
+            }, new HandlerOptions() { SkipRequestFilters = true });
+
+            Handle.GET("/signin/createadminuser", () =>
+            {
+                MasterPage master = this.GetMaster();
+
+                master.RequireSignIn = false;
+                master.Open("/signin/partial/createadminuser");
+
+                return master;
+            });
+
+
+
+
 
             Handle.GET("/signin/admin/settings", (Request request) =>
             {

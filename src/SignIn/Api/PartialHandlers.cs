@@ -1,4 +1,5 @@
 ﻿using SignIn.Helpers;
+using SignIn.Models;
 using Simplified.Ring3;
 using Simplified.Ring5;
 using Starcounter;
@@ -31,12 +32,20 @@ namespace SignIn.Api
                 return 200;
             }, internalOption);
 
-            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage() { Data = null }, internalOption);
+            Handle.GET("/signin/partial/signin-form", (Request request) =>
+            {
+                return new SignInFormPage()
+                {
+                    Data = null,
+                    CanCreateAdminUser = SystemAdminUser.GetCanCreateAdminUser(request.ClientIpAddress)
+                };
+            }, internalOption);
             Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null }, internalOption);
             Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(), internalOption);
             Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null }, internalOption);
             Handle.GET("/signin/partial/accessdenied-form", () => new AccessDeniedPage(), internalOption);
             Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null }, internalOption);
+
             Handle.GET("/signin/partial/user/image", () => new UserImagePage());
             Handle.GET("/signin/partial/user/image/{?}", (string objectId) => new Json(), internalOption);
             Handle.GET("/signin/partial/signout", HandleSignOut, internalOption);

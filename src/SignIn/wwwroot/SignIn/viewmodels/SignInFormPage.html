@@ -2,7 +2,7 @@
 
 <template>
     <template is="dom-bind">
-        <h2 slot="SignIn/header">Sign-in!</h2>
+        <h2 slot="SignIn/header">Sign in</h2>
         <template is="dom-if" if="{{model.Message}}">
             <p class="alert alert-danger" slot="SignIn/message">{{model.Message}}</p>
         </template>
@@ -15,7 +15,11 @@
         <span slot="SignIn/rememberme-label">Remember me</span>
         <button slot="SignIn/submit-button" type="submit" class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;">Sign in</button>
         <button slot="SignIn/forgot-button" type="button" class="btn btn-link" value="{{model.RestoreClick$::click}}" disabled="{{model.RestoreClick$::click}}" onmouseup="++this.value;">Forgot password?</button>
+        <template is="dom-if" if="{{model.CanCreateAdminUser}}">
+            <button slot="SignIn/create-Admin-User-button" type="button" class="btn btn-link" value="{{model.CreateAdminClick$::click}}" onmousedown="++this.value;">Create Admin Account</button>
+        </template>
         <signin-element slot="SignIn/signin-element" username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
+        <link is="puppet-redirect" history url$="{{model.RedirectUrl}}" />
     </template>
     <script>
         (function () {
@@ -74,6 +78,7 @@
             <div class="signin-form__toolbar">
                 <slot name="SignIn/submit-button"></slot>
                 <slot name="SignIn/forgot-button"></slot>
+                <slot name="SignIn/create-Admin-User-button"></slot>
             </div>
         </div>
         <slot name="SignIn/signin-element"></slot>

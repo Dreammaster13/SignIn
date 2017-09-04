@@ -1,0 +1,94 @@
+﻿<link rel="import" href="/sys/polymer/polymer.html">
+
+<template>
+    <template is="dom-bind">
+        <h2 slot="SignIn/header">Create Admin user</h2>
+        <template is="dom-if" if="{{model.Message}}">
+            <p slot="SignIn/message" class$="{{setMessageStyle(model.IsAlert, model.Message)}}" >{{model.Message}}</p>
+        </template>
+        <label slot="SignIn/username-label" for="txtUsername">Username</label>
+        <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{model.Username}}" disabled="disabled" placeholder="Username" class="form-control"  />
+        <template is="dom-if" if="{{model.CanCreateAdminUser$}}">
+
+            <label slot="SignIn/password-label" class="control-label" for="Password">Password</label>
+            <input slot="SignIn/password-input" id="Password" type="password" value="{{model.Password$::input}}" placeholder="Password" class="form-control" />
+            <label slot="SignIn/password-repeat-label" class="control-label" for="PasswordRepeat">Repeat Password</label>
+            <input slot="SignIn/password-repeat-input" id="PasswordRepeat" type="password" value="{{model.PasswordRepeat$::input}}" placeholder="Repeat Password" class="form-control" />
+            <template is="dom-if" if="{{model.CanCreateAdminUser$}}">
+                <button slot="SignIn/ok-button" type="submit" class="btn btn-primary" value="{{model.OkTrigger$::click}}"  onmouseup="++this.value;">Ok</button>
+                <button slot="SignIn/cancel-button" type="button" class="btn btn-link" value="{{model.CancelTrigger$::click}}" onmouseup="++this.value;">Cancel</button>
+            </template>
+        </template>
+        <template is="dom-if" if="{{model.IsAdminCreated$}}">
+            <button slot="SignIn/back-button" type="submit" class="btn btn-primary" value="{{model.BackTrigger$::click}}" onmouseup="++this.value;">Back</button>
+        </template>
+        <link is="puppet-redirect" history url$="{{model.RedirectUrl}}" />
+    </template>
+    <script>
+        (function () {
+            var script = document._currentScript || document.currentScript;
+            var template = script.previousElementSibling;
+
+      
+            template.txtKeypress = function (e) {
+                if (e.which != 13) {
+                    return;
+                }
+
+                setTimeout(function () {
+                    template.set("model.OkTrigger$", template.model.OkTrigger$ + 1);
+                });
+            };
+            template.setMessageStyle = function (isAlert, msg) {
+                if(!msg) {
+                    return "";
+                }
+                if (isAlert) {
+                    return "alert alert-danger";
+                }
+                return "alert alert-success";
+            }
+        })();
+    </script>
+    <template is="declarative-shadow-dom">
+        <style>
+            @import url("/SignIn/css/signin.css");
+        </style>
+        <slot name="SignIn/header"></slot>
+        <div class="signin-page">
+            <div class="signin-form">
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
+                        <slot name="SignIn/username-label"></slot>
+                    </div>
+                    <div class="signin-profile__input">
+                        <slot name="SignIn/username-input"></slot>
+                    </div>
+                </div>
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
+                        <slot name="SignIn/password-label"></slot>
+                    </div>
+                    <div class="signin-profile__input">
+                        <slot name="SignIn/password-input"></slot>
+                    </div>
+                </div>
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
+                        <slot name="SignIn/password-repeat-label"></slot>
+                    </div>
+                    <div class="signin-profile__input">
+                        <slot name="SignIn/password-repeat-input"></slot>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="signin-form__toolbar">
+                <slot name="SignIn/ok-button"></slot>
+                <slot name="SignIn/cancel-button"></slot>
+                <slot name="SignIn/back-button"></slot>
+            </div>
+            <slot name="SignIn/message"></slot>
+        </div>
+    </template>
+</template>
