@@ -1,0 +1,14 @@
+{
+  "Html": "/SignIn/viewmodels/CreateAdminUserFormPage.html",
+  "Message": "",
+  "Username": "",
+  "CanCreateAdminUser$": false,
+  "IsAdminCreated$": false,
+  "IsAlert": false,
+  "Password$": "",
+  "PasswordRepeat$": "",
+  "RedirectUrl": "",
+  "OkTrigger$": 0,
+  "CancelTrigger$": 0,
+  "BackTrigger$": 0
+}

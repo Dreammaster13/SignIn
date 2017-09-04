@@ -28,6 +28,10 @@ namespace SignIn
                 this.MainForm.OpenRestorePassword();
             }
         }
+        void Handle(Input.CreateAdminClick action)
+        {
+            RedirectUrl = "/signin/createadminuser";
+        }
 
         protected MainFormPage MainForm
         {
