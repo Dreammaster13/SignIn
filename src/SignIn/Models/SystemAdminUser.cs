@@ -122,11 +122,11 @@ namespace SignIn.Models
        
         internal string GetPasswordRepeatValidationMessage()
         {
-            return this.Password != this.PasswordRepeat ? "Passwords do not match" : String.Empty;
+            return this.Password != this.PasswordRepeat ? "Passwords do not match" : null;
         }
         internal string GetPasswordValidationMessage()
         {
-            return string.IsNullOrEmpty(this.Password) ?  "Password cannot be empty" : String.Empty;
+            return string.IsNullOrEmpty(this.Password) ?  "Password cannot be empty" : null;
         }
         private static bool HasUsers() => (Db.SQL($"SELECT o FROM {typeof(SystemUser).FullName} o").FirstOrDefault() != null);
         
