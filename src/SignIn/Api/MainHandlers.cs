@@ -69,14 +69,6 @@ namespace SignIn
                 };
             }, new HandlerOptions() { SkipRequestFilters = true });
 
-            Handle.GET("/signin/partial/createadminuser", (Request request) =>
-            {
-                return new CreateAdminUserViewModel()
-                {
-                    Data = SystemAdminUser.Create(request.ClientIpAddress)
-                };
-            }, new HandlerOptions() { SkipRequestFilters = true });
-
             Handle.GET("/signin/createadminuser", () =>
             {
                 MasterPage master = this.GetMaster();

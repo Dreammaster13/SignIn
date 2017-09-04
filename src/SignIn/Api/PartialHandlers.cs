@@ -1,5 +1,6 @@
 ﻿using SignIn.Helpers;
 using SignIn.Models;
+using SignIn.ViewModels;
 using Simplified.Ring3;
 using Simplified.Ring5;
 using Starcounter;
@@ -40,6 +41,15 @@ namespace SignIn.Api
                     CanCreateAdminUser = SystemAdminUser.GetCanCreateAdminUser(request.ClientIpAddress)
                 };
             }, internalOption);
+
+            Handle.GET("/signin/partial/createadminuser", (Request request) =>
+            {
+                return new CreateAdminUserViewModel()
+                {
+                    Data = SystemAdminUser.Create(request.ClientIpAddress)
+                };
+            }, new HandlerOptions() { SkipRequestFilters = true });
+
             Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null }, internalOption);
             Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(), internalOption);
             Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null }, internalOption);
