@@ -1,14 +1,13 @@
 ﻿<link rel="import" href="/SignIn/elements/signin-element.html" />
-<link rel="stylesheet" type="text/css" href="/SignIn/css/signin.css">
 <template>
     <template is="dom-bind">
         <h2 slot="SignIn/header">Sign-in!</h2>
         <template is="dom-if" if="{{model.Message}}">
             <p class="alert alert-danger" slot="SignIn/message">{{model.Message}}</p>
         </template>
-        <label slot="SignIn/username-label" class="signin-form__label-slotted" for="txtUsername">Username</label>
+        <label slot="SignIn/username-label" class="signin-form__label" for="txtUsername">Username</label>
         <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{local.username::input}}" placeholder="Username" class="form-control" on-keypress="txtKeypress"/>
-        <label slot="SignIn/password-label" class="signin-form__label-slotted" for="txtPassword">Password</label>
+        <label slot="SignIn/password-label" class="signin-form__label" for="txtPassword">Password</label>
         <assas action="{{thing}}"></assas>
         <input slot="SignIn/password-input" id="txtPassword" name="password" type="password" value="{{local.password::input}}" placeholder="Password" class="form-control" on-keypress="txtKeypress"/>
         <input slot="SignIn/rememberme-checkbox" type="checkbox" checked="{{local.rememberMe::change}}"/>
