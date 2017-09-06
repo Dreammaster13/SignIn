@@ -12,14 +12,14 @@ namespace SignIn.ViewModels
         {
             this.Password = action.Value;
             this.Message = this.Data.GetPasswordValidationMessage();
-            this.IsAlert = !string.IsNullOrEmpty(this.Message);
+            this.IsAlert = (!(string.IsNullOrEmpty(this.Message)));
  
         }
         private void Handle(Input.PasswordRepeat action)
         {
             this.PasswordRepeat = action.Value;
             this.Message = this.Data.GetPasswordRepeatValidationMessage();
-            this.IsAlert = !string.IsNullOrEmpty(this.Message);
+            this.IsAlert = (!(string.IsNullOrEmpty(this.Message)));
         }
         private void Handle(Input.OkTrigger action)
         {
