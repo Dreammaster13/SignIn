@@ -41,7 +41,7 @@ namespace SignIn.ViewModels
 
         private void CreateAdminUser()
         {
-            this.Data.CreateAdminUser( out string  message, out  bool isAlert);
+            this.Data.CreateAdminUser(out string message, out bool isAlert);
             this.Message = message;
             this.IsAlert = isAlert;
         }

@@ -13,7 +13,7 @@ namespace SignIn
         public static void SetupPermissions()
         {
             SystemUserGroup adminGroup = GetAdminGroup();
-            AuthorizationHelper.AssureUriPermission("/signin/admin/settings", adminGroup);
+            AuthorizationHelper.AssureUriPermission("/signin/settings", adminGroup);
             AuthorizationHelper.AssureUriPermission("/signin/user/authentication/settings/{?}", adminGroup);
         }
 
