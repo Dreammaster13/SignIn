@@ -71,64 +71,62 @@
 <template>
     <template is="dom-bind" strip-whitespace>
 
-        <div class="signin-detailed" slot="SignIn/current-user">
-            <!-- User signed in -->
-            <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
-                <juicy-popover position="bottom left">
-                    <div slot="handle" class="signin-popup-handle">
-                        <div class="signin-popup-user-image">
-                            <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
-                        </div>
-                        <div class="signin-popup-user-name">{{model.FullName}}</div>
-                    </div>
-                    <div slot="expendable" class="signin-popup-window">
-                        <div class="signin-popup-window__user-image">
-                            <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
-                        </div>
-                        <p class="signin-popup-window__user-name">
-                            <a href="/signin/profile">{{model.FullName}}</a>
-                        </p>
-                        <button on-click="signOut" class="btn btn-primary" role="button">Sign out</button>
-                    </div>
-                </juicy-popover>
-            </template>
-            <!-- User NOT signed in -->
-            <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
-                <juicy-popover class="signin-popover" position="bottom left">
-                    <div slot="handle" class="signin-popup-handle signin-popup-user-image">
+        <!-- User signed in -->
+        <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
+            <juicy-popover class="signin-detailed" slot="SignIn/current-user-signedin" position="bottom left">
+                <div slot="handle" class="signin-popup-handle">
+                    <div class="signin-popup-user-image">
                         <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                     </div>
-                    <div slot="expendable" class="signin-popup-window">
-                        <form on-submit="preventSubmit">
-                            <div>
-                                <template is="dom-if" if="{{model.Message}}" strip-whitespace restamp>
-                                    <div class="signin-popup-window__error">{{model.Message}}</div>
-                                </template>
-                            </div>
-                            <div>
-                                <input name="username" class="form-control signin-popup-window__control" type="text" placeholder="Username" value="{{local.username::input}}" on-keypress="txtKeypress" />
-                            </div>
-                            <div>
-                                <input name="password" class="form-control signin-popup-window__control" type="password" placeholder="Password" value="{{local.password::input}}" on-keypress="txtKeypress" />
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" checked="{{local.rememberMe::change}}" />
-                                    <span>Remember me</span>
-                                </label>
-                            </div>
-                            <div>
-                                <button type="submit" class="btn btn-primary" role="button" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmousedown="++this.value;">Sign in</button>
-                                <a href="/signin/signinuser" class="btn btn-link btn-sm" on-mouseover="btnFormHover">
-                                    Forgot password?
-                                </a>
-                            </div>
-                        </form>
+                    <div class="signin-popup-user-name">{{model.FullName}}</div>
+                </div>
+                <div slot="expendable" class="signin-popup-window">
+                    <div class="signin-popup-window__user-image">
+                        <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                     </div>
-                </juicy-popover>
-                <signin-element username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
-            </template>
-        </div>
+                    <p class="signin-popup-window__user-name">
+                        <a href="/signin/profile">{{model.FullName}}</a>
+                    </p>
+                    <button on-click="signOut" class="btn btn-primary" role="button">Sign out</button>
+                </div>
+            </juicy-popover>
+        </template>
+        <!-- User NOT signed in -->
+        <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
+            <juicy-popover slot="SignIn/current-user-not-signedin" class="signin-popover signin-detailed" position="bottom left">
+                <div slot="handle" class="signin-popup-handle signin-popup-user-image">
+                    <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
+                </div>
+                <div slot="expendable" class="signin-popup-window">
+                    <form on-submit="preventSubmit">
+                        <div>
+                            <template is="dom-if" if="{{model.Message}}" strip-whitespace restamp>
+                                <div class="signin-popup-window__error">{{model.Message}}</div>
+                            </template>
+                        </div>
+                        <div>
+                            <input name="username" class="form-control signin-popup-window__control" type="text" placeholder="Username" value="{{local.username::input}}" on-keypress="txtKeypress" />
+                        </div>
+                        <div>
+                            <input name="password" class="form-control signin-popup-window__control" type="password" placeholder="Password" value="{{local.password::input}}" on-keypress="txtKeypress" />
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" checked="{{local.rememberMe::change}}" />
+                                <span>Remember me</span>
+                            </label>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary" role="button" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmousedown="++this.value;">Sign in</button>
+                            <a href="/signin/signinuser" class="btn btn-link btn-sm" on-mouseover="btnFormHover">
+                                Forgot password?
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </juicy-popover>
+            <signin-element username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
+        </template>
 
     </template>
 
@@ -180,6 +178,7 @@
         })();
     </script>
     <template is="declarative-shadow-dom">
-        <slot name="SignIn/current-user"></slot>
+        <slot name="SignIn/current-user-signedin"></slot>
+        <slot name="SignIn/current-user-not-signedin"></slot>
     </template>
 </template>

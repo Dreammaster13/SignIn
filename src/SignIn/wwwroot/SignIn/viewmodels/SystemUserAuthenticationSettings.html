@@ -9,26 +9,27 @@
 
 <template>
     <template is="dom-bind">
-        <div slot="SignIn/auth-settings" class="signin-auth-settings">
-            <sgb-property-metadata items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
-
+        <sgb-property-metadata items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
+        <div class="signin-auth-settings" slot="SignIn/auth-settings-message">
             <template is="dom-if" if="{{model.Message}}">
                 <p class="alert alert-danger">{{model.Message}}</p>
             </template>
-
-            <h3>Authentication settings</h3>
-
-            <div>
-                <button class="btn btn-default btn-sm" onmousedown="++this.value;" value="{{model.NewPasswordClick$::click}}">Set New Password</button>
-                <button class="btn btn-default btn-sm" disabled$="{{!model.ResetPassword_Enabled}}" onmousedown="++this.value;" value="{{model.ResetPassword$::click}}">Reset Password</button>
-            </div>
-
-            <template is="dom-if" if="{{model.NewPasswordClick$}}">
-                <starcounter-include partial="{{model.UserPassword}}"></starcounter-include>
-            </template>
         </div>
+
+        <h3 slot="SignIn/auth-settings-headline">Authentication settings</h3>
+
+        <button slot="SignIn/auth-settings-new-pass" class="btn btn-default btn-sm" onmousedown="++this.value;" value="{{model.NewPasswordClick$::click}}">Set New Password</button>
+        <button slot="SignIn/auth-settings-reset-pass" class="btn btn-default btn-sm" disabled$="{{!model.ResetPassword_Enabled}}" onmousedown="++this.value;" value="{{model.ResetPassword$::click}}">Reset Password</button>
+
+        <template is="dom-if" if="{{model.NewPasswordClick$}}">
+            <starcounter-include slot="SignIn/auth-settings-new-pass-page" partial="{{model.UserPassword}}"></starcounter-include>
+        </template>
     </template>
     <template is="declarative-shadow-dom">
-        <slot name="SignIn/auth-settings"></slot>
+        <slot name="SignIn/auth-settings-message"></slot>
+        <slot name="SignIn/auth-settings-headline"></slot>
+        <slot name="SignIn/auth-settings-new-pass"></slot>
+        <slot name="SignIn/auth-settings-reset-pass"></slot>
+        <slot name="SignIn/auth-settings-new-pass-page"></slot>
     </template>
 </template>
