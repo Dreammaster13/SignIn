@@ -1,16 +1,11 @@
 ﻿<link rel="import" href="/sys/polymer/polymer.html">
 <link rel="import" href="/sys/sgb-property-metadata/sgb-property-metadata.html" />
 
-<style>
-    .signin-auth-settings {
-        margin-top: 2em;
-    }
-</style>
-
 <template>
     <template is="dom-bind">
+        <!-- Non-visual element, therefore doesn't need a slot -->
         <sgb-property-metadata items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
-        <div class="signin-auth-settings" slot="SignIn/auth-settings-message">
+        <div slot="SignIn/auth-settings-message">
             <template is="dom-if" if="{{model.Message}}">
                 <p class="alert alert-danger">{{model.Message}}</p>
             </template>
@@ -26,7 +21,14 @@
         </template>
     </template>
     <template is="declarative-shadow-dom">
-        <slot name="SignIn/auth-settings-message"></slot>
+        <style>
+            .signin-auth-settings {
+                margin-top: 2em;
+            }
+        </style>
+        <div class="signin-auth-settings">
+            <slot name="SignIn/auth-settings-message"></slot>
+        </div>
         <slot name="SignIn/auth-settings-headline"></slot>
         <slot name="SignIn/auth-settings-new-pass"></slot>
         <slot name="SignIn/auth-settings-reset-pass"></slot>

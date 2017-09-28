@@ -70,10 +70,8 @@
 
 <template>
     <template is="dom-bind" strip-whitespace>
-
-        <!-- User signed in -->
-        <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
-            <juicy-popover class="signin-detailed" slot="SignIn/current-user-signedin" position="bottom left">
+        <juicy-popover class="signin-detailed" slot="SignIn/current-user-signed" position="bottom left">
+            <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
                 <div slot="handle" class="signin-popup-handle">
                     <div class="signin-popup-user-image">
                         <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
@@ -89,11 +87,8 @@
                     </p>
                     <button on-click="signOut" class="btn btn-primary" role="button">Sign out</button>
                 </div>
-            </juicy-popover>
-        </template>
-        <!-- User NOT signed in -->
-        <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
-            <juicy-popover slot="SignIn/current-user-not-signedin" class="signin-popover signin-detailed" position="bottom left">
+            </template>
+            <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
                 <div slot="handle" class="signin-popup-handle signin-popup-user-image">
                     <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                 </div>
@@ -124,10 +119,12 @@
                         </div>
                     </form>
                 </div>
-            </juicy-popover>
+            </template>
+        </juicy-popover>
+        <!-- Non-visual element, therefore doesn't need a slot -->
+        <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
             <signin-element username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
         </template>
-
     </template>
 
     <script>
@@ -175,10 +172,17 @@
 
                 e.currentTarget.setAttribute("href", href);
             };
+
+            template.observers = ["onSignInChange(model.IsSignedIn)"];
+            
+            template.onSignInChange = function(value) {
+                if(template.querySelector('.signin-detailed')) {
+                    template.querySelector('.signin-detailed').collapse();
+                }
+            }
         })();
     </script>
     <template is="declarative-shadow-dom">
-        <slot name="SignIn/current-user-signedin"></slot>
-        <slot name="SignIn/current-user-not-signedin"></slot>
+        <slot name="SignIn/current-user-signed"></slot>
     </template>
 </template>
