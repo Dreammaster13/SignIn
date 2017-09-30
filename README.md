@@ -10,7 +10,7 @@ Simple user authentication app. Features include:
 
 ## Create the first user
 
-To create the first user, open `http://localhost:8080/signin/generateadminuser`. This generates an admin user with default credentials (username `admin`, password `admin`). The default user will be generated only if there are no users in database.
+To create the first user, navigate to `http://localhost:8080/signin` and press on "Create admin account" (visible only if no user exists in the database) or navigate directly to `http://localhost:8080/signin/createadminuser`.
 
 ## Sign in an existing user
 
