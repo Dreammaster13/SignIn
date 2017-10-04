@@ -16,7 +16,7 @@
         "tests"
     ],
     "dependencies": {
-        "juicy-popover": "Juicy/juicy-popover#~1.1.0",
+        "juicy-popover": "Juicy/juicy-popover#fix/position",
         "sgb-property-metadata": "Smorgasbord-Development/sgb-property-metadata"
     }
 }

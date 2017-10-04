@@ -72,7 +72,7 @@
         <div class="signin-detailed" slot="SignIn/current-user">
             <!-- User signed in -->
             <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
-                <juicy-popover position="bottom auto">
+                <juicy-popover>
                     <div slot="handle" class="signin-popup-handle">
                         <div class="signin-popup-user-image">
                             <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
@@ -92,7 +92,7 @@
             </template>
             <!-- User NOT signed in -->
             <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
-                <juicy-popover class="signin-popover" position="bottom auto">
+                <juicy-popover class="signin-popover">
                     <div slot="handle" class="signin-popup-handle signin-popup-user-image">
                         <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                     </div>
