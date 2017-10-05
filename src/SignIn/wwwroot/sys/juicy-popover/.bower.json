@@ -1,5 +1,6 @@
 {
   "name": "juicy-popover",
+  "version": "1.2.0",
   "description": "Custom Element that expands an area when clicked on a handle",
   "homepage": "https://github.com/Juicy/juicy-popover",
   "license": "MIT",
@@ -20,13 +21,13 @@
   "dependencies": {
     "webcomponentsjs": "^0.7.22"
   },
-  "_release": "5e926be425",
+  "_release": "1.2.0",
   "_resolution": {
-    "type": "branch",
-    "branch": "fix/position",
-    "commit": "5e926be4255af4f4194e0a54b06a8ff248783c58"
+    "type": "version",
+    "tag": "1.2.0",
+    "commit": "2e77b96d4051f1042cc594318b1e134c063c521b"
   },
   "_source": "https://github.com/Juicy/juicy-popover.git",
-  "_target": "fix/position",
+  "_target": "^1.2.0",
   "_originalSource": "Juicy/juicy-popover"
 }
