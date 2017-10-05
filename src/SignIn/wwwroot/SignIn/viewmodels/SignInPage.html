@@ -8,10 +8,7 @@
     }
 
     .signin-popup-window {
-        right: 0;
-        margin-right: -25px;
         width: 350px;
-        position: absolute;
         z-index: 1;
         box-shadow: 0 2px 10px rgba(0,0,0,.2);
         border-color: rgba(0,0,0,.2);
@@ -74,14 +71,14 @@
         <div class="signin-detailed" slot="SignIn/current-user">
             <!-- User signed in -->
             <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
-                <juicy-popover position="bottom left">
+                <juicy-popover>
                     <div slot="handle" class="signin-popup-handle">
                         <div class="signin-popup-user-image">
                             <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                         </div>
                         <div class="signin-popup-user-name">{{model.FullName}}</div>
                     </div>
-                    <div slot="expendable" class="signin-popup-window">
+                    <div slot="expandable" class="signin-popup-window">
                         <div class="signin-popup-window__user-image">
                             <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                         </div>
@@ -94,11 +91,11 @@
             </template>
             <!-- User NOT signed in -->
             <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
-                <juicy-popover class="signin-popover" position="bottom left">
+                <juicy-popover class="signin-popover">
                     <div slot="handle" class="signin-popup-handle signin-popup-user-image">
                         <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                     </div>
-                    <div slot="expendable" class="signin-popup-window">
+                    <div slot="expandable" class="signin-popup-window">
                         <form on-submit="preventSubmit">
                             <div>
                                 <template is="dom-if" if="{{model.Message}}" strip-whitespace restamp>
