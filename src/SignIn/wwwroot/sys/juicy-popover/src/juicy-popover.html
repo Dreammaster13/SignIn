@@ -9,6 +9,10 @@ version: 1.1.0
             position: relative;
         }
 
+        #handle {
+            display: inline-block;
+        }
+
         #expandable {
             display: none;
             position: absolute;
@@ -22,16 +26,16 @@ version: 1.1.0
         }
     </style>
     <div id="container">
-        <span id="handle">
+        <div id="handle">
             <slot name="handle"></slot>
             <content select="[slot='handle']"></content>
-        </span>
-        <span id="expandable">
+        </div>
+        <div id="expandable">
             <slot id="deprecated-v1" name="expendable"></slot>
             <content id="deprecated-v0" select="[slot='expendable']"></content>
             <slot name="expandable"></slot>
             <content select="[slot='expandable']"></content>
-        </span>
+        </div>
     </div>
 </template>
 
@@ -119,7 +123,7 @@ version: 1.1.0
 
             handle.addEventListener("mousedown", function (ev) {
                 if (!expandable.classList.contains("expanded")) {
-                    this.expand(ev.target);
+                    this.expand();
                     ignore = true;
                 }
             }.bind(this));
@@ -161,17 +165,13 @@ version: 1.1.0
             }
         };
 
-        function isLastIndex(index, length) {
-            return (index + 1 == length);
-        }
-
         function proposeRect(position, handleRect, expandableRect) {
             var newExpandableRect = {
                 top: 0,
                 left: 0,
                 right: 0,
                 bottom: 0
-            }
+            };
             if (position.indexOf("beforetop") > -1) {
                 newExpandableRect.top = handleRect.top - expandableRect.height;
                 
@@ -202,28 +202,33 @@ version: 1.1.0
 
         function doesItFit(bounding) {
             //if this fails then switch to the library https://github.com/patik/within-viewport
-            var scrollSize = 18;
             return (
                     bounding.top >= 0 &&
                     bounding.left >= 0 &&
-                    bounding.bottom <= window.innerHeight - scrollSize &&
-                    bounding.right <= window.innerWidth - scrollSize
+                    bounding.bottom <= document.body.clientHeight &&
+                    bounding.right <= document.body.clientWidth
                 );
         }
 
         JuicyPopoverElementPrototype.reposition = function () {
             var expandable = this.shadowRoot.querySelector("#expandable");
-            var handle = this.expandedOnElement || this.shadowRoot.querySelector("#handle");
+            var handle = this.shadowRoot.querySelector("#handle");
 
             var config = this.getAttribute("position") || "bottom left, bottom beforeright, beforetop left, beforetop beforeright";
             var positions = config.split(",");
-            var length = positions.length;
+            var hasFallbacks = (positions.length > 1);
+
             var handleRect = handle.getBoundingClientRect();
             var expandableRect = expandable.getBoundingClientRect();
 
+            if (hasFallbacks && expandableRect.width == 0 && expandableRect.height == 0) {
+                console.log("You have provided more than one position, but they will not be used because the dimentions of your expandable cannot be measured. Make sure you are not using absolute positioning.");
+            }
+
             positions.some(function(position, index) {
                 var newExpandableRect = proposeRect(position, handleRect, expandableRect);
-                if(isLastIndex(index, length) || doesItFit(newExpandableRect)) {
+                var isLastIndex = (index + 1 == positions.length);
+                if(isLastIndex || doesItFit(newExpandableRect)) {
                     var parentRect = handle.offsetParent.getBoundingClientRect();
                     var top = newExpandableRect.top - parentRect.top;
                     var left = newExpandableRect.left - parentRect.left;
@@ -233,8 +238,7 @@ version: 1.1.0
             });
         };
 
-        JuicyPopoverElementPrototype.expand = function (elem) {
-            this.expandedOnElement = elem;
+        JuicyPopoverElementPrototype.expand = function () {
             this.expanded = true;
         };
 
