@@ -79,7 +79,7 @@
                         </div>
                         <div class="signin-popup-user-name">{{model.FullName}}</div>
                     </div>
-                    <div slot="expendable" class="signin-popup-window">
+                    <div slot="expandable" class="signin-popup-window">
                         <div class="signin-popup-window__user-image">
                             <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                         </div>
@@ -96,7 +96,7 @@
                     <div slot="handle" class="signin-popup-handle signin-popup-user-image">
                         <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                     </div>
-                    <div slot="expendable" class="signin-popup-window">
+                    <div slot="expandable" class="signin-popup-window">
                         <form on-submit="preventSubmit">
                             <div>
                                 <template is="dom-if" if="{{model.Message}}" strip-whitespace restamp>
