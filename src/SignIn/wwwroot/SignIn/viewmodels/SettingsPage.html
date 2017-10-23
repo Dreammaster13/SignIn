@@ -68,7 +68,7 @@
         <button slot="SignIn/settings-save-btn" class="btn btn-primary" disabled$="{{isSaveDisabled(model.IsInvalid, model.IsPristine)}}" onmousedown="++this.value;" value="{{model.Save$::click}}">Save</button>
         <button slot="SignIn/settings-undo-btn" class="btn btn-default" disabled$="{{model.IsPristine}}" onmousedown="++this.value;" value="{{model.Rollback$::click}}">Undo</button>
         <button slot="SignIn/settings-close-btn" class="btn btn-default" onmousedown="++this.value;" value="{{model.Close$::click}}">Close</button>
-        <link is="puppet-redirect" history url$="{{model.RedirectUrl}}" />
+        <link is="puppet-redirect" history url="{{model.RedirectUrl}}" />
     </template>
     <script>
         (function (template) {
