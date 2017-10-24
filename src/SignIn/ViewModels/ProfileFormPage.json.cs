@@ -1,7 +1,7 @@
 using Starcounter;
-using Simplified.Ring2;
-using Simplified.Ring3;
-using Simplified.Ring5;
+//using Simplified.Ring2;
+//using Simplified.Ring3;
+//using Simplified.Ring5;
 
 namespace SignIn
 {
@@ -11,7 +11,7 @@ namespace SignIn
         {
             base.OnData();
 
-            SystemUser user = SystemUser.GetCurrentSystemUser();
+            SystemUser user = SystemUser.GetCurrentSystemUserSession().User;
             //EmailAddress email = Utils.GetUserEmailAddress(user);
 
             this.Username = user.Username;
@@ -42,7 +42,7 @@ namespace SignIn
 
             Db.Transact(() =>
             {
-                SystemUser user = SystemUser.GetCurrentSystemUser();
+                SystemUser user = SystemUser.GetCurrentSystemUserSession().User;
                 //EmailAddress email = Utils.GetUserEmailAddress(user);
 
                 //if (email == null)
@@ -69,7 +69,7 @@ namespace SignIn
             this.Message = null;
             this.MessageCss = "alert alert-danger";
 
-            SystemUser user = SystemUser.GetCurrentSystemUser();
+            SystemUser user = SystemUser.GetCurrentSystemUserSession().User;
             bool validOldPassword = SystemUser.ValidatePasswordHash(user.Username, this.OldPassword, user.PasswordSalt, user.Password);
 
             if (!validOldPassword)

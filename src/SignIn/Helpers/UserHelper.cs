@@ -1,4 +1,4 @@
-﻿using Simplified.Ring3;
+﻿//using Simplified.Ring3;
 
 namespace SignIn
 {
@@ -15,5 +15,6 @@ namespace SignIn
             user.Password = passwordHash;
             user.PasswordSalt = salt;
         }
-    }
+
+}
 }

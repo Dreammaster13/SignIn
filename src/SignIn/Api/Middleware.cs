@@ -1,6 +1,6 @@
 ﻿using SignIn.Helpers;
-using Simplified.Ring3;
-using Simplified.Ring5;
+//using Simplified.Ring3;
+//using Simplified.Ring5;
 using Starcounter;
 using System;
 using System.Collections.Generic;
@@ -19,18 +19,18 @@ namespace SignIn.Api
 
             Application.Current.Use((Request req) =>
             {
-                Cookie cookie = cookieHelpers.GetSignInCookie();
+                //Cookie cookie = cookieHelpers.GetSignInCookie();
 
-                if (cookie != null)
-                {
-                    Session.Ensure();
-                    SystemUserSession session = SystemUser.SignInSystemUser(cookie.Value);
+                //if (cookie != null)
+                //{
+                //    Session.Ensure();
+                //    SystemUserSession session = SystemUser.SignInSystemUser(cookie.Value);
 
-                    if (session != null)
-                    {
-                        cookieHelpers.RefreshAuthCookie(session);
-                    }
-                }
+                //    if (session != null)
+                //    {
+                //        cookieHelpers.RefreshAuthCookie(session);
+                //    }
+                //}
 
                 return null;
             });

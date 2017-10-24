@@ -1,12 +1,13 @@
 ﻿using SignIn.Helpers;
 using SignIn.Models;
 using SignIn.ViewModels;
-using Simplified.Ring3;
-using Simplified.Ring5;
+//using Simplified.Ring3;
+//using Simplified.Ring5;
 using Starcounter;
 using System;
 using System.Collections.Specialized;
 using System.Web;
+using System.Text;
 
 namespace SignIn.Api
 {
@@ -25,8 +26,8 @@ namespace SignIn.Api
                 NameValueCollection values = HttpUtility.ParseQueryString(request.Body);
                 string username = values["username"];
                 string password = values["password"];
-                string rememberMe = values["rememberMe"];
-
+                //string rememberMe = values["rememberMe"];
+                string rememberMe = "true";
                 HandleSignIn(username, password, rememberMe);
 
                 Session.Current?.CalculatePatchAndPushOnWebSocket();
@@ -99,18 +100,22 @@ namespace SignIn.Api
                 {
                     Db.Transact(() =>
                     {
-                        session.Token.Expires = DateTime.UtcNow.AddDays(cookieHelper.rememberMeDays);
-                        session.Token.IsPersistent = true;
+                        //session.Token.Expires = DateTime.UtcNow.AddDays(cookieHelper.rememberMeDays);
+                        //session.Token.IsPersistent = true;
+
+
+                        //this
+                        session.ExpiresAt = DateTime.UtcNow.AddDays(30);
                     });
                 }
-                cookieHelper.SetAuthCookie(session.Token);
+                //cookieHelper.SetAuthCookie(session.Token);
             }
         }
 
         protected Response HandleSignOut()
         {
             SystemUser.SignOutSystemUser();
-            cookieHelper.ClearAuthCookie();
+            //cookieHelper.ClearAuthCookie();
 
             return 200;
         }

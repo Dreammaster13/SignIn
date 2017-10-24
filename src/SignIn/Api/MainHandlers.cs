@@ -3,9 +3,9 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using Starcounter;
-using Simplified.Ring3;
-using Simplified.Ring2;
-using Simplified.Ring6;
+//using Simplified.Ring3;
+//using Simplified.Ring2;
+//using Simplified.Ring6;
 using SignIn.Helpers;
 using SignIn.ViewModels;
 using SignIn.Models;
@@ -34,16 +34,16 @@ namespace SignIn
                     return master.SignInPage;
                 }
 
-                Cookie cookie = cookieHelpers.GetSignInCookie();
+                //Cookie cookie = cookieHelpers.GetSignInCookie();
                 SignInPage page = new SignInPage() { Data = null };
 
                 Session.Current.Store[nameof(SignInPage)] = page;
                 
-                if (cookie != null)
-                {
-                    SystemUser.SignInSystemUser(cookie.Value);
-                    master.RefreshSignInState();
-                }
+                //if (cookie != null)
+                //{
+                //    SystemUser.SignInSystemUser(cookie.Value);
+                //    master.RefreshSignInState();
+                //}
 
                 return page;
             });
@@ -205,7 +205,7 @@ namespace SignIn
             Handle.GET("/signin/user/authentication/password/{?}", (string userid, Request request) =>
             {
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM SignIn.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
 
                 if (user == null)
                 {

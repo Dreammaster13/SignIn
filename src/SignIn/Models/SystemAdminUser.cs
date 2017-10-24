@@ -1,7 +1,5 @@
 ﻿using System;
 using Starcounter;
-using Simplified.Ring2;
-using Simplified.Ring3;
 using System.Net;
 using System.Linq;
 
@@ -102,14 +100,25 @@ namespace SignIn.Models
 
                 if (user == null)
                 {
-                    Person person = new Person()
+                    Db.Transact(() =>
                     {
-                        FirstName = _adminUsername,
-                        LastName = _adminUsername
-                    };
+                        new SystemUser()
+                        {
+                            Username = Username,
+                            Password = SystemUser.GeneratePasswordHash(Username, Password, adminPassword),
+                            PasswordSalt = adminPassword
+                        };
+                    });
 
-                    user = SystemUser.RegisterSystemUser(_adminUsername, _adminEmail, adminPassword);
-                    user.WhatIs = person;
+
+                    //Person person = new Person()
+                    //{
+                    //    FirstName = _adminUsername,
+                    //    LastName = _adminUsername
+                    //};
+
+                    //user = SystemUser.RegisterSystemUser(_adminUsername, _adminEmail, adminPassword);
+                    //user.WhatIs = person;
                 }
 
                 // Add the admin group to the system admin user
@@ -142,7 +151,7 @@ namespace SignIn.Models
         //}
        
         private static SystemUser GetAdminUser() => Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser).FullName} o WHERE o.{nameof(SystemUser.Username)} = ?", _adminUsername).FirstOrDefault();
-        private static SystemUserGroup GetAdminUserGroup() => Db.SQL<SystemUserGroup>($"SELECT o FROM {typeof(SystemUserGroup).FullName} o WHERE o.{nameof(SystemUser.Name)} = ?", _adminGroupName).FirstOrDefault();
+        //private static SystemUserGroup GetAdminUserGroup() => Db.SQL<SystemUserGroup>($"SELECT o FROM {typeof(SystemUserGroup).FullName} o WHERE o.{nameof(SystemUser.Name)} = ?", _adminGroupName).FirstOrDefault();
         
     }
 }

@@ -1,5 +1,5 @@
 using Starcounter;
-using Simplified.Ring3;
+//using Simplified.Ring3;
 
 namespace SignIn
 {
@@ -9,7 +9,7 @@ namespace SignIn
         {
             base.OnData();
 
-            SystemUser user = SystemUser.GetCurrentSystemUser();
+            SystemUser user = SystemUser.GetCurrentSystemUserSession().User;
 
             if (user != null)
             {

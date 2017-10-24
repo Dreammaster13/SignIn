@@ -2,7 +2,6 @@
 
 namespace SignIn
 {
-    [Database]
     public class Something
     {
         public bool Deleted { get; set; }
