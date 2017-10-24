@@ -7,7 +7,7 @@
   "IsAlert": false,
   "Password$": "",
   "PasswordRepeat$": "",
-  "RedirectUrl": "",
+  "RedirectUrl$": "",
   "OkTrigger$": 0,
   "CancelTrigger$": 0,
   "BackTrigger$": 0

@@ -22,7 +22,7 @@
         <template is="dom-if" if="{{model.IsAdminCreated$}}">
             <button slot="SignIn/back-button" type="submit" class="btn btn-primary" value="{{model.BackTrigger$::click}}" onmouseup="++this.value;">Back</button>
         </template>
-        <link is="puppet-redirect" history url="{{model.RedirectUrl}}" />
+        <link is="puppet-redirect" history url="{{model.RedirectUrl$}}" />
     </template>
     <script>
         (function () {
