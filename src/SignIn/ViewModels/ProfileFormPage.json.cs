@@ -12,14 +12,14 @@ namespace SignIn
             base.OnData();
 
             SystemUser user = SystemUser.GetCurrentSystemUser();
-            EmailAddress email = Utils.GetUserEmailAddress(user);
+            //EmailAddress email = Utils.GetUserEmailAddress(user);
 
             this.Username = user.Username;
 
-            if (email != null)
-            {
-                this.Email = email.Name;
-            }
+            //if (email != null)
+            //{
+            //    this.Email = email.Name;
+            //}
         }
 
         void Handle(Input.UpdateClick action)
@@ -34,29 +34,29 @@ namespace SignIn
                 return;
             }
 
-            if (!Utils.IsValidEmail(this.Email))
-            {
-                this.Message = "This is not a valid e-mail address!";
-                return;
-            }
+            //if (!Utils.IsValidEmail(this.Email))
+            //{
+            //    this.Message = "This is not a valid e-mail address!";
+            //    return;
+            //}
 
             Db.Transact(() =>
             {
                 SystemUser user = SystemUser.GetCurrentSystemUser();
-                EmailAddress email = Utils.GetUserEmailAddress(user);
+                //EmailAddress email = Utils.GetUserEmailAddress(user);
 
-                if (email == null)
-                {
-                    email = new EmailAddress();
+                //if (email == null)
+                //{
+                //    email = new EmailAddress();
 
-                    EmailAddressRelation relation = new EmailAddressRelation()
-                    {
-                        EmailAddress = email,
-                        Somebody = user.WhoIs as Person
-                    };
-                }
+                //    EmailAddressRelation relation = new EmailAddressRelation()
+                //    {
+                //        EmailAddress = email,
+                //        Somebody = user.WhoIs as Person
+                //    };
+                //}
 
-                email.Name = this.Email;
+                //email.Name = this.Email;
             });
 
             this.Message = "Profile changes has been updated";

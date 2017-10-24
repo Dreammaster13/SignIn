@@ -73,10 +73,10 @@ namespace SignIn.Helpers
             });
 
             cookie.Value = Session.Token.Token;
-            if (Session.Token.IsPersistent)
-            {
+            //if (Session.Token.IsPersistent)
+            //{
                 cookie.Expires = Session.Token.Expires;
-            }
+            //}
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }

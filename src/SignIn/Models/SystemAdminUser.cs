@@ -81,8 +81,9 @@ namespace SignIn.Models
             message = String.Empty;
             isAlert = false;
             SystemUser user = GetAdminUser();
-            SystemUserGroup group = GetAdminUserGroup();
-            if (IsInGroup(user, group))
+            //SystemUserGroup group = GetAdminUserGroup();
+            //if (IsInGroup(user, group))
+            if(user != null)
             {
                 message = "There is already an Admin user created";
                 isAlert = true;
@@ -92,12 +93,12 @@ namespace SignIn.Models
             // There is no system user beloning to the admin group
             Db.Transact(() =>
             {
-                if (group == null)
-                {
-                    group = new SystemUserGroup();
-                    group.Name = _adminGroupName;
-                    group.Description = _adminGroupDescription;
-                }
+                //if (group == null)
+                //{
+                //    group = new SystemUserGroup();
+                //    group.Name = _adminGroupName;
+                //    group.Description = _adminGroupDescription;
+                //}
 
                 if (user == null)
                 {
@@ -112,10 +113,10 @@ namespace SignIn.Models
                 }
 
                 // Add the admin group to the system admin user
-                SystemUserGroupMember member = new SystemUserGroupMember();
+                //SystemUserGroupMember member = new SystemUserGroupMember();
 
-                member.WhatIs = user;
-                member.ToWhat = group;
+                //member.WhatIs = user;
+                //member.ToWhat = group;
             });
             message = $"Admin user with username = '{_adminUsername}' was created";
         }
@@ -132,12 +133,13 @@ namespace SignIn.Models
         
         private static bool HasAdminUser()
         {
-            return IsInGroup(GetAdminUser(), GetAdminUserGroup());
+            return (GetAdminUser() != null);
+            //return IsInGroup(GetAdminUser(), GetAdminUserGroup());
         }
-        private static bool IsInGroup(SystemUser user, SystemUserGroup group)
-        {
-            return (group != null && user != null && SystemUser.IsMemberOfGroup(user, group));
-        }
+        //private static bool IsInGroup(SystemUser user, SystemUserGroup group)
+        //{
+        //    return (group != null && user != null && SystemUser.IsMemberOfGroup(user, group));
+        //}
        
         private static SystemUser GetAdminUser() => Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser).FullName} o WHERE o.{nameof(SystemUser.Username)} = ?", _adminUsername).FirstOrDefault();
         private static SystemUserGroup GetAdminUserGroup() => Db.SQL<SystemUserGroup>($"SELECT o FROM {typeof(SystemUserGroup).FullName} o WHERE o.{nameof(SystemUser.Name)} = ?", _adminGroupName).FirstOrDefault();
