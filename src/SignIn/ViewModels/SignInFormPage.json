@@ -9,5 +9,5 @@
   "CreateAdminClick$": 0,
   "CanCreateAdminUser": false,
   "SessionUri": "",
-  "RedirectUrl": ""
+  "RedirectUrl$": ""
 }
