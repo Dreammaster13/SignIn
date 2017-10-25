@@ -34,16 +34,17 @@ namespace SignIn
                     return master.SignInPage;
                 }
 
-                //Cookie cookie = cookieHelpers.GetSignInCookie();
+                Cookie cookie = cookieHelpers.GetSignInCookie();
                 SignInPage page = new SignInPage() { Data = null };
 
                 Session.Current.Store[nameof(SignInPage)] = page;
-                
-                //if (cookie != null)
-                //{
-                //    SystemUser.SignInSystemUser(cookie.Value);
-                //    master.RefreshSignInState();
-                //}
+
+                if (cookie != null)
+                {
+                    var us = Db.SQL<SystemUserSession>("SELECT o FROM SignIn.SystemUserSession o WHERE o.SessionId=? and o.ExpiresAt > ?", cookie.Value, DateTime.Now).First;
+                    SystemUser.SignInSystemUser(us.User.Username);
+                    master.RefreshSignInState();
+                }
 
                 return page;
             });

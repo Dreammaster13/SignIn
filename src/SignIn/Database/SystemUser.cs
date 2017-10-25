@@ -9,16 +9,55 @@ using System.Security.Cryptography;
 
 namespace SignIn
 {
-    public class SystemUser : Something
+    [Database]
+    public class SystemUser
     {
         public string Username;
         public string Password;
         public string PasswordSalt;
 
-        public string User 
+        //static public SystemUser RegisterSystemUser(string Username, string Email, string Password, out EmailAddress EmailAddress)
+        static public SystemUser RegisterSystemUser(string Username, string Email, string Password)
         {
-            get { return Name; }
-            set { Name = value; }
+            string hash;
+            string salt = GeneratePasswordSalt(16);
+            //Person person = new Person();
+            //string relationTypeName = "Primary";
+            //EmailAddressRelationType type = Db.SQL<EmailAddressRelationType>("SELECT t FROM Simplified.Ring3.EmailAddressRelationType t WHERE t.Name = ?", relationTypeName).First;
+
+            hash = GeneratePasswordHash(Username, Password, salt);
+
+            //if (type == null)
+            //{
+            //    type = new EmailAddressRelationType()
+            //    {
+            //        Name = relationTypeName
+            //    };
+            //}
+
+            //EmailAddress email = new EmailAddress()
+            //{
+            //    Name = Email
+            //};
+
+            //EmailAddressRelation relation = new EmailAddressRelation()
+            //{
+            //    ContactInfo = email,
+            //    Somebody = person,
+            //    ContactInfoRelationType = type
+            //};
+
+            SystemUser user = new SystemUser()
+            {
+                Username = Username,
+                //WhoIs = person,
+                Password = hash,
+                PasswordSalt = salt
+            };
+
+            //EmailAddress = email;
+
+            return user;
         }
 
         static public SystemUserSession SignInSystemUser(string Username, string Password)
@@ -104,9 +143,9 @@ namespace SignIn
             return session;
         }
 
-        static private SystemUserSession AssureSystemUserSession(SystemUser Username)
+        static private SystemUserSession AssureSystemUserSession(SystemUser systemUser)
         {
-            SystemUser systemUser = Db.SQL<SystemUser>("SELECT o FROM SignIn.SystemUser o WHERE o.Username = ?", Username).First;
+            //SystemUser systemUser = Db.SQL<SystemUser>("SELECT o FROM SignIn.SystemUser o WHERE o.Username = ?", Username).First;
 
             if (systemUser == null)
             {
@@ -117,18 +156,19 @@ namespace SignIn
 
             Db.Transact(() =>
             {
-                userSession = Db.SQL<SystemUserSession>("SELECT o FROM SignIn.SystemUserSession o WHERE o.SessionId=?",
-                    Session.Current?.SessionId).First;
-                userSession.ExpiresAt = DateTime.UtcNow.AddDays(7);
+                userSession = Db.SQL<SystemUserSession>("SELECT o FROM SignIn.SystemUserSession o WHERE o.SessionId=? and o.ExpiresAt > ?",
+                    Session.Current?.SessionId, DateTime.Now).First;
                 if (userSession == null)
                 {
-                    //userSession = new SystemUserSession();
-                    //userSession.Created = DateTime.UtcNow;
-                    //userSession.SessionIdString = Session.Current.SessionId;
                     userSession = new SystemUserSession();
-                    userSession.User = systemUser;
-                    userSession.SessionId = Session.Current.SessionId;
+                    userSession.ExpiresAt = DateTime.UtcNow.AddDays(7);
                 }
+                else
+                {
+                    userSession.ExpiresAt = DateTime.UtcNow.AddDays(1);
+                }
+                userSession.User = systemUser;
+                userSession.SessionId = Session.Current.SessionId;
 
             });
 
@@ -318,8 +358,8 @@ namespace SignIn
                 return null;
             }
 
-            return Db.SQL<SystemUserSession>("SELECT o FROM SignIn.SystemUserSession o WHERE o.SessionId=?",
-                    Session.Current?.SessionId).First;
+            return Db.SQL<SystemUserSession>("SELECT o FROM SignIn.SystemUserSession o WHERE o.SessionId=? and o.ExpiresAt > ?",
+                    Session.Current?.SessionId, DateTime.Now).First;
         }
     }
 }

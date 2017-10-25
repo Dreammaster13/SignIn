@@ -19,18 +19,21 @@ namespace SignIn.Api
 
             Application.Current.Use((Request req) =>
             {
-                //Cookie cookie = cookieHelpers.GetSignInCookie();
+                Cookie cookie = cookieHelpers.GetSignInCookie();
 
-                //if (cookie != null)
-                //{
-                //    Session.Ensure();
-                //    SystemUserSession session = SystemUser.SignInSystemUser(cookie.Value);
-
-                //    if (session != null)
-                //    {
-                //        cookieHelpers.RefreshAuthCookie(session);
-                //    }
-                //}
+                if (cookie != null)
+                {
+                    Session.Ensure();
+                    var us = Db.SQL<SystemUserSession>("SELECT o FROM SignIn.SystemUserSession o WHERE o.SessionId=? and o.ExpiresAt > ?", cookie.Value, DateTime.Now).First;
+                    if (us != null)
+                    {
+                        SystemUserSession session = SystemUser.SignInSystemUser(us.User.Username);
+                    }
+                    if (us != null)
+                    {
+                        cookieHelpers.RefreshAuthCookie(us);
+                    }
+                }
 
                 return null;
             });

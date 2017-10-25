@@ -10,8 +10,8 @@ namespace SignIn.Models
     /// </summary>
     public class SystemAdminUser
     {
-        private  const string _adminGroupName = "Admin (System Users)";
-        private const string _adminGroupDescription = "System User Administrator Group";
+        //private  const string _adminGroupName = "Admin (System Users)";
+        //private const string _adminGroupDescription = "System User Administrator Group";
         private const string _adminUsername = "admin";
         private const string _adminEmail = "admin@starcounter.com";
         
@@ -100,14 +100,10 @@ namespace SignIn.Models
 
                 if (user == null)
                 {
+
                     Db.Transact(() =>
                     {
-                        new SystemUser()
-                        {
-                            Username = Username,
-                            Password = SystemUser.GeneratePasswordHash(Username, Password, adminPassword),
-                            PasswordSalt = adminPassword
-                        };
+                        SystemUser.RegisterSystemUser(_adminUsername, _adminEmail, adminPassword);
                     });
 
 

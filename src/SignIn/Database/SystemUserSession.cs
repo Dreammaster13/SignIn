@@ -3,6 +3,7 @@ using Starcounter;
 
 namespace SignIn
 {
+    [Database]
     public class SystemUserSession
     {
         public string SessionId { get; set; }

@@ -9,76 +9,76 @@ namespace SignIn.Helpers
 {
     internal class CookieHelpers
     {
-    //    internal string AuthCookieName = "soauthtoken";
-    //    internal int rememberMeDays = 30;
+        internal string AuthCookieName = "soauthtoken";
+        internal int rememberMeDays = 30;
 
-    //    internal void SetAuthCookie(SystemUserTokenKey token)
-    //    {
-    //        Cookie cookie = new Cookie()
-    //        {
-    //            Name = AuthCookieName
-    //        };
+        internal void SetAuthCookie(SystemUserSession userSess, bool IsPersistent)
+        {
+            Cookie cookie = new Cookie()
+            {
+                Name = AuthCookieName
+            };
 
-    //        if (token == null)
-    //        {
-    //            DeleteCookie(cookie);
-    //        }
-    //        else
-    //        {
-    //            cookie.Value = token.Token;
-    //            if (token.IsPersistent)
-    //            {
-    //                cookie.Expires = token.Expires;
-    //            }
-    //        }
+            if (userSess == null)
+            {
+                DeleteCookie(cookie);
+            }
+            else
+            {
+                cookie.Value = userSess.SessionId;
+                if (IsPersistent)
+                {
+                    cookie.Expires = userSess.ExpiresAt;
+                }
+            }
 
-    //        Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
-    //    }
+            Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
+        }
 
-    //    internal void ClearAuthCookie()
-    //    {
-    //        this.SetAuthCookie(null);
-    //    }
+        internal void ClearAuthCookie()
+        {
+            this.SetAuthCookie(null, false);
+        }
 
-    //    internal void DeleteCookie(Cookie cookie)
-    //    {
-    //        cookie.Expires = DateTime.Now.AddDays(-1).ToUniversalTime();
-    //    }
+        internal void DeleteCookie(Cookie cookie)
+        {
+            cookie.Expires = DateTime.Now.AddDays(-1).ToUniversalTime();
+        }
 
 
-    //    internal Cookie GetSignInCookie()
-    //    {
-    //        List<Cookie> cookies = Handle.IncomingRequest.Cookies.Where(val => !string.IsNullOrEmpty(val)).Select(x => new Cookie(x)).ToList();
-    //        Cookie cookie = cookies.FirstOrDefault(x => x.Name == AuthCookieName);
+        internal Cookie GetSignInCookie()
+        {
+            List<Cookie> cookies = Handle.IncomingRequest.Cookies.Where(val => !string.IsNullOrEmpty(val)).Select(x => new Cookie(x)).ToList();
+            Cookie cookie = cookies.FirstOrDefault(x => x.Name == AuthCookieName);
 
-    //        return cookie;
-    //    }
+            return cookie;
+        }
 
-    //    internal void RefreshAuthCookie(SystemUserSession Session)
-    //    {
-    //        Cookie cookie = GetSignInCookie();
+        internal void RefreshAuthCookie(SystemUserSession Session)
+        {
+            Cookie cookie = GetSignInCookie();
 
-    //        if (cookie == null)
-    //        {
-    //            return;
-    //        }
+            if (cookie == null)
+            {
+                return;
+            }
 
-    //        Db.Transact(() =>
-    //        {
-    //            Session.Token = SystemUser.RenewAuthToken(Session.Token);
-    //            if (Session.Token.IsPersistent)
-    //            {
-    //                Session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
-    //            }
-    //        });
+            //Db.Transact(() =>
+            //{
+            //    Session.Token = SystemUser.RenewAuthToken(Session.Token);
+            //    if (Session.Token.IsPersistent)
+            //    {
+            //        Session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
+            //    }
+            //});
 
-    //        cookie.Value = Session.Token.Token;
-    //        //if (Session.Token.IsPersistent)
-    //        //{
-    //            cookie.Expires = Session.Token.Expires;
-    //        //}
+            //cookie.Value = Session.Token.Token;
+            //if (Session.Token.IsPersistent)
+            //{
+            cookie.Expires = Session.ExpiresAt;
+            //}
 
-    //        Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
-    //    }
+            Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
+        }
     }
 }

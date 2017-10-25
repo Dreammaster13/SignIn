@@ -26,8 +26,7 @@ namespace SignIn.Api
                 NameValueCollection values = HttpUtility.ParseQueryString(request.Body);
                 string username = values["username"];
                 string password = values["password"];
-                //string rememberMe = values["rememberMe"];
-                string rememberMe = "true";
+                string rememberMe = values["rememberMe"];
                 HandleSignIn(username, password, rememberMe);
 
                 Session.Current?.CalculatePatchAndPushOnWebSocket();
@@ -100,22 +99,17 @@ namespace SignIn.Api
                 {
                     Db.Transact(() =>
                     {
-                        //session.Token.Expires = DateTime.UtcNow.AddDays(cookieHelper.rememberMeDays);
-                        //session.Token.IsPersistent = true;
-
-
-                        //this
                         session.ExpiresAt = DateTime.UtcNow.AddDays(30);
                     });
                 }
-                //cookieHelper.SetAuthCookie(session.Token);
+                cookieHelper.SetAuthCookie(session, (RememberMe == "true"));
             }
         }
 
         protected Response HandleSignOut()
         {
             SystemUser.SignOutSystemUser();
-            //cookieHelper.ClearAuthCookie();
+            cookieHelper.ClearAuthCookie();
 
             return 200;
         }
