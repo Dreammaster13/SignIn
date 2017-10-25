@@ -1,4 +1,5 @@
 ﻿<link rel="import" href="/SignIn/elements/signin-element.html" />
+<link rel="import" href="/sys/palindrom-redirect/palindrom-redirect.html" />
 
 <template>
     <template is="dom-bind">
@@ -19,7 +20,7 @@
             <button slot="SignIn/create-Admin-User-button" type="button" class="btn btn-link" value="{{model.CreateAdminClick$::click}}" onmousedown="++this.value;">Create Admin Account</button>
         </template>
         <signin-element slot="SignIn/signin-element" username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
-        <link is="puppet-redirect" history url="{{model.RedirectUrl$}}" />
+        <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}" />
     </template>
     <script>
         (function () {
