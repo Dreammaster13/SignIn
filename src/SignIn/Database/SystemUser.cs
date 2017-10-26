@@ -157,7 +157,7 @@ namespace SignIn
             Db.Transact(() =>
             {
                 userSession = Db.SQL<SystemUserSession>("SELECT o FROM SignIn.SystemUserSession o WHERE o.SessionId=? and o.ExpiresAt > ?",
-                    Session.Current?.SessionId, DateTime.Now).First;
+                    Session.Current?.SessionId, DateTime.UtcNow).First;
                 if (userSession == null)
                 {
                     userSession = new SystemUserSession();
@@ -359,7 +359,7 @@ namespace SignIn
             }
 
             return Db.SQL<SystemUserSession>("SELECT o FROM SignIn.SystemUserSession o WHERE o.SessionId=? and o.ExpiresAt > ?",
-                    Session.Current?.SessionId, DateTime.Now).First;
+                    Session.Current?.SessionId, DateTime.UtcNow).First;
         }
     }
 }

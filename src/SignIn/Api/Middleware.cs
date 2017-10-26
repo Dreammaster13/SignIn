@@ -28,9 +28,6 @@ namespace SignIn.Api
                     if (us != null)
                     {
                         SystemUserSession session = SystemUser.SignInSystemUser(us.User.Username);
-                    }
-                    if (us != null)
-                    {
                         cookieHelpers.RefreshAuthCookie(us);
                     }
                 }
