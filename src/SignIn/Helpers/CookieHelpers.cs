@@ -1,6 +1,4 @@
-﻿//using Simplified.Ring3;
-//using Simplified.Ring5;
-using Starcounter;
+﻿using Starcounter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +8,6 @@ namespace SignIn.Helpers
     internal class CookieHelpers
     {
         internal string AuthCookieName = "soauthtoken";
-        //internal int rememberMeDays = 30;
 
         internal void SetAuthCookie(SystemUserSession userSess)
         {
@@ -26,10 +23,7 @@ namespace SignIn.Helpers
             else
             {
                 cookie.Value = userSess.SessionId;
-                //if (IsPersistent)
-                //{
-                    cookie.Expires = userSess.ExpiresAt;
-                //}
+                cookie.Expires = userSess.ExpiresAt;
             }
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
@@ -62,21 +56,7 @@ namespace SignIn.Helpers
             {
                 return;
             }
-
-            //Db.Transact(() =>
-            //{
-            //    Session.Token = SystemUser.RenewAuthToken(Session.Token);
-            //    if (Session.Token.IsPersistent)
-            //    {
-            //        Session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
-            //    }
-            //});
-
-            //cookie.Value = Session.Token.Token;
-            //if (Session.Token.IsPersistent)
-            //{
             cookie.Expires = Session.ExpiresAt;
-            //}
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }

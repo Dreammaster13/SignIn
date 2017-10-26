@@ -13,7 +13,7 @@ namespace SignIn.Models
         //private  const string _adminGroupName = "Admin (System Users)";
         //private const string _adminGroupDescription = "System User Administrator Group";
         private const string _adminUsername = "admin";
-        private const string _adminEmail = "admin@starcounter.com";
+        private const string _adminEmail = "mihai@starcounter.com";
         
         public bool CanCreateAdminUser => GetCanCreateAdminUser(this.ClientRootAddress);
      

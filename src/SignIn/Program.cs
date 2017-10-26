@@ -6,7 +6,7 @@ namespace SignIn
     {
         static void Main()
         {
-            AuthorizationHelper.SetupPermissions();
+            //AuthorizationHelper.SetupPermissions();
 
             new Middleware().Register();
             new CommitHooks().Register();

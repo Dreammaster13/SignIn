@@ -12,14 +12,14 @@ namespace SignIn
             base.OnData();
 
             SystemUser user = SystemUser.GetCurrentSystemUserSession().User;
-            //EmailAddress email = Utils.GetUserEmailAddress(user);
+            var email = user.Email;
 
             this.Username = user.Username;
 
-            //if (email != null)
-            //{
-            //    this.Email = email.Name;
-            //}
+            if (email != null)
+            {
+                this.Email = email;
+            }
         }
 
         void Handle(Input.UpdateClick action)
@@ -34,29 +34,17 @@ namespace SignIn
                 return;
             }
 
-            //if (!Utils.IsValidEmail(this.Email))
-            //{
-            //    this.Message = "This is not a valid e-mail address!";
-            //    return;
-            //}
+            if (!Utils.IsValidEmail(this.Email))
+            {
+                this.Message = "This is not a valid e-mail address!";
+                return;
+            }
 
             Db.Transact(() =>
             {
                 SystemUser user = SystemUser.GetCurrentSystemUserSession().User;
-                //EmailAddress email = Utils.GetUserEmailAddress(user);
-
-                //if (email == null)
-                //{
-                //    email = new EmailAddress();
-
-                //    EmailAddressRelation relation = new EmailAddressRelation()
-                //    {
-                //        EmailAddress = email,
-                //        Somebody = user.WhoIs as Person
-                //    };
-                //}
-
-                //email.Name = this.Email;
+                var email = user.Email;
+                user.Email = this.Email;
             });
 
             this.Message = "Profile changes has been updated";

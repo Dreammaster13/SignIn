@@ -1,8 +1,6 @@
 ﻿using SignIn.Helpers;
 using SignIn.Models;
 using SignIn.ViewModels;
-//using Simplified.Ring3;
-//using Simplified.Ring5;
 using Starcounter;
 using System;
 using System.Collections.Specialized;

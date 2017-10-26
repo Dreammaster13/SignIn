@@ -12,95 +12,86 @@ namespace SignIn
 {
     partial class SystemUserAuthenticationSettings : PropertyMetadataPage, IBound<SystemUser>
     {
-        //public bool ResetPassword_Enabled_
-        //{
-        //    get
-        //    {
-        //        var emailAddress = Utils.GetUserEmailAddress(this.Data);
-        //        return emailAddress != null && MailSettingsHelper.GetSettings().Enabled && Utils.IsValidEmail(emailAddress.EMail);
-        //    }
-        //}
+        public bool ResetPassword_Enabled_
+        {
+            get
+            {
+                var emailAddress = this.Data.Email;
+                return emailAddress != null && MailSettingsHelper.GetSettings().Enabled && Utils.IsValidEmail(emailAddress);
+            }
+        }
 
-        //void Handle(Input.ResetPassword action)
-        //{
-        //    // Go to "Reset password" form
-        //    this.Message = null;
-        //    this.ResetUserPassword();
-        //}
+        void Handle(Input.ResetPassword action)
+        {
+            // Go to "Reset password" form
+            this.Message = null;
+            this.ResetUserPassword();
+        }
 
-        //protected void ResetUserPassword()
-        //{
-        //    string link = null;
-        //    string fullName = string.Empty;
-        //    var mailSettings = MailSettingsHelper.GetSettings();
+        protected void ResetUserPassword()
+        {
+            string link = null;
+            string fullName = string.Empty;
+            var mailSettings = MailSettingsHelper.GetSettings();
 
-        //    if (mailSettings.Enabled == false)
-        //    {
-        //        this.Message = "Mail Server not enabled in the settings.";
-        //        return;
-        //    }
+            if (mailSettings.Enabled == false)
+            {
+                this.Message = "Mail Server not enabled in the settings.";
+                return;
+            }
 
-        //    if (string.IsNullOrEmpty(mailSettings.SiteHost))
-        //    {
-        //        this.Message = "Invalid settings, check site host name / port";
-        //        return;
-        //    }
+            if (string.IsNullOrEmpty(mailSettings.SiteHost))
+            {
+                this.Message = "Invalid settings, check site host name / port";
+                return;
+            }
+            
+            var email = this.Data.Email;
+            if (!Utils.IsValidEmail(email))
+            {
+                this.Message = "Username is not an email address";
+                return;
+            }
 
-        //    //var emailAddress = Utils.GetUserEmailAddress(this.Data);
-        //    //var email = emailAddress.EMail;
-        //    //if (!Utils.IsValidEmail(email))
-        //    //{
-        //    //    this.Message = "Username is not an email address";
-        //    //    return;
-        //    //}
+            var transaction = this.Transaction;
+            transaction.Scope(() =>
+            {
+                SystemUser systemUser = this.Data;
+                // Generate Password Reset token
+                ResetPassword resetPassword = new ResetPassword()
+                {
+                    User = systemUser,
+                    Token = HttpUtility.UrlEncode(Guid.NewGuid().ToString()),
+                    Expire = DateTime.UtcNow.AddMinutes(1440)
+                };
+                
+                fullName = systemUser.Username;
 
-        //    var transaction = this.Transaction;
-        //    transaction.Scope(() =>
-        //    {
-        //        SystemUser systemUser = this.Data;
-        //        // Generate Password Reset token
-        //        ResetPassword resetPassword = new ResetPassword()
-        //        {
-        //            User = systemUser,
-        //            Token = HttpUtility.UrlEncode(Guid.NewGuid().ToString()),
-        //            Expire = DateTime.UtcNow.AddMinutes(1440)
-        //        };
+                // Build reset password link
+                UriBuilder uri = new UriBuilder();
 
-        //        // Get FullName
-        //        if (systemUser.WhoIs != null)
-        //        {
-        //            fullName = systemUser.WhoIs.FullName;
-        //        }
-        //        else
-        //        {
-        //            fullName = systemUser.Username;
-        //        }
+                uri.Host = mailSettings.SiteHost;
+                uri.Port = (int)mailSettings.SitePort;
 
-        //        // Build reset password link
-        //        UriBuilder uri = new UriBuilder();
+                uri.Path = "signin/user/resetpassword";
+                uri.Query = "token=" + resetPassword.Token;
 
-        //        uri.Host = mailSettings.SiteHost;
-        //        uri.Port = (int)mailSettings.SitePort;
+                link = uri.ToString();
+            });
 
-        //        uri.Path = "signin/user/resetpassword";
-        //        uri.Query = "token=" + resetPassword.Token;
+            transaction.Commit();
 
-        //        link = uri.ToString();
-        //    });
-
-        //    transaction.Commit();
-
-        //    try
-        //    {
-        //        this.Message = string.Format("Sending mail sent to {0}...", email);
-        //        Utils.SendResetPasswordMail(fullName, email, link);
-        //        this.Message = "Mail sent.";
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        this.Message = e.Message;
-        //    }
-        //}
+            try
+            {
+                this.Message = string.Format("Sending mail sent to {0}...", email);
+                Utils.SendResetPasswordMail(fullName, email, link);
+                this.Message = "Mail sent.";
+            }
+            catch (Exception e)
+            {
+                this.Message = e.Message;
+            }
+        }
 
     }
 }

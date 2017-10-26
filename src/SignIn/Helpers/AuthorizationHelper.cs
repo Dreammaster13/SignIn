@@ -1,6 +1,4 @@
-﻿//using Simplified.Ring3;
-//using Simplified.Ring5;
-using Starcounter;
+﻿using Starcounter;
 
 namespace SignIn
 {

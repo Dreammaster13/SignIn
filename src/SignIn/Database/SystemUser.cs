@@ -15,48 +15,23 @@ namespace SignIn
         public string Username;
         public string Password;
         public string PasswordSalt;
-
-        //static public SystemUser RegisterSystemUser(string Username, string Email, string Password, out EmailAddress EmailAddress)
+        public string Email;
+        
         static public SystemUser RegisterSystemUser(string Username, string Email, string Password)
         {
             string hash;
             string salt = GeneratePasswordSalt(16);
-            //Person person = new Person();
-            //string relationTypeName = "Primary";
-            //EmailAddressRelationType type = Db.SQL<EmailAddressRelationType>("SELECT t FROM Simplified.Ring3.EmailAddressRelationType t WHERE t.Name = ?", relationTypeName).First;
 
             hash = GeneratePasswordHash(Username, Password, salt);
-
-            //if (type == null)
-            //{
-            //    type = new EmailAddressRelationType()
-            //    {
-            //        Name = relationTypeName
-            //    };
-            //}
-
-            //EmailAddress email = new EmailAddress()
-            //{
-            //    Name = Email
-            //};
-
-            //EmailAddressRelation relation = new EmailAddressRelation()
-            //{
-            //    ContactInfo = email,
-            //    Somebody = person,
-            //    ContactInfoRelationType = type
-            //};
-
+            
             SystemUser user = new SystemUser()
             {
                 Username = Username,
-                //WhoIs = person,
                 Password = hash,
-                PasswordSalt = salt
+                PasswordSalt = salt,
+                Email = Email
             };
-
-            //EmailAddress = email;
-
+            
             return user;
         }
 
@@ -127,12 +102,6 @@ namespace SignIn
             {
                 return null;
             }
-
-            //if (!ValidateAuthToken(token))
-            //{
-            //    return null;
-            //}
-
             SystemUserSession session = null;
 
             Db.Transact(() =>
@@ -145,7 +114,6 @@ namespace SignIn
 
         static private SystemUserSession AssureSystemUserSession(SystemUser systemUser)
         {
-            //SystemUser systemUser = Db.SQL<SystemUser>("SELECT o FROM SignIn.SystemUser o WHERE o.Username = ?", Username).First;
 
             if (systemUser == null)
             {

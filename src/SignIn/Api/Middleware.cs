@@ -1,6 +1,4 @@
 ﻿using SignIn.Helpers;
-//using Simplified.Ring3;
-//using Simplified.Ring5;
 using Starcounter;
 using System;
 using System.Collections.Generic;

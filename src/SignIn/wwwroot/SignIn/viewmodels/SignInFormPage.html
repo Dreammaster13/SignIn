@@ -11,8 +11,6 @@
         <label slot="SignIn/password-label" for="txtPassword">Password</label>
         <assas action="{{thing}}"></assas>
         <input slot="SignIn/password-input" id="txtPassword" name="password" type="password" value="{{local.password::input}}" placeholder="Password" class="form-control" on-keypress="txtKeypress"/>
-        <!--<input slot="SignIn/rememberme-checkbox" type="checkbox" checked="{{local.rememberMe::change}}"/>-->
-        <!--<span slot="SignIn/rememberme-label">Remember me</span>-->
         <button slot="SignIn/submit-button" type="submit" class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;">Sign in</button>
         <button slot="SignIn/forgot-button" type="button" class="btn btn-link" value="{{model.RestoreClick$::click}}" disabled="{{model.RestoreClick$::click}}" onmouseup="++this.value;">Forgot password?</button>
         <template is="dom-if" if="{{model.CanCreateAdminUser}}">
