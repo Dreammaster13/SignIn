@@ -325,5 +325,15 @@ namespace SignIn
             return Db.SQL<SystemUserSession>("SELECT o FROM SignIn.SystemUserSession o WHERE o.SessionId=? and o.ExpiresAt > ?",
                     Session.Current?.SessionId, DateTime.UtcNow).First;
         }
+        static public SystemUser GetSystemUser(string Username)
+        {
+            if (Session.Current == null)
+            {
+                return null;
+            }
+
+            return Db.SQL<SystemUser>("SELECT o FROM SignIn.SystemUser o WHERE o.UserName=?", Username).First;
+        }
+
     }
 }

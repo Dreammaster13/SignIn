@@ -36,15 +36,15 @@ namespace SignIn
                 return;
             }
 
-            SystemUserSession usersess = SystemUser.GetCurrentSystemUserSession();
+            SystemUser user = SystemUser.GetSystemUser(this.Username);
 
-            if (usersess == null || usersess.User == null)
+            if (user == null || user.Username == null)
             {
                 this.Message = "Invalid username!";
                 return;
             }
 
-            var email = usersess.User.Email;
+            var email = user.Email;
 
             if (string.IsNullOrEmpty(email))
             {
@@ -53,14 +53,14 @@ namespace SignIn
             }
 
             string password = Utils.RandomString(5);
-            string hash = SystemUser.GeneratePasswordHash(usersess.User.Username, password, usersess.User.PasswordSalt);
+            string hash = SystemUser.GeneratePasswordHash(user.Username, password, user.PasswordSalt);
 
             try
             {
-                this.SendNewPassword(usersess.User.Username, password, usersess.User.Email);
+                this.SendNewPassword(user.Username, password, user.Email);
                 this.Message = "Your new password has been sent to your email address.";
                 this.MessageCss = "alert alert-success";
-                Db.Transact(() => { usersess.User.Password = hash; });
+                Db.Transact(() => { user.Password = hash; });
             }
             catch (Exception ex)
             {
