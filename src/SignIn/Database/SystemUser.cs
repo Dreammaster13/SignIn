@@ -161,12 +161,8 @@ namespace SignIn
                 if (userSession == null)
                 {
                     userSession = new SystemUserSession();
-                    userSession.ExpiresAt = DateTime.UtcNow.AddDays(7);
                 }
-                else
-                {
-                    userSession.ExpiresAt = DateTime.UtcNow.AddDays(1);
-                }
+                userSession.ExpiresAt = DateTime.UtcNow.AddDays(7);
                 userSession.User = systemUser;
                 userSession.SessionId = Session.Current.SessionId;
 

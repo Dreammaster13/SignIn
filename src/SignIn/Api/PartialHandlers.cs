@@ -26,8 +26,8 @@ namespace SignIn.Api
                 NameValueCollection values = HttpUtility.ParseQueryString(request.Body);
                 string username = values["username"];
                 string password = values["password"];
-                string rememberMe = values["rememberMe"];
-                HandleSignIn(username, password, rememberMe);
+                //string rememberMe = values["rememberMe"];
+                HandleSignIn(username, password);
 
                 Session.Current?.CalculatePatchAndPushOnWebSocket();
                 return 200;
@@ -61,7 +61,7 @@ namespace SignIn.Api
             Handle.GET("/signin/partial/signout", HandleSignOut, internalOption);
         }
 
-        protected void HandleSignIn(string Username, string Password, string RememberMe)
+        protected void HandleSignIn(string Username, string Password)
         {
             Username = Uri.UnescapeDataString(Username);
 
@@ -95,14 +95,14 @@ namespace SignIn.Api
             }
             else
             {
-                if (RememberMe == "true")
-                {
+                //if (RememberMe == "true")
+                //{
                     Db.Transact(() =>
                     {
                         session.ExpiresAt = DateTime.UtcNow.AddDays(30);
                     });
-                }
-                cookieHelper.SetAuthCookie(session, (RememberMe == "true"));
+                //}
+                cookieHelper.SetAuthCookie(session);
             }
         }
 

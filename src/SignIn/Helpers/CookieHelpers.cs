@@ -10,9 +10,9 @@ namespace SignIn.Helpers
     internal class CookieHelpers
     {
         internal string AuthCookieName = "soauthtoken";
-        internal int rememberMeDays = 30;
+        //internal int rememberMeDays = 30;
 
-        internal void SetAuthCookie(SystemUserSession userSess, bool IsPersistent)
+        internal void SetAuthCookie(SystemUserSession userSess)
         {
             Cookie cookie = new Cookie()
             {
@@ -26,10 +26,10 @@ namespace SignIn.Helpers
             else
             {
                 cookie.Value = userSess.SessionId;
-                if (IsPersistent)
-                {
+                //if (IsPersistent)
+                //{
                     cookie.Expires = userSess.ExpiresAt;
-                }
+                //}
             }
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
@@ -37,7 +37,7 @@ namespace SignIn.Helpers
 
         internal void ClearAuthCookie()
         {
-            this.SetAuthCookie(null, false);
+            this.SetAuthCookie(null);
         }
 
         internal void DeleteCookie(Cookie cookie)

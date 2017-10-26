@@ -108,12 +108,12 @@
                             <div>
                                 <input name="password" class="form-control signin-popup-window__control" type="password" placeholder="Password" value="{{local.password::input}}" on-keypress="txtKeypress" />
                             </div>
-                            <div class="checkbox">
+                            <!--<div class="checkbox">
                                 <label>
                                     <input type="checkbox" checked="{{local.rememberMe::change}}" />
                                     <span>Remember me</span>
                                 </label>
-                            </div>
+                            </div>-->
                             <div>
                                 <button type="submit" class="btn btn-primary" role="button" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmousedown="++this.value;">Sign in</button>
                                 <a href="/signin/signinuser" class="btn btn-link btn-sm" on-mouseover="btnFormHover">
