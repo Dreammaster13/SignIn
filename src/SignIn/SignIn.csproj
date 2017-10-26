@@ -71,7 +71,6 @@
     <Compile Include="Api\BlenderMapping.cs" />
     <Compile Include="Api\Middleware.cs" />
     <Compile Include="Api\PartialHandlers.cs" />
-    <Compile Include="Database\Something.cs" />
     <Compile Include="Database\SystemUser.cs" />
     <Compile Include="Database\SystemUserSession.cs" />
     <Compile Include="Helpers\AuthorizationHelper.cs" />
