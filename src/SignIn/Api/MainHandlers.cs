@@ -102,103 +102,99 @@ namespace SignIn
             });
 
             // Reset password
-            //Handle.GET("/signin/user/resetpassword?{?}", (string query, Request request) =>
-            //{
-            //    NameValueCollection queryCollection = HttpUtility.ParseQueryString(query);
-            //    string token = queryCollection.Get("token");
+            Handle.GET("/signin/user/resetpassword?{?}", (string query, Request request) =>
+            {
+                NameValueCollection queryCollection = HttpUtility.ParseQueryString(query);
+                string token = queryCollection.Get("token");
 
-            //    MasterPage master = this.GetMaster();
+                MasterPage master = this.GetMaster();
 
-            //    if (token == null)
-            //    {
-            //        // TODO:
-            //        master.Partial = null; // (ushort)System.Net.HttpStatusCode.NotFound;
-            //        return master;
-            //    }
+                if (token == null)
+                {
+                    // TODO:
+                    master.Partial = null; // (ushort)System.Net.HttpStatusCode.NotFound;
+                    return master;
+                }
 
-            //    // Retrive the resetPassword instance
-            //    ResetPassword resetPassword = Db.SQL<ResetPassword>("SELECT o FROM Simplified.Ring6.ResetPassword o WHERE o.Token=? AND o.Expire>?", token, DateTime.UtcNow).First;
+                // Retrive the resetPassword instance
+                ResetPassword resetPassword = Db.SQL<ResetPassword>("SELECT o FROM Simplified.Ring6.ResetPassword o WHERE o.Token=? AND o.Expire>?", token, DateTime.UtcNow).First;
 
-            //    if (resetPassword == null)
-            //    {
-            //        // TODO: Show message "Reset token already used or expired"
-            //        master.Partial = null; // (ushort)System.Net.HttpStatusCode.NotFound;
-            //        return master;
-            //    }
+                if (resetPassword == null)
+                {
+                    // TODO: Show message "Reset token already used or expired"
+                    master.Partial = null; // (ushort)System.Net.HttpStatusCode.NotFound;
+                    return master;
+                }
 
-            //    if (resetPassword.User == null)
-            //    {
-            //        // TODO: Show message "User deleted"
-            //        master.Partial = null; // (ushort)System.Net.HttpStatusCode.NotFound;
-            //        return master;
-            //    }
+                if (resetPassword.User == null)
+                {
+                    // TODO: Show message "User deleted"
+                    master.Partial = null; // (ushort)System.Net.HttpStatusCode.NotFound;
+                    return master;
+                }
 
-            //    SystemUser systemUser = resetPassword.User;
+                SystemUser systemUser = resetPassword.User;
 
-            //    ResetPasswordPage page = new ResetPasswordPage()
-            //    {
-            //        Html = "/SignIn/viewmodels/ResetPasswordPage.html",
-            //        Uri = "/signin/user/resetpassword"
-            //        //Uri = request.Uri // TODO:
-            //    };
+                ResetPasswordPage page = new ResetPasswordPage()
+                {
+                    Html = "/SignIn/viewmodels/ResetPasswordPage.html",
+                    Uri = "/signin/user/resetpassword"
+                    //Uri = request.Uri // TODO:
+                };
 
-            //    page.ResetPassword = resetPassword;
+                page.ResetPassword = resetPassword;
 
-            //    if (systemUser.WhoIs != null)
-            //    {
-            //        page.FullName = systemUser.WhoIs.FullName;
-            //    }
-            //    else
-            //    {
-            //        page.FullName = systemUser.Username;
-            //    }
+                if (systemUser.Username != null)
+                { 
+                    page.FullName = systemUser.Username;
+                }
 
-            //    master.Partial = page;
+                master.Partial = page;
 
-            //    return master;
-            //});
+                return master;
+            });
 
-            //Handle.GET("/signin/user/authentication/settings/{?}", (string userid, Request request) =>
-            //{
-            //    Json page;
-            //    if (!AuthorizationHelper.TryNavigateTo("/signin/user/authentication/settings/{?}", request, out page))
-            //    {
-            //        return new Json();
-            //    }
+            Handle.GET("/signin/user/authentication/settings/{?}", (string userid, Request request) =>
+            {
+                Json page;
+                if (!AuthorizationHelper.TryNavigateTo("/signin/user/authentication/settings/{?}", request, out page))
+                {
+                    return new Json();
+                }
 
-            //    // Get system user
-            //    SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+                // Get system user
+                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
 
-            //    if (user == null)
-            //    {
-            //        // TODO: Return a "User not found" page
-            //        return new Json();
-            //        //return (ushort)System.Net.HttpStatusCode.NotFound;
-            //    }
+                if (user == null)
+                {
+                    // TODO: Return a "User not found" page
+                    return new Json();
+                    //return (ushort)System.Net.HttpStatusCode.NotFound;
+                }
 
-            //    SystemUser systemUser = SystemUser.GetCurrentSystemUser();
-            //    //SystemUserGroup adminGroup = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
-            //    //        AuthorizationHelper.AdminGroupName).FirstOrDefault();
+                SystemUser systemUser = SystemUser.GetCurrentSystemUserSession().User;
+                //SystemUserGroup adminGroup = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
+                //        AuthorizationHelper.AdminGroupName).FirstOrDefault();
 
-            //    // Check if current user has permission to get this user instance
-            //    //if (AuthorizationHelper.IsMemberOfGroup(systemUser, adminGroup))
-            //    //{
-            //        if (user.WhoIs is Person)
-            //        {
-            //            page = Db.Scope(() => new SystemUserAuthenticationSettings
-            //            {
-            //                Html = "/SignIn/viewmodels/SystemUserAuthenticationSettings.html",
-            //                Uri = request.Uri,
-            //                Data = user,
-            //                UserPassword = Self.GET("/signin/user/authentication/password/" + user.GetObjectID())
-            //            });
+                // Check if current user has permission to get this user instance
+                //if (AuthorizationHelper.IsMemberOfGroup(systemUser, adminGroup))
+                //{
+                //if (user.WhoIs is Person)
+                //{
+                    page = Db.Scope(() => new SystemUserAuthenticationSettings
+                    {
+                        Html = "/SignIn/viewmodels/SystemUserAuthenticationSettings.html",
+                        Uri = request.Uri,
+                        Data = user,
+                        UserPassword = Self.GET("/signin/user/authentication/password/" + user.GetObjectID())
+                    });
 
-            //            return page;
-            //        }
-            //    //}
+                    return page;
+                //}
+                //}
 
-            //    return new Json();
-            //}, new HandlerOptions { SelfOnly = true });
+                //return new Json();
+            }, new HandlerOptions { SelfOnly = true });
 
             Handle.GET("/signin/user/authentication/password/{?}", (string userid, Request request) =>
             {
