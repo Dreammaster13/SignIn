@@ -93,13 +93,10 @@ namespace SignIn.Api
             }
             else
             {
-                //if (RememberMe == "true")
-                //{
-                    Db.Transact(() =>
-                    {
-                        session.ExpiresAt = DateTime.UtcNow.AddDays(30);
-                    });
-                //}
+                Db.Transact(() =>
+                {
+                    session.ExpiresAt = DateTime.UtcNow.AddDays(30);
+                });
                 cookieHelper.SetAuthCookie(session);
             }
         }

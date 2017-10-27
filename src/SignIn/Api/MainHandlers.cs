@@ -169,16 +169,9 @@ namespace SignIn
                 {
                     // TODO: Return a "User not found" page
                     return new Json();
-                    //return (ushort)System.Net.HttpStatusCode.NotFound;
                 }
 
                 
-                //SystemUserGroup adminGroup = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
-                //        AuthorizationHelper.AdminGroupName).FirstOrDefault();
-
-                // Check if current user has permission to get this user instance
-                //if (AuthorizationHelper.IsMemberOfGroup(systemUser, adminGroup))
-                //{
                 if (SystemUser.GetCurrentSystemUserSession() != null && SystemUser.GetCurrentSystemUserSession().User != null)
                 {
                     SystemUser systemUser = SystemUser.GetCurrentSystemUserSession().User;
@@ -235,15 +228,9 @@ namespace SignIn
 
         protected Response HandleSignInForm(string OriginalUrl)
         {
-            //var settings = DataHelper.GetSettings();
-
             MasterPage master = this.GetMaster();
             master.RequireSignIn = false;
-
-            //if (settings.SignInFormAsFullPage && Handle.CallLevel > 0 && !string.IsNullOrEmpty(OriginalUrl))
-            //{
-            //    master.Redirect("/signin/signinuser?" + OriginalUrl);
-            //}
+            
             if (Handle.CallLevel > 0 && !string.IsNullOrEmpty(OriginalUrl))
             {
                 master.Redirect("/signin/signinuser?" + OriginalUrl);

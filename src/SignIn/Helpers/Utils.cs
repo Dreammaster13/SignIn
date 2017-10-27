@@ -2,9 +2,6 @@
 using System.Net;
 using System.Net.Mail;
 using System.Text;
-//using Simplified.Ring2;
-//using Simplified.Ring3;
-//using Simplified.Ring6;
 using Starcounter;
 
 namespace SignIn
@@ -44,23 +41,6 @@ namespace SignIn
 
             return builder.ToString();
         }
-
-        //public static string GetUserEmailAddress(SystemUser user)
-        //{
-        //    Person person = user.WhoIs as Person;
-
-        //    if (person == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    EmailAddress email =
-        //        Db.SQL<EmailAddress>(
-        //                "SELECT r.EmailAddress FROM Simplified.Ring3.EmailAddressRelation r WHERE r.Somebody = ?", person)
-        //            .First;
-
-        //    return email;
-        //}
 
         /// <summary>
         /// Send Reset password email

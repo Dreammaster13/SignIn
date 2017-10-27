@@ -1,5 +1,4 @@
-﻿//using Simplified.Ring3;
-
+﻿
 namespace SignIn
 {
     public class UserHelper

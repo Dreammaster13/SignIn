@@ -2,9 +2,6 @@ using System;
 using System.Net;
 using System.Net.Mail;
 using Starcounter;
-//using Simplified.Ring2;
-//using Simplified.Ring3;
-//using Simplified.Ring6;
 
 namespace SignIn
 {

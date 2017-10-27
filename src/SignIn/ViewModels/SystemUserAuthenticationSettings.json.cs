@@ -1,7 +1,5 @@
 using System;
 using System.Web;
-//using Simplified.Ring3;
-//using Simplified.Ring6;
 using Smorgasbord.PropertyMetadata;
 using Starcounter;
 
