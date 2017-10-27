@@ -95,6 +95,7 @@ namespace SignIn.Models
                     {
                         SystemUser.RegisterSystemUser(_adminUsername, _adminEmail, adminPassword);
                     });
+                }
             });
             message = $"Admin user with username = '{_adminUsername}' was created";
         }
