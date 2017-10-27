@@ -117,7 +117,7 @@ namespace SignIn
                 }
 
                 // Retrive the resetPassword instance
-                ResetPassword resetPassword = Db.SQL<ResetPassword>("SELECT o FROM Simplified.Ring6.ResetPassword o WHERE o.Token=? AND o.Expire>?", token, DateTime.UtcNow).First;
+                ResetPassword resetPassword = Db.SQL<ResetPassword>("SELECT o FROM SignIn.ResetPassword o WHERE o.Token=? AND o.Expire>?", token, DateTime.UtcNow).First;
 
                 if (resetPassword == null)
                 {
@@ -163,7 +163,7 @@ namespace SignIn
                 }
 
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM SignIn.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
 
                 if (user == null)
                 {
@@ -172,15 +172,16 @@ namespace SignIn
                     //return (ushort)System.Net.HttpStatusCode.NotFound;
                 }
 
-                SystemUser systemUser = SystemUser.GetCurrentSystemUserSession().User;
+                
                 //SystemUserGroup adminGroup = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
                 //        AuthorizationHelper.AdminGroupName).FirstOrDefault();
 
                 // Check if current user has permission to get this user instance
                 //if (AuthorizationHelper.IsMemberOfGroup(systemUser, adminGroup))
                 //{
-                //if (user.WhoIs is Person)
-                //{
+                if (SystemUser.GetCurrentSystemUserSession() != null && SystemUser.GetCurrentSystemUserSession().User != null)
+                {
+                    SystemUser systemUser = SystemUser.GetCurrentSystemUserSession().User;
                     page = Db.Scope(() => new SystemUserAuthenticationSettings
                     {
                         Html = "/SignIn/viewmodels/SystemUserAuthenticationSettings.html",
@@ -190,11 +191,11 @@ namespace SignIn
                     });
 
                     return page;
-                //}
+                }
                 //}
 
-                //return new Json();
-            }, new HandlerOptions { SelfOnly = true });
+            return new Json();
+        }, new HandlerOptions { SelfOnly = true });
 
             Handle.GET("/signin/user/authentication/password/{?}", (string userid, Request request) =>
             {

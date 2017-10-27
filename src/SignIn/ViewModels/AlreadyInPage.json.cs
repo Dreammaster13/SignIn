@@ -8,12 +8,10 @@ namespace SignIn
         protected override void OnData()
         {
             base.OnData();
-
-            SystemUser user = SystemUser.GetCurrentSystemUserSession().User;
-
-            if (user != null)
+            
+            if (SystemUser.GetCurrentSystemUserSession() != null && SystemUser.GetCurrentSystemUserSession().User != null)
             {
-                this.Username = user.Username;
+                this.Username = SystemUser.GetCurrentSystemUserSession().User.Username;
             }
         }
     }

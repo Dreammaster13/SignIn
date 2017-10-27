@@ -23,7 +23,7 @@ namespace SignIn.Api
                 {
                     Session.Ensure();
                     var us = Db.SQL<SystemUserSession>("SELECT o FROM SignIn.SystemUserSession o WHERE o.SessionId=? and o.ExpiresAt > ?", cookie.Value, DateTime.Now).First;
-                    if (us != null)
+                    if (us != null && us.User != null)
                     {
                         SystemUserSession session = SystemUser.SignInSystemUser(us.User.Username);
                         cookieHelpers.RefreshAuthCookie(us);

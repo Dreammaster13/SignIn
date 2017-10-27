@@ -32,9 +32,8 @@ namespace SignIn
         public static bool TryNavigateTo(string url, Request request, out Json returnPage)
         {
             returnPage = null;
-
-            SystemUser systemUser = SystemUser.GetCurrentSystemUserSession().User;
-            if (systemUser == null)
+            
+            if (SystemUser.GetCurrentSystemUserSession() == null || SystemUser.GetCurrentSystemUserSession().User == null)
             {
                 // Ask user to sign in.
                 returnPage = Self.GET("/signin/partial/accessdenied-form");
