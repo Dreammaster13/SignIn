@@ -29,28 +29,29 @@ namespace SignIn
         //    }
         //}
 
-        //public static bool TryNavigateTo(string url, Request request, out Json returnPage)
-        //{
-        //    returnPage = null;
+        public static bool TryNavigateTo(string url, Request request, out Json returnPage)
+        {
+            returnPage = null;
 
-        //    SystemUser systemUser = SystemUser.GetCurrentSystemUser();
-        //    if (systemUser == null)
-        //    {
-        //        // Ask user to sign in.
-        //        returnPage = Self.GET("/signin/partial/accessdenied-form");
-        //        return false;
-        //    }
+            SystemUser systemUser = SystemUser.GetCurrentSystemUserSession().User;
+            if (systemUser == null)
+            {
+                // Ask user to sign in.
+                returnPage = Self.GET("/signin/partial/accessdenied-form");
+                return false;
+            }
 
-        //    // Check user permission
-        //    //if (!AuthorizationHelper.CanGetUri(systemUser, url, request))
-        //    //{
-        //    //    // User has no permission, redirect to the Access Denied page
-        //    //    returnPage = Self.GET("/signin/partial/accessdenied-form");
-        //    //    return false;
-        //    //}
+            //all users have permission
+            // Check user permission
+            //if (!AuthorizationHelper.CanGetUri(systemUser, url, request))
+            //{
+            //    // User has no permission, redirect to the Access Denied page
+            //    returnPage = Self.GET("/signin/partial/accessdenied-form");
+            //    return false;
+            //}
 
-        //    return true;
-        //}
+            return true;
+        }
 
         //public static bool IsMemberOfGroup(SystemUser user, SystemUserGroup basedOnGroup)
         //{

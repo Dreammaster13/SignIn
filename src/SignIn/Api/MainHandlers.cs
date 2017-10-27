@@ -81,25 +81,25 @@ namespace SignIn
 
 
 
-            //Handle.GET("/signin/settings", (Request request) =>
-            //{
-            //    Json page;
-            //    if (!AuthorizationHelper.TryNavigateTo("/signin/settings", request, out page))
-            //    {
-            //        return page;
-            //    }
+            Handle.GET("/signin/settings", (Request request) =>
+            {
+                Json page;
+                if (!AuthorizationHelper.TryNavigateTo("/signin/settings", request, out page))
+                {
+                    return page;
+                }
 
-            //    return Db.Scope(() =>
-            //    {
-            //        var settingsPage = new SettingsPage
-            //        {
-            //            Html = "/SignIn/viewmodels/SettingsPage.html",
-            //            Uri = request.Uri,
-            //            Data = MailSettingsHelper.GetSettings()
-            //        };
-            //        return settingsPage;
-            //    });
-            //});
+                return Db.Scope(() =>
+                {
+                    var settingsPage = new SettingsPage
+                    {
+                        Html = "/SignIn/viewmodels/SettingsPage.html",
+                        Uri = request.Uri,
+                        Data = MailSettingsHelper.GetSettings()
+                    };
+                    return settingsPage;
+                });
+            });
 
             // Reset password
             //Handle.GET("/signin/user/resetpassword?{?}", (string query, Request request) =>
