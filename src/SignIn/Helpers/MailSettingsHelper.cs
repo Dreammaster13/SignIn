@@ -15,7 +15,7 @@ namespace SignIn
         public static SettingsMailServer GetSettings()
         {
             var name = "SignInMailSettings";
-            SettingsMailServer settings = Db.SQL<SettingsMailServer>("SELECT s FROM SignIn.SettingsMailServer s WHERE s.Name = ?", name).First;
+            SettingsMailServer settings = Db.SQL<SettingsMailServer>($"SELECT s FROM {typeof(SettingsMailServer)} s WHERE s.Name = ?", name).First;
 
             if (settings == null)
             {

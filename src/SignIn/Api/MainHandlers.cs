@@ -38,9 +38,17 @@ namespace SignIn
 
                 if (cookie != null)
                 {
-                    var us = Db.SQL<SystemUserSession>("SELECT o FROM SignIn.SystemUserSession o WHERE o.SessionId=? and o.ExpiresAt > ?", cookie.Value, DateTime.Now).First;
-                    SystemUser.SignInSystemUser(us.User.Username);
-                    master.RefreshSignInState();
+                    var us = Db.SQL<SystemUserSession>($"SELECT o FROM {typeof(SystemUserSession)} o WHERE o.SessionId=? and o.ExpiresAt > ?", cookie.Value, DateTime.Now).First;
+
+                    if (us == null)
+                    {
+                        return Self.GET("/signin/signinuser");
+                    }
+                    else
+                    {
+                        SystemUser.SignInSystemUser(us.User.Username);
+                        master.RefreshSignInState();
+                    }
                 }
 
                 return page;
@@ -117,7 +125,7 @@ namespace SignIn
                 }
 
                 // Retrive the resetPassword instance
-                ResetPassword resetPassword = Db.SQL<ResetPassword>("SELECT o FROM SignIn.ResetPassword o WHERE o.Token=? AND o.Expire>?", token, DateTime.UtcNow).First;
+                ResetPassword resetPassword = Db.SQL<ResetPassword>($"SELECT o FROM {typeof(ResetPassword)} o WHERE o.Token=? AND o.Expire>?", token, DateTime.UtcNow).First;
 
                 if (resetPassword == null)
                 {
@@ -163,7 +171,7 @@ namespace SignIn
                 }
 
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM SignIn.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+                SystemUser user = Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser)} o WHERE o.ObjectID = ?", userid).FirstOrDefault();
 
                 if (user == null)
                 {
@@ -193,7 +201,7 @@ namespace SignIn
             Handle.GET("/signin/user/authentication/password/{?}", (string userid, Request request) =>
             {
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM SignIn.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+                SystemUser user = Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser)} o WHERE o.ObjectID = ?", userid).FirstOrDefault();
 
                 if (user == null)
                 {
