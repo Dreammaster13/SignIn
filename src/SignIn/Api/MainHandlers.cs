@@ -4,8 +4,6 @@ using System.Linq;
 using System.Web;
 using Starcounter;
 using SignIn.Helpers;
-using SignIn.ViewModels;
-using SignIn.Models;
 
 namespace SignIn
 {
@@ -66,27 +64,6 @@ namespace SignIn
 
                 return master;
             });
-
-            Handle.GET("/signin/generateadminuser", (Request request) =>
-            {
-                return new Response()
-                {
-                     Body = "Create the admin user by going to '/signin/signinuser' and pressing the 'Create Admin' button.",
-                };
-            }, new HandlerOptions() { SkipRequestFilters = true });
-
-            Handle.GET("/signin/createadminuser", () =>
-            {
-                MasterPage master = this.GetMaster();
-
-                master.RequireSignIn = false;
-                master.Open("/signin/partial/createadminuser");
-
-                return master;
-            });
-
-
-
 
 
             Handle.GET("/signin/settings", (Request request) =>

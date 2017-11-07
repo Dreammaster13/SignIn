@@ -6,8 +6,6 @@
   "Submit": 0,
   "SignInClick$": 0,
   "RestoreClick$": 0,
-  "CreateAdminClick$": 0,
-  "CanCreateAdminUser": false,
   "SessionUri": "",
   "RedirectUrl": ""
 }
