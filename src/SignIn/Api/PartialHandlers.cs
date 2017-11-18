@@ -17,8 +17,7 @@ namespace SignIn.Api
 
         internal void Register()
         {
-
-            HandlerOptions internalOption = new HandlerOptions() { SkipRequestFilters = true };
+            var internalOption = new HandlerOptions() { SkipRequestFilters = true };
 
             Handle.POST("/signin/partial/signin", (Request request) =>
             {
@@ -79,17 +78,16 @@ namespace SignIn.Api
 
                 if (master.Partial is MainFormPage)
                 {
-                    MainFormPage page = (MainFormPage)master.Partial;
-                    if (page.CurrentForm is SignInFormPage)
+                    var page = (MainFormPage)master.Partial;
+                    if (page.CurrentForm is SignInFormPage form)
                     {
-                        SignInFormPage form = (SignInFormPage)page.CurrentForm;
                         form.Message = message;
                     }
                 }
 
                 if (master.Partial is SignInFormPage)
                 {
-                    SignInFormPage page = master.Partial as SignInFormPage;
+                    var page = master.Partial as SignInFormPage;
                     page.Message = message;
                 }
             }

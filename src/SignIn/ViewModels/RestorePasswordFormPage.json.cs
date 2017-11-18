@@ -67,7 +67,7 @@ namespace SignIn
             {
                 this.Message = "Mail server is currently unavailable.";
                 this.MessageCss = "alert alert-danger";
-                Starcounter.Logging.LogSource log = new Starcounter.Logging.LogSource(Application.Current.Name);
+                var log = new Starcounter.Logging.LogSource(Application.Current.Name);
                 log.LogException(ex);
             }
         }
@@ -75,15 +75,16 @@ namespace SignIn
         protected void SendNewPassword(string Name, string Username, string NewPassword, string Email)
         {
             SettingsMailServer settings = MailSettingsHelper.GetSettings();
-            MailMessage mail = new MailMessage(settings.Username, Email);
-            SmtpClient client = new SmtpClient();
-
-            client.Port = settings.Port;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential(settings.Username, settings.Password);
-            client.Host = settings.Host;
-            client.EnableSsl = settings.EnableSsl;
+            var mail = new MailMessage(settings.Username, Email);
+            var client = new SmtpClient
+            {
+                Port = settings.Port,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(settings.Username, settings.Password),
+                Host = settings.Host,
+                EnableSsl = settings.EnableSsl
+            };
 
             mail.Subject = "Restore password";
             mail.Body =
@@ -94,9 +95,6 @@ namespace SignIn
             client.Send(mail);
         }
 
-        protected MainFormPage MainForm
-        {
-            get { return this.Parent as MainFormPage; }
-        }
+        protected MainFormPage MainForm => this.Parent as MainFormPage;
     }
 }

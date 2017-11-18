@@ -94,11 +94,12 @@ namespace SignIn
 
         private PropertyMetadataItem CreatePropertyMetadata(string propertyName, string message)
         {
-            PropertyMetadataItem item = new PropertyMetadataItem();
-            item.Message = message;
-            item.ErrorLevel = 1;
-            item.PropertyName = propertyName;
-            return item;
+            return new PropertyMetadataItem
+            {
+                Message = message,
+                ErrorLevel = 1,
+                PropertyName = propertyName
+            };
         }
 
         #endregion

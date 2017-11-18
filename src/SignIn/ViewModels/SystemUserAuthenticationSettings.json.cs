@@ -17,7 +17,9 @@ namespace SignIn
             get
             {
                 var emailAddress = Utils.GetUserEmailAddress(this.Data);
-                return emailAddress != null && MailSettingsHelper.GetSettings().Enabled && Utils.IsValidEmail(emailAddress.EMail);
+                return emailAddress != null && 
+                    MailSettingsHelper.GetSettings().Enabled && 
+                    Utils.IsValidEmail(emailAddress.EMail);
             }
         }
 
@@ -59,7 +61,7 @@ namespace SignIn
             {
                 SystemUser systemUser = this.Data;
                 // Generate Password Reset token
-                ResetPassword resetPassword = new ResetPassword()
+                var resetPassword = new ResetPassword()
                 {
                     User = systemUser,
                     Token = HttpUtility.UrlEncode(Guid.NewGuid().ToString()),
@@ -77,13 +79,14 @@ namespace SignIn
                 }
 
                 // Build reset password link
-                UriBuilder uri = new UriBuilder();
+                var uri = new UriBuilder
+                {
+                    Host = mailSettings.SiteHost,
+                    Port = (int)mailSettings.SitePort,
 
-                uri.Host = mailSettings.SiteHost;
-                uri.Port = (int)mailSettings.SitePort;
-
-                uri.Path = "signin/user/resetpassword";
-                uri.Query = "token=" + resetPassword.Token;
+                    Path = "signin/user/resetpassword",
+                    Query = "token=" + resetPassword.Token
+                };
 
                 link = uri.ToString();
             });

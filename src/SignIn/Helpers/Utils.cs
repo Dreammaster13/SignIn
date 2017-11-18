@@ -57,7 +57,8 @@ namespace SignIn
 
             EmailAddress email =
                 Db.SQL<EmailAddress>(
-                        "SELECT r.EmailAddress FROM Simplified.Ring3.EmailAddressRelation r WHERE r.Somebody = ?", person)
+                    "SELECT r.EmailAddress FROM Simplified.Ring3.EmailAddressRelation r " +
+                    "WHERE r.Somebody = ?", person)
                     .FirstOrDefault();
 
             return email;

@@ -8,7 +8,10 @@ namespace SignIn
     {
         public static SignInSettings GetSettings()
         {
-            var settings = Db.SQL<SignInSettings>("SELECT s FROM Simplified.Ring6.SignInSettings s").FirstOrDefault();
+            var settings = Db.SQL<SignInSettings>(
+                "SELECT s FROM Simplified.Ring6.SignInSettings s")
+                .FirstOrDefault();
+
             if (settings == null)
             {
                 Db.Transact(() =>

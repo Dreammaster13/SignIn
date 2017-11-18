@@ -33,9 +33,6 @@ namespace SignIn
             RedirectUrl = "/signin/createadminuser";
         }
 
-        protected MainFormPage MainForm
-        {
-            get { return this.Parent as MainFormPage; }
-        }
+        protected MainFormPage MainForm => this.Parent as MainFormPage;
     }
 }

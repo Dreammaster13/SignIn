@@ -14,7 +14,7 @@ namespace SignIn.Helpers
 
         internal void SetAuthCookie(SystemUserTokenKey token)
         {
-            Cookie cookie = new Cookie()
+            var cookie = new Cookie()
             {
                 Name = AuthCookieName
             };
@@ -48,7 +48,10 @@ namespace SignIn.Helpers
 
         internal Cookie GetSignInCookie()
         {
-            List<Cookie> cookies = Handle.IncomingRequest.Cookies.Where(val => !string.IsNullOrEmpty(val)).Select(x => new Cookie(x)).ToList();
+            List<Cookie> cookies = Handle.IncomingRequest.Cookies
+                .Where(val => !string.IsNullOrEmpty(val))
+                .Select(x => new Cookie(x)).ToList();
+
             Cookie cookie = cookies.FirstOrDefault(x => x.Name == AuthCookieName);
 
             return cookie;

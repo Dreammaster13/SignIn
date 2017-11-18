@@ -20,13 +20,16 @@ namespace SignIn
 
         public static void AssureUriPermission(string uri, SystemUserGroup group)
         {
-            UriPermission permission = Db.SQL<UriPermission>("SELECT o.Permission FROM Simplified.Ring5.SystemUserGroupUriPermission o WHERE o.Permission.Uri=? AND o.SystemUserGroup=?", uri, group).FirstOrDefault();
+            var permission = Db.SQL<UriPermission>(
+                "SELECT o.Permission FROM Simplified.Ring5.SystemUserGroupUriPermission o " +
+                "WHERE o.Permission.Uri=? AND o.SystemUserGroup=?", uri, group)
+                .FirstOrDefault();
 
             if (permission == null)
             {
                 Db.Transact(() =>
                 {
-                    UriPermission p1 = new UriPermission { Uri = uri, CanGet = true };
+                    var p1 = new UriPermission { Uri = uri, CanGet = true };
                     new SystemUserGroupUriPermission { ToWhat = p1, WhatIs = group };
                 });
             }
@@ -57,10 +60,15 @@ namespace SignIn
 
         public static bool IsMemberOfGroup(SystemUser user, SystemUserGroup basedOnGroup)
         {
-            if (user == null) return false;
-            if (basedOnGroup == null) return false;
+            if (user == null || basedOnGroup == null)
+            {
+                return false;
+            }
 
-            var groups = Db.SQL<SystemUserGroup>("SELECT o.SystemUserGroup FROM Simplified.Ring3.SystemUserGroupMember o WHERE o.SystemUser=?", user);
+            var groups = Db.SQL<SystemUserGroup>(
+                "SELECT o.SystemUserGroup FROM Simplified.Ring3.SystemUserGroupMember o " +
+                "WHERE o.SystemUser=?", user);
+
             foreach (var groupItem in groups)
             {
                 bool flag = IsBasedOnGroup(groupItem, basedOnGroup);
@@ -100,7 +108,10 @@ namespace SignIn
         private static bool CanGetUri(SystemUser user, string uri, Request request)
         {
             // Check if there is any permission set for a url
-            UriPermission per = Db.SQL<UriPermission>("SELECT o FROM  Simplified.Ring5.UriPermission o WHERE o.Uri=?", uri).FirstOrDefault();
+            var per = Db.SQL<UriPermission>(
+                "SELECT o FROM  Simplified.Ring5.UriPermission o WHERE o.Uri=?", uri)
+                .FirstOrDefault();
+
             if (per == null)
             {
                 // TODO: Check if user is part of Admin group, then allow acces?
@@ -124,14 +135,21 @@ namespace SignIn
                 return null;
             }
 
-            UriPermission permission = Db.SQL<UriPermission>("SELECT o.Permission FROM Simplified.Ring5.SystemUserUriPermission o WHERE o.Permission.Uri=? AND o.SystemUser=?", uri, user).FirstOrDefault();
+            var permission = Db.SQL<UriPermission>(
+                "SELECT o.Permission FROM Simplified.Ring5.SystemUserUriPermission o " +
+                "WHERE o.Permission.Uri=? AND o.SystemUser=?", uri, user)
+                .FirstOrDefault();
+
             if (permission != null)
             {
                 return permission;
             }
 
             // Check user group
-            var groups = Db.SQL<SystemUserGroupMember>("SELECT o FROM Simplified.Ring3.SystemUserGroupMember o WHERE o.SystemUser=?", user);
+            var groups = Db.SQL<SystemUserGroupMember>(
+                "SELECT o FROM Simplified.Ring3.SystemUserGroupMember o " +
+                "WHERE o.SystemUser=?", user);
+
             foreach (var group in groups)
             {
                 permission = GetPermissionFromGroup(group.SystemUserGroup, uri);
@@ -147,15 +165,21 @@ namespace SignIn
         {
             if (group == null) return null;
 
-            UriPermission permission = Db.SQL<UriPermission>("SELECT o.Permission FROM Simplified.Ring5.SystemUserGroupUriPermission o WHERE o.Permission.Uri=? AND o.SystemUserGroup=?", url, group).FirstOrDefault()
-                ??GetPermissionFromGroup(group.Parent, url);
+            UriPermission permission = Db.SQL<UriPermission>(
+                "SELECT o.Permission FROM Simplified.Ring5.SystemUserGroupUriPermission o " +
+                "WHERE o.Permission.Uri=? AND o.SystemUserGroup=?", url, group).FirstOrDefault()
+                ?? GetPermissionFromGroup(group.Parent, url);
 
             return permission;
         }
 
         private static SystemUserGroup GetAdminGroup()
         {
-            SystemUserGroup adminGroup = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?", AuthorizationHelper.AdminGroupName).FirstOrDefault();
+            var adminGroup = Db.SQL<SystemUserGroup>(
+                "SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?", 
+                AuthorizationHelper.AdminGroupName)
+                .FirstOrDefault();
+
             if (adminGroup == null)
             {
                 Db.Transact(() =>

@@ -6,11 +6,7 @@ namespace SignIn
 {
     partial class MasterPage : Json
     {
-        public SignInPage SignInPage {
-            get {
-                return Session.Current.Store[nameof(SignInPage)] as SignInPage;
-            }
-        }
+        public SignInPage SignInPage => Session.Current.Store[nameof(SignInPage)] as SignInPage;
 
         protected string url;
 

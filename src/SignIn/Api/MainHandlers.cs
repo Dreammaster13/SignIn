@@ -65,7 +65,8 @@ namespace SignIn
             {
                 return new Response()
                 {
-                     Body = "Create the admin user by going to '/signin/signinuser' and pressing the 'Create Admin' button.",
+                     Body = "Create the admin user by going to '/signin/signinuser' and " +
+                            "pressing the 'Create Admin' button.",
                 };
             }, new HandlerOptions() { SkipRequestFilters = true });
 
@@ -119,7 +120,9 @@ namespace SignIn
                 }
 
                 // Retrive the resetPassword instance
-                ResetPassword resetPassword = Db.SQL<ResetPassword>("SELECT o FROM Simplified.Ring6.ResetPassword o WHERE o.Token=? AND o.Expire>?", token, DateTime.UtcNow).FirstOrDefault();
+                var resetPassword = Db.SQL<ResetPassword>(
+                    "SELECT o FROM Simplified.Ring6.ResetPassword o WHERE o.Token=? AND o.Expire>?", 
+                    token, DateTime.UtcNow).FirstOrDefault();
 
                 if (resetPassword == null)
                 {
@@ -162,14 +165,15 @@ namespace SignIn
 
             Handle.GET("/signin/user/authentication/settings/{?}", (string userid, Request request) =>
             {
-                Json page;
-                if (!AuthorizationHelper.TryNavigateTo("/signin/user/authentication/settings/{?}", request, out page))
+                if (!AuthorizationHelper.TryNavigateTo("/signin/user/authentication/settings/{?}", request, out Json page))
                 {
                     return new Json();
                 }
 
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+                var user = Db.SQL<SystemUser>(
+                    "SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid)
+                    .FirstOrDefault();
 
                 if (user == null)
                 {
@@ -179,8 +183,10 @@ namespace SignIn
                 }
 
                 SystemUser systemUser = SystemUser.GetCurrentSystemUser();
-                SystemUserGroup adminGroup = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
-                        AuthorizationHelper.AdminGroupName).FirstOrDefault();
+
+                var adminGroup = Db.SQL<SystemUserGroup>(
+                    "SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
+                    AuthorizationHelper.AdminGroupName).FirstOrDefault();
 
                 // Check if current user has permission to get this user instance
                 if (AuthorizationHelper.IsMemberOfGroup(systemUser, adminGroup))
@@ -205,7 +211,9 @@ namespace SignIn
             Handle.GET("/signin/user/authentication/password/{?}", (string userid, Request request) =>
             {
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+                var user = Db.SQL<SystemUser>(
+                    "SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid)
+                    .FirstOrDefault();
 
                 if (user == null)
                 {
@@ -245,7 +253,8 @@ namespace SignIn
             MasterPage master = this.GetMaster();
             master.RequireSignIn = false;
 
-            if (settings.SignInFormAsFullPage && Handle.CallLevel > 0 && !string.IsNullOrEmpty(OriginalUrl))
+            if (settings.SignInFormAsFullPage && Handle.CallLevel > 0 && 
+                !string.IsNullOrEmpty(OriginalUrl))
             {
                 master.Redirect("/signin/signinuser?" + OriginalUrl);
             }
