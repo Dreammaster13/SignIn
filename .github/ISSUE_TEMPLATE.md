@@ -6,13 +6,13 @@
 
 ### Technical information
 
-##### Starcounter version <!-- for example 2.2.1.3018 -->
+##### Starcounter version <!-- for example 2.3.1.7081 -->
 
 ##### Involved apps' version
 
 <!-- for example
- - StarcounterPrefabs/Launcher@5.0.0
- - StarcounterSamples/Products@c85359e40caea2b9143f31121c1fb54b4bb549df
+ - StarcounterApps/Launchpad@2.0.0
+ - StarcounterApps/SignIn@6e0db6044b817b9fb0d64cdf4e24722b1760cb15
  -->
  
 ##### Browsers affected
@@ -21,8 +21,6 @@
 - [ ] Chrome
 - [ ] Firefox
 - [ ] Edge
-- [ ] Safari 9
-- [ ] Safari 8
-- [ ] IE 11
+- [ ] Safari
 
 ### Screenshot
