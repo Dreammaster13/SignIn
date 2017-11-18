@@ -6,6 +6,7 @@ using Simplified.Ring2;
 using Simplified.Ring3;
 using Simplified.Ring6;
 using Starcounter;
+using System.Linq;
 
 namespace SignIn
 {
@@ -57,7 +58,7 @@ namespace SignIn
             EmailAddress email =
                 Db.SQL<EmailAddress>(
                         "SELECT r.EmailAddress FROM Simplified.Ring3.EmailAddressRelation r WHERE r.Somebody = ?", person)
-                    .First;
+                    .FirstOrDefault();
 
             return email;
         }

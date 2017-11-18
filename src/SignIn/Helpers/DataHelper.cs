@@ -1,5 +1,6 @@
 ﻿using Simplified.Ring6;
 using Starcounter;
+using System.Linq;
 
 namespace SignIn
 {
@@ -7,7 +8,7 @@ namespace SignIn
     {
         public static SignInSettings GetSettings()
         {
-            var settings = Db.SQL<SignInSettings>("SELECT s FROM Simplified.Ring6.SignInSettings s").First;
+            var settings = Db.SQL<SignInSettings>("SELECT s FROM Simplified.Ring6.SignInSettings s").FirstOrDefault();
             if (settings == null)
             {
                 Db.Transact(() =>
