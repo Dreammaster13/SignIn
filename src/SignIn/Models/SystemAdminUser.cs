@@ -12,10 +12,10 @@ namespace SignIn.Models
     /// </summary>
     public class SystemAdminUser
     {
-        private  const string _adminGroupName = "Admin (System Users)";
-        private const string _adminGroupDescription = "System User Administrator Group";
-        private const string _adminUsername = "admin";
-        private const string _adminEmail = "admin@starcounter.com";
+        private const string AdminGroupName = "Admin (System Users)";
+        private const string AdminGroupDescription = "System User Administrator Group";
+        private const string AdminUsername = "admin";
+        private const string AdminEmail = "admin@starcounter.com";
         
         public bool CanCreateAdminUser => GetCanCreateAdminUser(this.ClientRootAddress);
      
@@ -27,8 +27,6 @@ namespace SignIn.Models
 
         public string PasswordRepeat { get; set; }
 
-
-
         /// <summary>
         /// Factory method to create a new SystemAdminUser
         /// </summary>
@@ -38,7 +36,7 @@ namespace SignIn.Models
         {
             return new SystemAdminUser()
             {
-                Username = _adminUsername,
+                Username = AdminUsername,
                 ClientRootAddress = clientRootAddress
             };
         }
@@ -58,13 +56,13 @@ namespace SignIn.Models
         {
             isAlert = false;
             message = GetPasswordValidationMessage();
-            if (!String.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(message))
             {
                 isAlert = true;
                 return;
             }
             message = this.GetPasswordRepeatValidationMessage();
-            if (!String.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(message))
             {
                 isAlert = true;
                 return;
@@ -78,7 +76,7 @@ namespace SignIn.Models
         /// </summary>
         private void CreateAdminSystemUserIfMissing(string adminPassword, out string message, out bool isAlert)
         {
-            message = String.Empty;
+            message = string.Empty;
             isAlert = false;
             SystemUser user = GetAdminUser();
             SystemUserGroup group = GetAdminUserGroup();
@@ -89,58 +87,68 @@ namespace SignIn.Models
                 return;//Do nothing if there's already an admin user
             }
 
-            // There is no system user beloning to the admin group
+            // There is no system user belonging to the admin group
             Db.Transact(() =>
             {
                 if (group == null)
                 {
-                    group = new SystemUserGroup();
-                    group.Name = _adminGroupName;
-                    group.Description = _adminGroupDescription;
+                    group = new SystemUserGroup
+                    {
+                        Name = AdminGroupName,
+                        Description = AdminGroupDescription
+                    };
                 }
 
                 if (user == null)
                 {
-                    Person person = new Person()
+                    var person = new Person()
                     {
-                        FirstName = _adminUsername,
-                        LastName = _adminUsername
+                        FirstName = AdminUsername,
+                        LastName = AdminUsername
                     };
 
-                    user = SystemUser.RegisterSystemUser(_adminUsername, _adminEmail, adminPassword);
+                    user = SystemUser.RegisterSystemUser(AdminUsername, AdminEmail, adminPassword);
                     user.WhatIs = person;
                 }
 
                 // Add the admin group to the system admin user
-                SystemUserGroupMember member = new SystemUserGroupMember();
-
-                member.WhatIs = user;
-                member.ToWhat = group;
+                var member = new SystemUserGroupMember
+                {
+                    WhatIs = user,
+                    ToWhat = group
+                };
             });
-            message = $"Admin user with username = '{_adminUsername}' was created";
+            message = $"Admin user with username = '{AdminUsername}' was created";
         }
        
-        internal string GetPasswordRepeatValidationMessage()
-        {
-            return this.Password != this.PasswordRepeat ? "Passwords do not match" : null;
-        }
-        internal string GetPasswordValidationMessage()
-        {
-            return string.IsNullOrEmpty(this.Password) ?  "Password cannot be empty" : null;
-        }
-        private static bool HasUsers() => (Db.SQL($"SELECT o FROM {typeof(SystemUser).FullName} o").FirstOrDefault() != null);
+        internal string GetPasswordRepeatValidationMessage() => 
+            this.Password != this.PasswordRepeat ? "Passwords do not match" : null;
+
+        internal string GetPasswordValidationMessage() => 
+            string.IsNullOrEmpty(this.Password) ? "Password cannot be empty" : null;
+
+        private static bool HasUsers() => 
+            Db.SQL($"SELECT o FROM {typeof(SystemUser).FullName} o").Any();
         
-        private static bool HasAdminUser()
-        {
-            return IsInGroup(GetAdminUser(), GetAdminUserGroup());
-        }
-        private static bool IsInGroup(SystemUser user, SystemUserGroup group)
-        {
-            return (group != null && user != null && SystemUser.IsMemberOfGroup(user, group));
-        }
+        private static bool HasAdminUser() => 
+            IsInGroup(GetAdminUser(), GetAdminUserGroup());
+
+        private static bool IsInGroup(SystemUser user, SystemUserGroup group) => 
+            group != null && 
+            user != null && 
+            SystemUser.IsMemberOfGroup(user, group);
        
-        private static SystemUser GetAdminUser() => Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser).FullName} o WHERE o.{nameof(SystemUser.Username)} = ?", _adminUsername).FirstOrDefault();
-        private static SystemUserGroup GetAdminUserGroup() => Db.SQL<SystemUserGroup>($"SELECT o FROM {typeof(SystemUserGroup).FullName} o WHERE o.{nameof(SystemUser.Name)} = ?", _adminGroupName).FirstOrDefault();
+        private static SystemUser GetAdminUser() => 
+            Db.SQL<SystemUser>(
+                $"SELECT o FROM {typeof(SystemUser).FullName} o " +
+                $"WHERE o.{nameof(SystemUser.Username)} = ?", AdminUsername)
+            .FirstOrDefault();
+
+        private static SystemUserGroup GetAdminUserGroup() => 
+            Db.SQL<SystemUserGroup>(
+                $"SELECT o FROM {typeof(SystemUserGroup).FullName} o " +
+                $"WHERE o.{nameof(SystemUser.Name)} = ?", AdminGroupName)
+            .FirstOrDefault();
         
     }
 }

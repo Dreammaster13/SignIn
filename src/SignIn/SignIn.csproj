@@ -74,7 +74,9 @@
     <Compile Include="Helpers\AuthorizationHelper.cs" />
     <Compile Include="Helpers\CookieHelpers.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
+    <Compile Include="Helpers\JwtHashAlgorithm.cs" />
     <Compile Include="Helpers\MailSettingsHelper.cs" />
+    <Compile Include="Helpers\SignatureVerificationException.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
     <Compile Include="Models\SystemAdminUser.cs" />
     <Compile Include="Helpers\UserHelper.cs" />

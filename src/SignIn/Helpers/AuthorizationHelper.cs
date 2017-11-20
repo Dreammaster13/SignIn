@@ -6,7 +6,7 @@ using System.Linq;
 namespace SignIn
 {
     // TODO: Replace it with the new Authorization module. The following code was copied and adapted from UserAdmin app (Helper class).
-    public class AuthorizationHelper
+    public static class AuthorizationHelper
     {
         internal static string AdminGroupName = "Admin (System Users)";
         internal static string AdminGroupDescription = "System User Administrator Group";
@@ -14,8 +14,8 @@ namespace SignIn
         public static void SetupPermissions()
         {
             SystemUserGroup adminGroup = GetAdminGroup();
-            AuthorizationHelper.AssureUriPermission("/signin/settings", adminGroup);
-            AuthorizationHelper.AssureUriPermission("/signin/user/authentication/settings/{?}", adminGroup);
+            AssureUriPermission("/signin/settings", adminGroup);
+            AssureUriPermission("/signin/user/authentication/settings/{?}", adminGroup);
         }
 
         public static void AssureUriPermission(string uri, SystemUserGroup group)
@@ -48,7 +48,7 @@ namespace SignIn
             }
 
             // Check user permission
-            if (!AuthorizationHelper.CanGetUri(systemUser, url, request))
+            if (!CanGetUri(systemUser, url, request))
             {
                 // User has no permission, redirect to the Access Denied page
                 returnPage = Self.GET("/signin/partial/accessdenied-form");
@@ -71,8 +71,7 @@ namespace SignIn
 
             foreach (var groupItem in groups)
             {
-                bool flag = IsBasedOnGroup(groupItem, basedOnGroup);
-                if (flag)
+                if (IsBasedOnGroup(groupItem, basedOnGroup))
                 {
                     return true;
                 }
@@ -119,7 +118,7 @@ namespace SignIn
                 return false;
             }
 
-            UriPermission permission = AuthorizationHelper.GetPermission(user, uri);
+            UriPermission permission = GetPermission(user, uri);
             if (permission != null)
             {
                 return permission.CanGet;
@@ -176,8 +175,8 @@ namespace SignIn
         private static SystemUserGroup GetAdminGroup()
         {
             var adminGroup = Db.SQL<SystemUserGroup>(
-                "SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?", 
-                AuthorizationHelper.AdminGroupName)
+                "SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
+                AdminGroupName)
                 .FirstOrDefault();
 
             if (adminGroup == null)

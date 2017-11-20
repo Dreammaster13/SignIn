@@ -10,7 +10,7 @@ namespace SignIn.Api
 {
     internal class Middleware
     {
-        private CookieHelpers cookieHelpers = new CookieHelpers();
+        private CookieHelpers CookieHelpers => new CookieHelpers();
 
         internal void Register()
         {
@@ -19,7 +19,7 @@ namespace SignIn.Api
 
             Application.Current.Use((Request req) =>
             {
-                Cookie cookie = cookieHelpers.GetSignInCookie();
+                Cookie cookie = CookieHelpers.GetSignInCookie();
 
                 if (cookie != null)
                 {
@@ -28,7 +28,7 @@ namespace SignIn.Api
 
                     if (session != null)
                     {
-                        cookieHelpers.RefreshAuthCookie(session);
+                        CookieHelpers.RefreshAuthCookie(session);
                     }
                 }
 

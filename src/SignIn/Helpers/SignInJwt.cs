@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SignIn.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -6,20 +7,13 @@ using System.Web.Script.Serialization;
 
 namespace JWT
 {
-    public enum JwtHashAlgorithm
-    {
-        HS256,
-        HS384,
-        HS512
-    }
-
     /// <summary>
     /// Provides methods for encoding and decoding JSON Web Tokens.
     /// </summary>
     public static class JsonWebToken
     {
-        private static Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>> HashAlgorithms;
-        private static JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+        private readonly static Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>> HashAlgorithms;
+        private readonly static JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
 
         static JsonWebToken()
         {
@@ -247,18 +241,10 @@ namespace JWT
                     output += "=";
                     break; // One pad char
                 default:
-                    throw new System.Exception("Illegal base64url string!");
+                    throw new Exception("Illegal base64url string!");
             }
             var converted = Convert.FromBase64String(output); // Standard base64 decoder
             return converted;
-        }
-    }
-
-    public class SignatureVerificationException : Exception
-    {
-        public SignatureVerificationException(string message)
-            : base(message)
-        {
         }
     }
 }

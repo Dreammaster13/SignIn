@@ -10,6 +10,8 @@ namespace SignIn
 {
     partial class RestorePasswordFormPage : Json
     {
+        protected MainFormPage MainForm => this.Parent as MainFormPage;
+
         void Handle(Input.SignInClick action)
         {
             action.Cancel();
@@ -75,7 +77,6 @@ namespace SignIn
         protected void SendNewPassword(string Name, string Username, string NewPassword, string Email)
         {
             SettingsMailServer settings = MailSettingsHelper.GetSettings();
-            var mail = new MailMessage(settings.Username, Email);
             var client = new SmtpClient
             {
                 Port = settings.Port,
@@ -86,15 +87,18 @@ namespace SignIn
                 EnableSsl = settings.EnableSsl
             };
 
-            mail.Subject = "Restore password";
-            mail.Body =
-                string.Format(
-                    "<h1>Hello {0}</h1><p>You have requested a new password for your <b>{1}</b> account.</p><p>Your new password is: <b>{2}</b>.</p>",
-                    Name, Username, NewPassword);
-            mail.IsBodyHtml = true;
+            var mail = new MailMessage(settings.Username, Email)
+            {
+                Subject = "Restore password",
+                Body =
+                    $"<h1>Hello {Name}</h1><p>You have requested a new password for your " +
+                    $"<b>{Username}</b> account.</p>" +
+                    $"<p>Your new password is: <b>{NewPassword}</b>.</p>",
+
+                IsBodyHtml = true
+            };
+
             client.Send(mail);
         }
-
-        protected MainFormPage MainForm => this.Parent as MainFormPage;
     }
 }
