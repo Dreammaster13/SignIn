@@ -133,20 +133,11 @@ namespace SignIn
                 var page = new ResetPasswordPage()
                 {
                     Html = "/SignIn/viewmodels/ResetPasswordPage.html",
-                    Uri = "/signin/user/resetpassword"
+                    Uri = "/signin/user/resetpassword",
+                    ResetPassword = resetPassword,
+                    FullName = systemUser.WhoIs?.FullName ?? systemUser.Username
                     //Uri = request.Uri // TODO:
                 };
-
-                page.ResetPassword = resetPassword;
-
-                if (systemUser.WhoIs != null)
-                {
-                    page.FullName = systemUser.WhoIs.FullName;
-                }
-                else
-                {
-                    page.FullName = systemUser.Username;
-                }
 
                 master.Partial = page;
 
