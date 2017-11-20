@@ -86,7 +86,7 @@ namespace SignIn.Api
                 {
                     var settingsPage = new SettingsPage
                     {
-                        Html = "/SignIn/viewmodels/SettingsPage.html",
+                        Html = "/SignIn/views/SettingsPage.html",
                         Uri = request.Uri,
                         Data = MailSettingsHelper.GetSettings()
                     };
@@ -132,7 +132,7 @@ namespace SignIn.Api
 
                 var page = new ResetPasswordPage()
                 {
-                    Html = "/SignIn/viewmodels/ResetPasswordPage.html",
+                    Html = "/SignIn/views/ResetPasswordPage.html",
                     Uri = "/signin/user/resetpassword",
                     ResetPassword = resetPassword,
                     FullName = systemUser.WhoIs?.FullName ?? systemUser.Username
@@ -176,7 +176,7 @@ namespace SignIn.Api
                     {
                         page = Db.Scope(() => new SystemUserAuthenticationSettings
                         {
-                            Html = "/SignIn/viewmodels/SystemUserAuthenticationSettings.html",
+                            Html = "/SignIn/views/SystemUserAuthenticationSettings.html",
                             Uri = request.Uri,
                             Data = user,
                             UserPassword = Self.GET("/signin/user/authentication/password/" + user.GetObjectID())
@@ -203,7 +203,7 @@ namespace SignIn.Api
 
                 Json page = Db.Scope(() => new SetPasswordPage
                 {
-                    Html = "/SignIn/viewmodels/SetPasswordPage.html",
+                    Html = "/SignIn/views/SetPasswordPage.html",
                     Data = user
                 });
 

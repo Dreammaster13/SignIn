@@ -1,5 +1,5 @@
 {
-  "Html": "/SignIn/viewmodels/CreateAdminUserFormPage.html",
+  "Html": "/SignIn/views/CreateAdminUserFormPage.html",
   "Message": "",
   "Username": "",
   "CanCreateAdminUser$": false,
