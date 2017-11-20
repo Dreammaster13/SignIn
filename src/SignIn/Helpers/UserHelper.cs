@@ -1,6 +1,6 @@
 ﻿using Simplified.Ring3;
 
-namespace SignIn
+namespace SignIn.Helpers
 {
     public class UserHelper
     {

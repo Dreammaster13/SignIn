@@ -4,7 +4,7 @@ using Starcounter;
 using Starcounter.Internal;
 using System.Linq;
 
-namespace SignIn
+namespace SignIn.Helpers
 {
     /// <summary>
     /// Helper for SignIn mail server settings

@@ -10,7 +10,7 @@ using SignIn.Helpers;
 using SignIn.ViewModels;
 using SignIn.Models;
 
-namespace SignIn
+namespace SignIn.Api
 {
     internal class MainHandlers
     {

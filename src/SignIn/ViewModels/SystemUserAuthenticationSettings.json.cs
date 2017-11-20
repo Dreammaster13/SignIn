@@ -4,11 +4,12 @@ using Simplified.Ring3;
 using Simplified.Ring6;
 using Smorgasbord.PropertyMetadata;
 using Starcounter;
+using SignIn.Helpers;
 
 // FORGOT PASSWORD:
 // http://www.asp.net/identity/overview/features-api/account-confirmation-and-password-recovery-with-aspnet-identity
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class SystemUserAuthenticationSettings : PropertyMetadataPage, IBound<SystemUser>
     {

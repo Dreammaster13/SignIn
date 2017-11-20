@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.Script.Serialization;
 
-namespace JWT
+namespace SignIn.Helpers
 {
     /// <summary>
     /// Provides methods for encoding and decoding JSON Web Tokens.

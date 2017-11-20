@@ -1,7 +1,7 @@
 using Simplified.Ring5;
 using Starcounter;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class SignInFormPage : Json
     {

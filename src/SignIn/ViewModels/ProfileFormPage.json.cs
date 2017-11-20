@@ -2,8 +2,9 @@ using Starcounter;
 using Simplified.Ring2;
 using Simplified.Ring3;
 using Simplified.Ring5;
+using SignIn.Helpers;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class ProfileFormPage : Json
     {

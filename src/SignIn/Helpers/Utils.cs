@@ -8,7 +8,7 @@ using Simplified.Ring6;
 using Starcounter;
 using System.Linq;
 
-namespace SignIn
+namespace SignIn.Helpers
 {
     public static class Utils
     {

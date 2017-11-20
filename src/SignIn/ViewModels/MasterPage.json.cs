@@ -2,7 +2,7 @@ using Starcounter;
 using Simplified.Ring3;
 using Simplified.Ring5;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class MasterPage : Json
     {

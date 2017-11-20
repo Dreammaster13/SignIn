@@ -1,7 +1,7 @@
 using Starcounter;
 using Simplified.Ring5;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class SignInPage : Json, IBound<SystemUserSession>
     {

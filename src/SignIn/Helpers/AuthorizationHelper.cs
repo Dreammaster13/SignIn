@@ -3,7 +3,7 @@ using Simplified.Ring5;
 using Starcounter;
 using System.Linq;
 
-namespace SignIn
+namespace SignIn.Helpers
 {
     // TODO: Replace it with the new Authorization module. The following code was copied and adapted from UserAdmin app (Helper class).
     public static class AuthorizationHelper

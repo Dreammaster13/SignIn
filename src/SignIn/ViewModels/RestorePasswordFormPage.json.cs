@@ -5,8 +5,9 @@ using Starcounter;
 using Simplified.Ring2;
 using Simplified.Ring3;
 using Simplified.Ring6;
+using SignIn.Helpers;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class RestorePasswordFormPage : Json
     {

@@ -1,7 +1,7 @@
 using Starcounter;
 using Simplified.Ring3;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class AlreadyInPage : Json
     {

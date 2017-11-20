@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JWT
+namespace SignIn.Helpers
 {
     public class SignatureVerificationException : Exception
     {
