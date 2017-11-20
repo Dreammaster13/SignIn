@@ -14,16 +14,13 @@ namespace SignIn
 {
     internal class MainHandlers
     {
-        private CookieHelpers cookieHelpers = new CookieHelpers();
+        private CookieHelpers CookieHelpers => new CookieHelpers();
 
         public void Register()
         {
             Handle.GET("/signin/app-name", () => new AppName());
 
-            Handle.GET("/signin", () =>
-            {
-                return Self.GET("/signin/signinuser");
-            });
+            Handle.GET("/signin", () => Self.GET("/signin/signinuser"));
 
             Handle.GET("/signin/user", () =>
             {
@@ -34,7 +31,7 @@ namespace SignIn
                     return master.SignInPage;
                 }
 
-                Cookie cookie = cookieHelpers.GetSignInCookie();
+                Cookie cookie = CookieHelpers.GetSignInCookie();
                 SignInPage page = new SignInPage() { Data = null };
 
                 Session.Current.Store[nameof(SignInPage)] = page;
@@ -61,14 +58,12 @@ namespace SignIn
                 return master;
             });
 
-            Handle.GET("/signin/generateadminuser", (Request request) =>
-            {
-                return new Response()
+            Handle.GET("/signin/generateadminuser", (Request request) => 
+                new Response()
                 {
                      Body = "Create the admin user by going to '/signin/signinuser' and " +
                             "pressing the 'Create Admin' button.",
-                };
-            }, new HandlerOptions() { SkipRequestFilters = true });
+                }, new HandlerOptions() { SkipRequestFilters = true });
 
             Handle.GET("/signin/createadminuser", () =>
             {
@@ -80,14 +75,9 @@ namespace SignIn
                 return master;
             });
 
-
-
-
-
             Handle.GET("/signin/settings", (Request request) =>
             {
-                Json page;
-                if (!AuthorizationHelper.TryNavigateTo("/signin/settings", request, out page))
+                if (!AuthorizationHelper.TryNavigateTo("/signin/settings", request, out Json page))
                 {
                     return page;
                 }
@@ -140,7 +130,7 @@ namespace SignIn
 
                 SystemUser systemUser = resetPassword.User;
 
-                ResetPasswordPage page = new ResetPasswordPage()
+                var page = new ResetPasswordPage()
                 {
                     Html = "/SignIn/viewmodels/ResetPasswordPage.html",
                     Uri = "/signin/user/resetpassword"
