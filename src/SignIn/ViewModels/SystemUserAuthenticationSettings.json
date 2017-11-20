@@ -7,6 +7,5 @@
   "UserPassword": {},
 
   "ResetPassword$": 0,
-  "$ResetPassword_Enabled": { "Bind": "ResetPassword_Enabled_" },
   "ResetPassword_Enabled": false
 }

@@ -53,7 +53,7 @@ namespace SignIn.ViewModels
         /// <summary>
         /// Assure metadata for all fields
         /// </summary>
-        virtual protected void AssurePropertiesMetadata()
+        protected virtual void AssurePropertiesMetadata()
         {
             AssurePropertyMetadata_SiteHost("SiteHost$", this.SiteHost);
             AssurePropertyMetadata_SitePort("SitePort$", this.SitePort);

@@ -13,7 +13,12 @@ namespace SignIn.ViewModels
 {
     partial class SystemUserAuthenticationSettings : PropertyMetadataPage, IBound<SystemUser>
     {
-        public bool ResetPassword_Enabled_
+        static SystemUserAuthenticationSettings()
+        {
+            DefaultTemplate.ResetPassword_Enabled.Bind = nameof(ResetPassword_Enabled);
+        }
+
+        public bool ResetPassword_Enabled
         {
             get
             {
@@ -61,42 +66,24 @@ namespace SignIn.ViewModels
             transaction.Scope(() =>
             {
                 SystemUser systemUser = this.Data;
-                // Generate Password Reset token
-                var resetPassword = new ResetPassword()
-                {
-                    User = systemUser,
-                    Token = HttpUtility.UrlEncode(Guid.NewGuid().ToString()),
-                    Expire = DateTime.UtcNow.AddMinutes(1440)
-                };
+                ResetPassword passwordReseToken = GeneratePasswordResetToken(systemUser);
+                fullName = GetFullName(systemUser);
 
-                // Get FullName
-                if (systemUser.WhoIs != null)
-                {
-                    fullName = systemUser.WhoIs.FullName;
-                }
-                else
-                {
-                    fullName = systemUser.Username;
-                }
-
-                // Build reset password link
-                var uri = new UriBuilder
-                {
-                    Host = mailSettings.SiteHost,
-                    Port = (int)mailSettings.SitePort,
-
-                    Path = "signin/user/resetpassword",
-                    Query = "token=" + resetPassword.Token
-                };
+                UriBuilder uri = BuildResetPasswordLink(mailSettings, passwordReseToken);
 
                 link = uri.ToString();
             });
 
             transaction.Commit();
 
+            SendEmail(link, fullName, email);
+        }
+
+        private void SendEmail(string link, string fullName, string email)
+        {
             try
             {
-                this.Message = string.Format("Sending mail sent to {0}...", email);
+                this.Message = $"Sending mail sent to {email}...";
                 Utils.SendResetPasswordMail(fullName, email, link);
                 this.Message = "Mail sent.";
             }
@@ -106,5 +93,35 @@ namespace SignIn.ViewModels
             }
         }
 
+        private static UriBuilder BuildResetPasswordLink(
+            SettingsMailServer mailSettings, 
+            ResetPassword resetPassword)
+        {
+            return new UriBuilder
+            {
+                Host = mailSettings.SiteHost,
+                Port = (int)mailSettings.SitePort,
+                Path = "signin/user/resetpassword",
+                Query = "token=" + resetPassword.Token
+            };
+        }
+
+        private static string GetFullName(SystemUser systemUser) => 
+            systemUser.WhoIs == null ?
+                systemUser.Username :
+                systemUser.WhoIs.FullName;
+
+        private static ResetPassword GeneratePasswordResetToken(SystemUser systemUser)
+        {
+            int oneDayInMinutes = 1440;
+            DateTime expirationTime = DateTime.UtcNow.AddMinutes(oneDayInMinutes);
+
+            return new ResetPassword()
+            {
+                User = systemUser,
+                Token = HttpUtility.UrlEncode(Guid.NewGuid().ToString()),
+                Expire = expirationTime
+            };
+        }
     }
 }

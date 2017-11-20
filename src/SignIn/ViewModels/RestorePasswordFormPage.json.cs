@@ -17,10 +17,7 @@ namespace SignIn.ViewModels
         {
             action.Cancel();
 
-            if (this.MainForm != null)
-            {
-                this.MainForm.OpenSignIn();
-            }
+            this.MainForm?.OpenSignIn();
         }
 
         void Handle(Input.Username action) // Makes the Reset Password clickable again.
@@ -47,10 +44,10 @@ namespace SignIn.ViewModels
                 return;
             }
 
-            Person person = user.WhoIs as Person;
+            var person = user.WhoIs as Person;
             EmailAddress email = Utils.GetUserEmailAddress(user);
 
-            if (person == null || email == null || string.IsNullOrEmpty(email.EMail))
+            if (person == null || string.IsNullOrEmpty(email?.EMail))
             {
                 this.Message = "Unable to restore password, no e-mail address found!";
                 return;
