@@ -1,4 +1,6 @@
-﻿namespace SignIn
+﻿using SignIn.Api;
+
+namespace SignIn
 {
     class Program
     {
@@ -6,11 +8,11 @@
         {
             AuthorizationHelper.SetupPermissions();
 
-            CommitHooks hooks = new CommitHooks();
-            MainHandlers handlers = new MainHandlers();
-
-            hooks.Register();
-            handlers.Register();
+            new Middleware().Register();
+            new CommitHooks().Register();
+            new MainHandlers().Register();
+            new PartialHandlers().Register();
+            new BlenderMapping().Register();
         }
     }
 }

@@ -6,14 +6,25 @@ namespace SignIn
 {
     partial class MasterPage : Json
     {
-        public SignInPage SignInPage;
+        public SignInPage SignInPage {
+            get {
+                return Session.Current.Store[nameof(SignInPage)] as SignInPage;
+            }
+        }
 
         protected string url;
 
-        public void Open(string Url)
+        public void Open(string contentUri)
         {
-            this.url = Url;
+            this.url = contentUri;
+            this.RedirectUrl = null;
             this.RefreshSignInState();
+        }
+
+        public void Redirect(string redirectUri)
+        {
+            this.OriginalUrl = redirectUri;
+            this.Open(null);
         }
 
         public void RefreshSignInState()
@@ -43,14 +54,15 @@ namespace SignIn
                 this.Partial = Self.GET("/signin/partial/alreadyin-form");
             }
 
-            if (this.SignInPage != null)
+            SignInPage sip = this.SignInPage;
+            if (sip != null)
             {
                 if (
-                    (userSession == null && this.SignInPage.Data != null) || //switching state to signed in
-                    (userSession != null && !userSession.Equals(this.SignInPage.Data)) //switching state to signed out
+                    (userSession == null && sip.Data != null) || //switching state to signed in
+                    (userSession != null && !userSession.Equals(sip.Data)) //switching state to signed out
                  )
                 {
-                    this.SignInPage.Data = userSession;
+                    sip.Data = userSession;
                 }
             }
         }

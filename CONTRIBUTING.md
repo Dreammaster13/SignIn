@@ -16,8 +16,8 @@
 
 ## Contributing code
 
-To contribute code to this repository, follow the instructions in the [guidelines](https://starcounter.gitbooks.io/guidelines/content/contributing-code.html).
+To contribute code to this repository, follow the instructions in the [guidelines](https://starcounter.gitbooks.io/companytrack/content/AppsTeam/Guidelines/version_control/contributing_code.html).
 
 ## How to release a package
 
-To release the app to the warehouse, follow the instructions in the [guidelines](https://starcounter.gitbooks.io/guidelines/content/releasing-to-warehouse.html).
+To release the app to the warehouse, follow the instructions in the [guidelines](https://starcounter.gitbooks.io/companytrack/content/AppsTeam/Guidelines/releasing-to-warehouse.html).

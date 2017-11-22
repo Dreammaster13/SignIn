@@ -2,6 +2,7 @@
   "directory": "wwwroot/sys",
   "ignoredDependencies": [
     "webcomponentsjs",
+    "palindrom-redirect",
     "PuppetJs",
     "imported-template",
     "puppet-redirect",

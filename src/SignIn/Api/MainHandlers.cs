@@ -1,59 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using Starcounter;
 using Simplified.Ring3;
-using Simplified.Ring5;
 using Simplified.Ring2;
 using Simplified.Ring6;
+using SignIn.Helpers;
+using SignIn.ViewModels;
+using SignIn.Models;
 
 namespace SignIn
 {
     internal class MainHandlers
     {
-        protected string AuthCookieName = "soauthtoken";
-        protected int rememberMeDays = 30;
+        private CookieHelpers cookieHelpers = new CookieHelpers();
 
         public void Register()
         {
-            Application.Current.Use(new HtmlFromJsonProvider());
-            Application.Current.Use(new PartialToStandaloneHtmlProvider());
+            Handle.GET("/signin/app-name", () => new AppName());
 
-            //Testing JWT
-            /*Handle.GET("/signin/jwt/{?}/{?}", (string Username, string Password) => {
-                string message;
-                SystemUserSession session = SignInOut.SignInSystemUser(Username, Password, null, out message);
-
-                if (session != null) {
-                    string jwt = JWT.JsonWebToken.Encode(new { Username = Username, Issuer = "Polyjuice.SignIn" }, session.Token.User.Password, JWT.JwtHashAlgorithm.HS256);
-                    Handle.AddOutgoingHeader("x-jwt", jwt);
-                }
-
-                return 200;
-            });*/
-
-            Application.Current.Use((Request req) =>
+            Handle.GET("/signin", () =>
             {
-                Cookie cookie = GetSignInCookie();
-
-                if (cookie != null)
-                {
-                    if (Session.Current == null)
-                    {
-                        Session.Current = new Session(SessionOptions.PatchVersioning);
-                    }
-
-                    SystemUserSession session = SystemUser.SignInSystemUser(cookie.Value);
-
-                    if (session != null)
-                    {
-                        RefreshAuthCookie(session);
-                    }
-                }
-
-                return null;
+                return Self.GET("/signin/signinuser");
             });
 
             Handle.GET("/signin/user", () =>
@@ -65,36 +34,19 @@ namespace SignIn
                     return master.SignInPage;
                 }
 
-                Cookie cookie = GetSignInCookie();
+                Cookie cookie = cookieHelpers.GetSignInCookie();
                 SignInPage page = new SignInPage() { Data = null };
 
-                master.SignInPage = page;
-
+                Session.Current.Store[nameof(SignInPage)] = page;
+                
                 if (cookie != null)
                 {
                     SystemUser.SignInSystemUser(cookie.Value);
                     master.RefreshSignInState();
                 }
 
-                //Testing JWT
-                /*if (Handle.IncomingRequest.HeadersDictionary.ContainsKey("x-jwt")) {
-                    System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-                    string jwt = Handle.IncomingRequest.HeadersDictionary["x-jwt"];
-                    Dictionary<string, string> payload = JWT.JsonWebToken.DecodeToObject<Dictionary<string, string>>(jwt, string.Empty, false);
-                    string username = payload["Username"];
-                    SystemUser user = Db.SQL<SystemUser>("SELECT su FROM Simplified.Ring3.SystemUser su WHERE su.Username = ?", username).First;
-
-                    try {
-                        JWT.JsonWebToken.DecodeToObject<Dictionary<string, string>>(jwt, user.Password, true);
-                        page.SetAuthorizedState(SignInOut.SignInSystemUser(user));
-                    } catch (JWT.SignatureVerificationException) { 
-                    }
-                }*/
-
                 return page;
             });
-
-            Handle.GET("/signin/partial/signout", HandleSignOut, new HandlerOptions() { SkipRequestFilters = true });
 
             Handle.GET("/signin/signinuser", HandleSignInForm);
             Handle.GET<string>("/signin/signinuser?{?}", HandleSignInForm);
@@ -109,62 +61,32 @@ namespace SignIn
                 return master;
             });
 
-            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null },
-                new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(),
-                new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null },
-                new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/accessdenied-form", () => new AccessDeniedPage(),
-                new HandlerOptions() { SelfOnly = true });
-
-            Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null },
-                new HandlerOptions() { SelfOnly = true });
-
-            Handle.GET("/signin/partial/user/image", () => new UserImagePage());
-            Handle.GET("/signin/partial/user/image/{?}", (string objectId) => new Json(),
-                new HandlerOptions { SelfOnly = true });
-
             Handle.GET("/signin/generateadminuser", (Request request) =>
             {
-                if (Db.SQL("SELECT o FROM Simplified.Ring3.SystemUser o").First != null)
+                return new Response()
                 {
-                    Handle.SetOutgoingStatusCode(403);
-                    return "Unable to generate admin user: database is not empty!";
-                }
-
-                string ip = request.ClientIpAddress.ToString();
-
-                if (ip == "127.0.0.1" || ip == "localhost")
-                {
-                    SignInOut.AssureAdminSystemUser();
-
-                    return "Default admin user has been successfully generated.";
-                }
-
-                Handle.SetOutgoingStatusCode(403);
-                return "Access denied.";
-
+                     Body = "Create the admin user by going to '/signin/signinuser' and pressing the 'Create Admin' button.",
+                };
             }, new HandlerOptions() { SkipRequestFilters = true });
 
-            Handle.POST("/signin/partial/signin", (Request request) =>
+            Handle.GET("/signin/createadminuser", () =>
             {
-                NameValueCollection values = HttpUtility.ParseQueryString(request.Body);
-                string username = values["username"];
-                string password = values["password"];
-                string rememberMe = values["rememberMe"];
+                MasterPage master = this.GetMaster();
 
-                HandleSignIn(username, password, rememberMe);
-                Session.Current.CalculatePatchAndPushOnWebSocket();
+                master.RequireSignIn = false;
+                master.Open("/signin/partial/createadminuser");
 
-                return 200;
-            }, new HandlerOptions() { SkipRequestFilters = true });
+                return master;
+            });
 
-            Handle.GET("/signin/admin/settings", (Request request) =>
+
+
+
+
+            Handle.GET("/signin/settings", (Request request) =>
             {
                 Json page;
-                if (!AuthorizationHelper.TryNavigateTo("/signin/admin/settings", request, out page))
+                if (!AuthorizationHelper.TryNavigateTo("/signin/settings", request, out page))
                 {
                     return page;
                 }
@@ -298,136 +220,17 @@ namespace SignIn
 
                 return page;
             }, new HandlerOptions { SelfOnly = true });
-
-            Blender.MapUri("/signin/user", "user"); //expandable icon; used in Launcher
-            Blender.MapUri("/signin/signinuser", "userform"); //inline form; used in RSE Launcher
-            Blender.MapUri("/signin/signinuser?{?}", "userform-return"); //inline form; used in UserAdmin
-            Blender.MapUri("/signin/admin/settings", "settings");
-            Blender.MapUri("/signin/user/authentication/password/{?}", "authentication-password");
-            Blender.MapUri("/signin/user/authentication/settings/{?}", "authentication-settings");
-            Blender.MapUri("/signin/partial/user/image", "userimage-default");  // default user image
         }
 
-        protected void ClearAuthCookie()
+        internal MasterPage GetMaster()
         {
-            this.SetAuthCookie(null);
-        }
-
-        protected void RefreshAuthCookie(SystemUserSession Session)
-        {
-            Cookie cookie = GetSignInCookie();
-
-            if (cookie == null)
+            MasterPage master = Session.Ensure().Store[nameof(MasterPage)] as MasterPage;
+            if (master == null) 
             {
-                return;
+                master = new MasterPage();
+                Session.Current.Store[nameof(MasterPage)] = master;
             }
-
-            Db.Transact(() =>
-            {
-                Session.Token = SystemUser.RenewAuthToken(Session.Token);
-                if (Session.Token.IsPersistent)
-                {
-                    Session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
-                }
-            });
-
-            cookie.Value = Session.Token.Token;
-            if (Session.Token.IsPersistent)
-            {
-                cookie.Expires = Session.Token.Expires;
-            }
-
-            Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
-        }
-
-        protected void SetAuthCookie(SystemUserTokenKey token)
-        {
-            Cookie cookie = new Cookie()
-            {
-                Name = AuthCookieName
-            };
-
-            if (token == null)
-            {
-                //to delete a cookie, explicitly use a date in the past
-                cookie.Expires = DateTime.Now.AddDays(-1).ToUniversalTime();
-            }
-            else
-            {
-                cookie.Value = token.Token;
-                if (token.IsPersistent)
-                {
-                    cookie.Expires = token.Expires;
-                }
-            }
-
-            Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
-        }
-
-        protected MasterPage GetMaster()
-        {
-            Session session = Session.Current;
-
-            if (session != null && session.Data != null)
-            {
-                return session.Data as MasterPage;
-            }
-
-            MasterPage master = new MasterPage();
-
-            if (session == null)
-            {
-                session = new Session(SessionOptions.PatchVersioning);
-            }
-
-            master.Session = session;
             return master;
-        }
-
-        protected void HandleSignIn(string Username, string Password, string RememberMe)
-        {
-            Username = Uri.UnescapeDataString(Username);
-
-            SystemUserSession session = SystemUser.SignInSystemUser(Username, Password);
-
-            if (session == null)
-            {
-                MasterPage master = GetMaster();
-                string message = "Invalid username or password!";
-
-                if (master.SignInPage != null)
-                {
-                    master.SignInPage.Message = message;
-                }
-
-                if (master.Partial is MainFormPage)
-                {
-                    MainFormPage page = (MainFormPage)master.Partial;
-                    if (page.CurrentForm is SignInFormPage)
-                    {
-                        SignInFormPage form = (SignInFormPage)page.CurrentForm;
-                        form.Message = message;
-                    }
-                }
-
-                if (master.Partial is SignInFormPage)
-                {
-                    SignInFormPage page = master.Partial as SignInFormPage;
-                    page.Message = message;
-                }
-            }
-            else
-            {
-                if (RememberMe == "true")
-                {
-                    Db.Transact(() =>
-                    {
-                        session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
-                        session.Token.IsPersistent = true;
-                    });
-                }
-                SetAuthCookie(session.Token);
-            }
         }
 
         protected Response HandleSignInForm()
@@ -437,29 +240,22 @@ namespace SignIn
 
         protected Response HandleSignInForm(string OriginalUrl)
         {
-            MasterPage master = this.GetMaster();
+            var settings = DataHelper.GetSettings();
 
+            MasterPage master = this.GetMaster();
             master.RequireSignIn = false;
-            master.OriginalUrl = HttpUtility.UrlDecode(OriginalUrl);
-            master.Open("/signin/partial/main-form");
+
+            if (settings.SignInFormAsFullPage && Handle.CallLevel > 0 && !string.IsNullOrEmpty(OriginalUrl))
+            {
+                master.Redirect("/signin/signinuser?" + OriginalUrl);
+            }
+            else
+            {
+                master.OriginalUrl = HttpUtility.UrlDecode(OriginalUrl);
+                master.Open("/signin/partial/main-form");
+            }
 
             return master;
-        }
-
-        protected Response HandleSignOut()
-        {
-            SystemUser.SignOutSystemUser();
-            ClearAuthCookie();
-
-            return this.GetMaster();
-        }
-
-        protected Cookie GetSignInCookie()
-        {
-            List<Cookie> cookies = Handle.IncomingRequest.Cookies.Where(val => !string.IsNullOrEmpty(val)).Select(x => new Cookie(x)).ToList();
-            Cookie cookie = cookies.FirstOrDefault(x => x.Name == AuthCookieName);
-
-            return cookie;
         }
     }
 }

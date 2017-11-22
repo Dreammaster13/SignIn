@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>x64</PlatformTarget>
@@ -36,7 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>x64</PlatformTarget>
@@ -68,10 +68,15 @@
   <ItemGroup>
     <Compile Include="Api\CommitHooks.cs" />
     <Compile Include="Api\MainHandlers.cs" />
+    <Compile Include="Api\BlenderMapping.cs" />
+    <Compile Include="Api\Middleware.cs" />
+    <Compile Include="Api\PartialHandlers.cs" />
     <Compile Include="Helpers\AuthorizationHelper.cs" />
+    <Compile Include="Helpers\CookieHelpers.cs" />
+    <Compile Include="Helpers\DataHelper.cs" />
     <Compile Include="Helpers\MailSettingsHelper.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
-    <Compile Include="Helpers\SignInOut.cs" />
+    <Compile Include="Models\SystemAdminUser.cs" />
     <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Program.cs" />
@@ -100,6 +105,9 @@
     <Compile Include="ViewModels\RestorePasswordFormPage.json.cs">
       <DependentUpon>RestorePasswordFormPage.json</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CreateAdminUserViewModel.json.cs">
+      <DependentUpon>CreateAdminUserViewModel.json</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\SetPasswordPage.json.cs">
       <DependentUpon>SetPasswordPage.json</DependentUpon>
     </Compile>
@@ -123,12 +131,21 @@
     <TypedJSON Include="ViewModels\SetPasswordPage.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
+    <TypedJSON Include="ViewModels\AppName.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
+    <TypedJSON Include="ViewModels\CreateAdminUserViewModel.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
     <None Include="wwwroot\SignIn\viewmodels\ResetPasswordPage.html" />
-    <Content Include="wwwroot\SignIn\css\empty_user.svg" />
+    <Content Include="wwwroot\SignIn\css\empty_user.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="wwwroot\SignIn\css\signin.css" />
     <Content Include="wwwroot\SignIn\elements\signin-element.html" />
     <Content Include="wwwroot\SignIn\viewmodels\AccessDeniedPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\AlreadyInPage.html" />
+    <None Include="wwwroot\SignIn\viewmodels\AppIcon.html" />
     <Content Include="wwwroot\SignIn\viewmodels\MainFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\MasterPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\ProfileFormPage.html" />
@@ -142,6 +159,7 @@
     </TypedJSON>
     <None Include="wwwroot\SignIn\viewmodels\SettingsPage.html" />
     <None Include="wwwroot\SignIn\viewmodels\SetPasswordPage.html" />
+    <None Include="wwwroot\SignIn\viewmodels\CreateAdminUserFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\UserImagePage.html" />
