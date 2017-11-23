@@ -1,9 +1,9 @@
 using Starcounter;
 using Simplified.Ring2;
 using Simplified.Ring3;
-using Simplified.Ring5;
+using SignIn.Helpers;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class ProfileFormPage : Json
     {
@@ -49,7 +49,7 @@ namespace SignIn
                 {
                     email = new EmailAddress();
 
-                    EmailAddressRelation relation = new EmailAddressRelation()
+                    var relation = new EmailAddressRelation()
                     {
                         EmailAddress = email,
                         Somebody = user.WhoIs as Person
@@ -70,7 +70,8 @@ namespace SignIn
             this.MessageCss = "alert alert-danger";
 
             SystemUser user = SystemUser.GetCurrentSystemUser();
-            bool validOldPassword = SystemUser.ValidatePasswordHash(user.Username, this.OldPassword, user.PasswordSalt, user.Password);
+            bool validOldPassword = SystemUser.ValidatePasswordHash(
+                user.Username, this.OldPassword, user.PasswordSalt, user.Password);
 
             if (!validOldPassword)
             {
@@ -90,7 +91,8 @@ namespace SignIn
                 return;
             }
 
-            string password = SystemUser.GeneratePasswordHash(user.Username, this.NewPassword, user.PasswordSalt);
+            string password = SystemUser.GeneratePasswordHash(
+                user.Username, this.NewPassword, user.PasswordSalt);
 
             Db.Transact(() => { user.Password = password; });
 

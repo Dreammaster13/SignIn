@@ -1,7 +1,8 @@
 ﻿using Starcounter;
 using Simplified.Ring5;
+using SignIn.ViewModels;
 
-namespace SignIn
+namespace SignIn.Api
 {
     internal class CommitHooks
     {

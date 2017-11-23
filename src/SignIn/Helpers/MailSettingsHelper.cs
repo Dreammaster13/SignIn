@@ -2,8 +2,9 @@
 using Simplified.Ring6;
 using Starcounter;
 using Starcounter.Internal;
+using System.Linq;
 
-namespace SignIn
+namespace SignIn.Helpers
 {
     /// <summary>
     /// Helper for SignIn mail server settings
@@ -16,7 +17,9 @@ namespace SignIn
         public static SettingsMailServer GetSettings()
         {
             var name = "SignInMailSettings";
-            SettingsMailServer settings = Db.SQL<SettingsMailServer>("SELECT s FROM Simplified.Ring6.SettingsMailServer s WHERE s.Name = ?", name).First;
+            var settings = Db.SQL<SettingsMailServer>(
+                "SELECT s FROM Simplified.Ring6.SettingsMailServer s WHERE s.Name = ?", name)
+                .FirstOrDefault();
 
             if (settings == null)
             {

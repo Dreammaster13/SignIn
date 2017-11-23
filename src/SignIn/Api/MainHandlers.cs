@@ -10,20 +10,17 @@ using SignIn.Helpers;
 using SignIn.ViewModels;
 using SignIn.Models;
 
-namespace SignIn
+namespace SignIn.Api
 {
     internal class MainHandlers
     {
-        private CookieHelpers cookieHelpers = new CookieHelpers();
+        private CookieHelpers CookieHelpers => new CookieHelpers();
 
         public void Register()
         {
             Handle.GET("/signin/app-name", () => new AppName());
 
-            Handle.GET("/signin", () =>
-            {
-                return Self.GET("/signin/signinuser");
-            });
+            Handle.GET("/signin", () => Self.GET("/signin/signinuser"));
 
             Handle.GET("/signin/user", () =>
             {
@@ -34,11 +31,11 @@ namespace SignIn
                     return master.SignInPage;
                 }
 
-                Cookie cookie = cookieHelpers.GetSignInCookie();
+                Cookie cookie = CookieHelpers.GetSignInCookie();
                 SignInPage page = new SignInPage() { Data = null };
 
                 Session.Current.Store[nameof(SignInPage)] = page;
-                
+
                 if (cookie != null)
                 {
                     SystemUser.SignInSystemUser(cookie.Value);
@@ -62,12 +59,11 @@ namespace SignIn
             });
 
             Handle.GET("/signin/generateadminuser", (Request request) =>
-            {
-                return new Response()
+                new Response()
                 {
-                     Body = "Create the admin user by going to '/signin/signinuser' and pressing the 'Create Admin' button.",
-                };
-            }, new HandlerOptions() { SkipRequestFilters = true });
+                    Body = "Create the admin user by going to '/signin/signinuser' and " +
+                            "pressing the 'Create Admin' button.",
+                }, new HandlerOptions() { SkipRequestFilters = true });
 
             Handle.GET("/signin/createadminuser", () =>
             {
@@ -79,14 +75,9 @@ namespace SignIn
                 return master;
             });
 
-
-
-
-
             Handle.GET("/signin/settings", (Request request) =>
             {
-                Json page;
-                if (!AuthorizationHelper.TryNavigateTo("/signin/settings", request, out page))
+                if (!AuthorizationHelper.TryNavigateTo("/signin/settings", request, out Json page))
                 {
                     return page;
                 }
@@ -95,7 +86,7 @@ namespace SignIn
                 {
                     var settingsPage = new SettingsPage
                     {
-                        Html = "/SignIn/viewmodels/SettingsPage.html",
+                        Html = "/SignIn/views/SettingsPage.html",
                         Uri = request.Uri,
                         Data = MailSettingsHelper.GetSettings()
                     };
@@ -119,7 +110,9 @@ namespace SignIn
                 }
 
                 // Retrive the resetPassword instance
-                ResetPassword resetPassword = Db.SQL<ResetPassword>("SELECT o FROM Simplified.Ring6.ResetPassword o WHERE o.Token=? AND o.Expire>?", token, DateTime.UtcNow).First;
+                var resetPassword = Db.SQL<ResetPassword>(
+                    "SELECT o FROM Simplified.Ring6.ResetPassword o WHERE o.Token=? AND o.Expire>?",
+                    token, DateTime.UtcNow).FirstOrDefault();
 
                 if (resetPassword == null)
                 {
@@ -137,23 +130,14 @@ namespace SignIn
 
                 SystemUser systemUser = resetPassword.User;
 
-                ResetPasswordPage page = new ResetPasswordPage()
+                var page = new ResetPasswordPage()
                 {
-                    Html = "/SignIn/viewmodels/ResetPasswordPage.html",
-                    Uri = "/signin/user/resetpassword"
+                    Html = "/SignIn/views/ResetPasswordPage.html",
+                    Uri = "/signin/user/resetpassword",
+                    ResetPassword = resetPassword,
+                    FullName = systemUser.WhoIs?.FullName ?? systemUser.Username
                     //Uri = request.Uri // TODO:
                 };
-
-                page.ResetPassword = resetPassword;
-
-                if (systemUser.WhoIs != null)
-                {
-                    page.FullName = systemUser.WhoIs.FullName;
-                }
-                else
-                {
-                    page.FullName = systemUser.Username;
-                }
 
                 master.Partial = page;
 
@@ -162,14 +146,15 @@ namespace SignIn
 
             Handle.GET("/signin/user/authentication/settings/{?}", (string userid, Request request) =>
             {
-                Json page;
-                if (!AuthorizationHelper.TryNavigateTo("/signin/user/authentication/settings/{?}", request, out page))
+                if (!AuthorizationHelper.TryNavigateTo("/signin/user/authentication/settings/{?}", request, out Json page))
                 {
                     return new Json();
                 }
 
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+                var user = Db.SQL<SystemUser>(
+                    "SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid)
+                    .FirstOrDefault();
 
                 if (user == null)
                 {
@@ -179,8 +164,10 @@ namespace SignIn
                 }
 
                 SystemUser systemUser = SystemUser.GetCurrentSystemUser();
-                SystemUserGroup adminGroup = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
-                        AuthorizationHelper.AdminGroupName).FirstOrDefault();
+
+                var adminGroup = Db.SQL<SystemUserGroup>(
+                    "SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
+                    AuthorizationHelper.AdminGroupName).FirstOrDefault();
 
                 // Check if current user has permission to get this user instance
                 if (AuthorizationHelper.IsMemberOfGroup(systemUser, adminGroup))
@@ -189,7 +176,7 @@ namespace SignIn
                     {
                         page = Db.Scope(() => new SystemUserAuthenticationSettings
                         {
-                            Html = "/SignIn/viewmodels/SystemUserAuthenticationSettings.html",
+                            Html = "/SignIn/views/SystemUserAuthenticationSettings.html",
                             Uri = request.Uri,
                             Data = user,
                             UserPassword = Self.GET("/signin/user/authentication/password/" + user.GetObjectID())
@@ -205,7 +192,9 @@ namespace SignIn
             Handle.GET("/signin/user/authentication/password/{?}", (string userid, Request request) =>
             {
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+                var user = Db.SQL<SystemUser>(
+                    "SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid)
+                    .FirstOrDefault();
 
                 if (user == null)
                 {
@@ -214,7 +203,7 @@ namespace SignIn
 
                 Json page = Db.Scope(() => new SetPasswordPage
                 {
-                    Html = "/SignIn/viewmodels/SetPasswordPage.html",
+                    Html = "/SignIn/views/SetPasswordPage.html",
                     Data = user
                 });
 
@@ -225,7 +214,7 @@ namespace SignIn
         internal MasterPage GetMaster()
         {
             MasterPage master = Session.Ensure().Store[nameof(MasterPage)] as MasterPage;
-            if (master == null) 
+            if (master == null)
             {
                 master = new MasterPage();
                 Session.Current.Store[nameof(MasterPage)] = master;
@@ -245,7 +234,8 @@ namespace SignIn
             MasterPage master = this.GetMaster();
             master.RequireSignIn = false;
 
-            if (settings.SignInFormAsFullPage && Handle.CallLevel > 0 && !string.IsNullOrEmpty(OriginalUrl))
+            if (settings.SignInFormAsFullPage && Handle.CallLevel > 0 &&
+                !string.IsNullOrEmpty(OriginalUrl))
             {
                 master.Redirect("/signin/signinuser?" + OriginalUrl);
             }

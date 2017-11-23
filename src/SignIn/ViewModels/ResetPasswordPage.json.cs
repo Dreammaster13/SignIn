@@ -2,8 +2,9 @@ using System;
 using Simplified.Ring3;
 using Simplified.Ring6;
 using Starcounter;
+using SignIn.Helpers;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     [ResetPasswordPage_json]
     partial class ResetPasswordPage : Json

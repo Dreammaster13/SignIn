@@ -1,10 +1,12 @@
 using Simplified.Ring5;
 using Starcounter;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class SignInFormPage : Json
     {
+        protected MainFormPage MainForm => this.Parent as MainFormPage;
+
         protected override void OnData()
         {
             base.OnData();
@@ -23,19 +25,12 @@ namespace SignIn
         {
             action.Cancel();
 
-            if (this.MainForm != null)
-            {
-                this.MainForm.OpenRestorePassword();
-            }
+            this.MainForm?.OpenRestorePassword();
         }
+
         void Handle(Input.CreateAdminClick action)
         {
             RedirectUrl = "/signin/createadminuser";
-        }
-
-        protected MainFormPage MainForm
-        {
-            get { return this.Parent as MainFormPage; }
         }
     }
 }

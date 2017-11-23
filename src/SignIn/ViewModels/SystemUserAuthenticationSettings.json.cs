@@ -4,20 +4,28 @@ using Simplified.Ring3;
 using Simplified.Ring6;
 using Smorgasbord.PropertyMetadata;
 using Starcounter;
+using SignIn.Helpers;
 
 // FORGOT PASSWORD:
 // http://www.asp.net/identity/overview/features-api/account-confirmation-and-password-recovery-with-aspnet-identity
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class SystemUserAuthenticationSettings : PropertyMetadataPage, IBound<SystemUser>
     {
-        public bool ResetPassword_Enabled_
+        static SystemUserAuthenticationSettings()
+        {
+            DefaultTemplate.ResetPassword_Enabled.Bind = nameof(ResetPassword_Enabled);
+        }
+
+        public bool ResetPassword_Enabled
         {
             get
             {
                 var emailAddress = Utils.GetUserEmailAddress(this.Data);
-                return emailAddress != null && MailSettingsHelper.GetSettings().Enabled && Utils.IsValidEmail(emailAddress.EMail);
+                return emailAddress != null && 
+                    MailSettingsHelper.GetSettings().Enabled && 
+                    Utils.IsValidEmail(emailAddress.EMail);
             }
         }
 
@@ -58,41 +66,24 @@ namespace SignIn
             transaction.Scope(() =>
             {
                 SystemUser systemUser = this.Data;
-                // Generate Password Reset token
-                ResetPassword resetPassword = new ResetPassword()
-                {
-                    User = systemUser,
-                    Token = HttpUtility.UrlEncode(Guid.NewGuid().ToString()),
-                    Expire = DateTime.UtcNow.AddMinutes(1440)
-                };
+                ResetPassword passwordReseToken = GeneratePasswordResetToken(systemUser);
+                fullName = GetFullName(systemUser);
 
-                // Get FullName
-                if (systemUser.WhoIs != null)
-                {
-                    fullName = systemUser.WhoIs.FullName;
-                }
-                else
-                {
-                    fullName = systemUser.Username;
-                }
-
-                // Build reset password link
-                UriBuilder uri = new UriBuilder();
-
-                uri.Host = mailSettings.SiteHost;
-                uri.Port = (int)mailSettings.SitePort;
-
-                uri.Path = "signin/user/resetpassword";
-                uri.Query = "token=" + resetPassword.Token;
+                UriBuilder uri = BuildResetPasswordLink(mailSettings, passwordReseToken);
 
                 link = uri.ToString();
             });
 
             transaction.Commit();
 
+            SendEmail(link, fullName, email);
+        }
+
+        private void SendEmail(string link, string fullName, string email)
+        {
             try
             {
-                this.Message = string.Format("Sending mail sent to {0}...", email);
+                this.Message = $"Sending mail sent to {email}...";
                 Utils.SendResetPasswordMail(fullName, email, link);
                 this.Message = "Mail sent.";
             }
@@ -102,5 +93,35 @@ namespace SignIn
             }
         }
 
+        private static UriBuilder BuildResetPasswordLink(
+            SettingsMailServer mailSettings, 
+            ResetPassword resetPassword)
+        {
+            return new UriBuilder
+            {
+                Host = mailSettings.SiteHost,
+                Port = (int)mailSettings.SitePort,
+                Path = "signin/user/resetpassword",
+                Query = "token=" + resetPassword.Token
+            };
+        }
+
+        private static string GetFullName(SystemUser systemUser) => 
+            systemUser.WhoIs == null ?
+                systemUser.Username :
+                systemUser.WhoIs.FullName;
+
+        private static ResetPassword GeneratePasswordResetToken(SystemUser systemUser)
+        {
+            int oneDayInMinutes = 1440;
+            DateTime expirationTime = DateTime.UtcNow.AddMinutes(oneDayInMinutes);
+
+            return new ResetPassword()
+            {
+                User = systemUser,
+                Token = HttpUtility.UrlEncode(Guid.NewGuid().ToString()),
+                Expire = expirationTime
+            };
+        }
     }
 }

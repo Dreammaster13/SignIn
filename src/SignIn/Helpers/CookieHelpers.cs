@@ -9,12 +9,18 @@ namespace SignIn.Helpers
 {
     internal class CookieHelpers
     {
-        internal string AuthCookieName = "soauthtoken";
-        internal int rememberMeDays = 30;
+        internal string AuthCookieName { get; }
+        internal int RememberMeDays { get; }
+
+        public CookieHelpers(string authCookieName = "soauthtoken", int rememberMeDays = 30)
+        {
+            AuthCookieName = authCookieName ?? throw new ArgumentNullException(nameof(authCookieName));
+            RememberMeDays = rememberMeDays;
+        }
 
         internal void SetAuthCookie(SystemUserTokenKey token)
         {
-            Cookie cookie = new Cookie()
+            var cookie = new Cookie()
             {
                 Name = AuthCookieName
             };
@@ -45,10 +51,12 @@ namespace SignIn.Helpers
             cookie.Expires = DateTime.Now.AddDays(-1).ToUniversalTime();
         }
 
-
         internal Cookie GetSignInCookie()
         {
-            List<Cookie> cookies = Handle.IncomingRequest.Cookies.Where(val => !string.IsNullOrEmpty(val)).Select(x => new Cookie(x)).ToList();
+            List<Cookie> cookies = Handle.IncomingRequest.Cookies
+                .Where(val => !string.IsNullOrEmpty(val))
+                .Select(x => new Cookie(x)).ToList();
+
             Cookie cookie = cookies.FirstOrDefault(x => x.Name == AuthCookieName);
 
             return cookie;
@@ -68,7 +76,7 @@ namespace SignIn.Helpers
                 Session.Token = SystemUser.RenewAuthToken(Session.Token);
                 if (Session.Token.IsPersistent)
                 {
-                    Session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
+                    Session.Token.Expires = DateTime.UtcNow.AddDays(RememberMeDays);
                 }
             });
 

@@ -1,7 +1,8 @@
+using SignIn.Helpers;
 using Simplified.Ring3;
 using Starcounter;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class SetPasswordPage : Json, IBound<SystemUser>
     {

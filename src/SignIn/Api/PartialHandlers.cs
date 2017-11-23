@@ -12,13 +12,12 @@ namespace SignIn.Api
 {
     internal class PartialHandlers
     {
-        private CookieHelpers cookieHelper = new CookieHelpers();
-        private MainHandlers mainHandlers = new MainHandlers();
+        private CookieHelpers CookieHelper => new CookieHelpers();
+        private MainHandlers MainHandlers => new MainHandlers();
 
         internal void Register()
         {
-
-            HandlerOptions internalOption = new HandlerOptions() { SkipRequestFilters = true };
+            var internalOption = new HandlerOptions() { SkipRequestFilters = true };
 
             Handle.POST("/signin/partial/signin", (Request request) =>
             {
@@ -33,22 +32,18 @@ namespace SignIn.Api
                 return 200;
             }, internalOption);
 
-            Handle.GET("/signin/partial/signin-form", (Request request) =>
-            {
-                return new SignInFormPage()
+            Handle.GET("/signin/partial/signin-form", (Request request) => 
+                new SignInFormPage()
                 {
                     Data = null,
                     CanCreateAdminUser = SystemAdminUser.GetCanCreateAdminUser(request.ClientIpAddress)
-                };
-            }, internalOption);
+                }, internalOption);
 
             Handle.GET("/signin/partial/createadminuser", (Request request) =>
-            {
-                return new CreateAdminUserViewModel()
+                new CreateAdminUserViewModel()
                 {
                     Data = SystemAdminUser.Create(request.ClientIpAddress)
-                };
-            }, new HandlerOptions() { SkipRequestFilters = true });
+                }, internalOption);
 
             Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null }, internalOption);
             Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(), internalOption);
@@ -69,7 +64,7 @@ namespace SignIn.Api
 
             if (session == null)
             {
-                MasterPage master = mainHandlers.GetMaster();
+                MasterPage master = MainHandlers.GetMaster();
                 string message = "Invalid username or password!";
 
                 if (master.SignInPage != null)
@@ -79,17 +74,16 @@ namespace SignIn.Api
 
                 if (master.Partial is MainFormPage)
                 {
-                    MainFormPage page = (MainFormPage)master.Partial;
-                    if (page.CurrentForm is SignInFormPage)
+                    var page = (MainFormPage)master.Partial;
+                    if (page.CurrentForm is SignInFormPage form)
                     {
-                        SignInFormPage form = (SignInFormPage)page.CurrentForm;
                         form.Message = message;
                     }
                 }
 
                 if (master.Partial is SignInFormPage)
                 {
-                    SignInFormPage page = master.Partial as SignInFormPage;
+                    var page = master.Partial as SignInFormPage;
                     page.Message = message;
                 }
             }
@@ -99,18 +93,18 @@ namespace SignIn.Api
                 {
                     Db.Transact(() =>
                     {
-                        session.Token.Expires = DateTime.UtcNow.AddDays(cookieHelper.rememberMeDays);
+                        session.Token.Expires = DateTime.UtcNow.AddDays(CookieHelper.RememberMeDays);
                         session.Token.IsPersistent = true;
                     });
                 }
-                cookieHelper.SetAuthCookie(session.Token);
+                CookieHelper.SetAuthCookie(session.Token);
             }
         }
 
         protected Response HandleSignOut()
         {
             SystemUser.SignOutSystemUser();
-            cookieHelper.ClearAuthCookie();
+            CookieHelper.ClearAuthCookie();
 
             return 200;
         }

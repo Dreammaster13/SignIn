@@ -1,6 +1,6 @@
 using Starcounter;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class MainFormPage : Json
     {

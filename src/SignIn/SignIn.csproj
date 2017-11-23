@@ -74,7 +74,9 @@
     <Compile Include="Helpers\AuthorizationHelper.cs" />
     <Compile Include="Helpers\CookieHelpers.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
+    <Compile Include="Helpers\JwtHashAlgorithm.cs" />
     <Compile Include="Helpers\MailSettingsHelper.cs" />
+    <Compile Include="Helpers\SignatureVerificationException.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
     <Compile Include="Models\SystemAdminUser.cs" />
     <Compile Include="Helpers\UserHelper.cs" />
@@ -137,32 +139,32 @@
     <TypedJSON Include="ViewModels\CreateAdminUserViewModel.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
-    <None Include="wwwroot\SignIn\viewmodels\ResetPasswordPage.html" />
+    <None Include="wwwroot\SignIn\views\ResetPasswordPage.html" />
     <Content Include="wwwroot\SignIn\css\empty_user.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="wwwroot\SignIn\css\signin.css" />
     <Content Include="wwwroot\SignIn\elements\signin-element.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\AccessDeniedPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\AlreadyInPage.html" />
-    <None Include="wwwroot\SignIn\viewmodels\AppIcon.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\MainFormPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\MasterPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\ProfileFormPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\RestorePasswordFormPage.html" />
+    <Content Include="wwwroot\SignIn\views\AccessDeniedPage.html" />
+    <Content Include="wwwroot\SignIn\views\AlreadyInPage.html" />
+    <None Include="wwwroot\SignIn\views\AppIcon.html" />
+    <Content Include="wwwroot\SignIn\views\MainFormPage.html" />
+    <Content Include="wwwroot\SignIn\views\MasterPage.html" />
+    <Content Include="wwwroot\SignIn\views\ProfileFormPage.html" />
+    <Content Include="wwwroot\SignIn\views\RestorePasswordFormPage.html" />
     <TypedJSON Include="ViewModels\ResetPasswordPage.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
-    <None Include="wwwroot\SignIn\viewmodels\SystemUserAuthenticationSettings.html" />
+    <None Include="wwwroot\SignIn\views\SystemUserAuthenticationSettings.html" />
     <TypedJSON Include="ViewModels\SystemUserAuthenticationSettings.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
-    <None Include="wwwroot\SignIn\viewmodels\SettingsPage.html" />
-    <None Include="wwwroot\SignIn\viewmodels\SetPasswordPage.html" />
-    <None Include="wwwroot\SignIn\viewmodels\CreateAdminUserFormPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\SignInPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\UserImagePage.html" />
+    <None Include="wwwroot\SignIn\views\SettingsPage.html" />
+    <None Include="wwwroot\SignIn\views\SetPasswordPage.html" />
+    <None Include="wwwroot\SignIn\views\CreateAdminUserFormPage.html" />
+    <Content Include="wwwroot\SignIn\views\SignInFormPage.html" />
+    <Content Include="wwwroot\SignIn\views\SignInPage.html" />
+    <Content Include="wwwroot\SignIn\views\UserImagePage.html" />
   </ItemGroup>
   <ItemGroup>
     <TypedJSON Include="ViewModels\SignInFormPage.json">

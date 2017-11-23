@@ -5,19 +5,19 @@ using Starcounter;
 using Simplified.Ring2;
 using Simplified.Ring3;
 using Simplified.Ring6;
+using SignIn.Helpers;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class RestorePasswordFormPage : Json
     {
+        protected MainFormPage MainForm => this.Parent as MainFormPage;
+
         void Handle(Input.SignInClick action)
         {
             action.Cancel();
 
-            if (this.MainForm != null)
-            {
-                this.MainForm.OpenSignIn();
-            }
+            this.MainForm?.OpenSignIn();
         }
 
         void Handle(Input.Username action) // Makes the Reset Password clickable again.
@@ -44,10 +44,10 @@ namespace SignIn
                 return;
             }
 
-            Person person = user.WhoIs as Person;
+            var person = user.WhoIs as Person;
             EmailAddress email = Utils.GetUserEmailAddress(user);
 
-            if (person == null || email == null || string.IsNullOrEmpty(email.EMail))
+            if (person == null || string.IsNullOrEmpty(email?.EMail))
             {
                 this.Message = "Unable to restore password, no e-mail address found!";
                 return;
@@ -67,7 +67,7 @@ namespace SignIn
             {
                 this.Message = "Mail server is currently unavailable.";
                 this.MessageCss = "alert alert-danger";
-                Starcounter.Logging.LogSource log = new Starcounter.Logging.LogSource(Application.Current.Name);
+                var log = new Starcounter.Logging.LogSource(Application.Current.Name);
                 log.LogException(ex);
             }
         }
@@ -75,28 +75,28 @@ namespace SignIn
         protected void SendNewPassword(string Name, string Username, string NewPassword, string Email)
         {
             SettingsMailServer settings = MailSettingsHelper.GetSettings();
-            MailMessage mail = new MailMessage(settings.Username, Email);
-            SmtpClient client = new SmtpClient();
+            var client = new SmtpClient
+            {
+                Port = settings.Port,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(settings.Username, settings.Password),
+                Host = settings.Host,
+                EnableSsl = settings.EnableSsl
+            };
 
-            client.Port = settings.Port;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential(settings.Username, settings.Password);
-            client.Host = settings.Host;
-            client.EnableSsl = settings.EnableSsl;
+            var mail = new MailMessage(settings.Username, Email)
+            {
+                Subject = "Restore password",
+                Body =
+                    $"<h1>Hello {Name}</h1><p>You have requested a new password for your " +
+                    $"<b>{Username}</b> account.</p>" +
+                    $"<p>Your new password is: <b>{NewPassword}</b>.</p>",
 
-            mail.Subject = "Restore password";
-            mail.Body =
-                string.Format(
-                    "<h1>Hello {0}</h1><p>You have requested a new password for your <b>{1}</b> account.</p><p>Your new password is: <b>{2}</b>.</p>",
-                    Name, Username, NewPassword);
-            mail.IsBodyHtml = true;
+                IsBodyHtml = true
+            };
+
             client.Send(mail);
-        }
-
-        protected MainFormPage MainForm
-        {
-            get { return this.Parent as MainFormPage; }
         }
     }
 }

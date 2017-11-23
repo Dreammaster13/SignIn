@@ -6,10 +6,11 @@ using Simplified.Ring2;
 using Simplified.Ring3;
 using Simplified.Ring6;
 using Starcounter;
+using System.Linq;
 
-namespace SignIn
+namespace SignIn.Helpers
 {
-    public class Utils
+    public static class Utils
     {
         /// <summary>
         /// Check if Email has the correct syntax
@@ -32,8 +33,8 @@ namespace SignIn
         public static string RandomString(int size)
         {
             string input = "abcdefghijklmnopqrstuvwxyz0123456789";
-            StringBuilder builder = new StringBuilder();
-            Random random = new Random();
+            var builder = new StringBuilder();
+            var random = new Random();
             char ch;
 
             for (int i = 0; i < size; i++)
@@ -47,7 +48,7 @@ namespace SignIn
 
         public static EmailAddress GetUserEmailAddress(SystemUser user)
         {
-            Person person = user.WhoIs as Person;
+            var person = user.WhoIs as Person;
 
             if (person == null)
             {
@@ -56,8 +57,9 @@ namespace SignIn
 
             EmailAddress email =
                 Db.SQL<EmailAddress>(
-                        "SELECT r.EmailAddress FROM Simplified.Ring3.EmailAddressRelation r WHERE r.Somebody = ?", person)
-                    .First;
+                    "SELECT r.EmailAddress FROM Simplified.Ring3.EmailAddressRelation r " +
+                    "WHERE r.Somebody = ?", person)
+                    .FirstOrDefault();
 
             return email;
         }
@@ -76,18 +78,16 @@ namespace SignIn
                     throw new InvalidOperationException("Mail service not enabled in the configuration.");
                 }
 
-                MailAddress fromAddress = new MailAddress(settings.Username, "Starcounter App");
-                MailAddress toAddress = new MailAddress(toEmail);
+                var fromAddress = new MailAddress(settings.Username, "Starcounter App");
+                var toAddress = new MailAddress(toEmail);
 
                 const string subject = "Starcounter App, Reset password request";
 
-                string body = string.Format(
-                    "Hi {0}<br><br>" +
-                    "We received a request to reset your password<br><br>" +
-                    "Click <a href='{1}'>here</a> to set a new password<br><br>" +
-                    "Thanks<br>",
-
-                    toFullName, link);
+                string body = 
+                    $"Hi {toFullName}<br><br>" +
+                    $"We received a request to reset your password<br><br>" +
+                    $"Click <a href='{link}'>here</a> to set a new password<br><br>" +
+                    $"Thanks<br>";
 
                 var smtp = new SmtpClient
                 {
@@ -99,16 +99,14 @@ namespace SignIn
                     Credentials = new NetworkCredential(fromAddress.Address, settings.Password)
                 };
 
-                using (var message = new MailMessage(fromAddress, toAddress)
+                var message = new MailMessage(fromAddress, toAddress)
                 {
                     Subject = subject,
                     IsBodyHtml = true,
                     Body = body
-
-                })
-                {
-                    smtp.Send(message);
-                }
+                };
+                smtp.Send(message);
+                message.Dispose();
             }
             catch (Exception e)
             {

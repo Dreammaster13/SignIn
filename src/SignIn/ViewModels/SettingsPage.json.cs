@@ -1,7 +1,7 @@
 using System.Net;
 using Smorgasbord.PropertyMetadata;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     [SettingsPage_json]
     partial class SettingsPage : PropertyMetadataPage
@@ -53,7 +53,7 @@ namespace SignIn
         /// <summary>
         /// Assure metadata for all fields
         /// </summary>
-        virtual protected void AssurePropertiesMetadata()
+        protected virtual void AssurePropertiesMetadata()
         {
             AssurePropertyMetadata_SiteHost("SiteHost$", this.SiteHost);
             AssurePropertyMetadata_SitePort("SitePort$", this.SitePort);
@@ -94,11 +94,12 @@ namespace SignIn
 
         private PropertyMetadataItem CreatePropertyMetadata(string propertyName, string message)
         {
-            PropertyMetadataItem item = new PropertyMetadataItem();
-            item.Message = message;
-            item.ErrorLevel = 1;
-            item.PropertyName = propertyName;
-            return item;
+            return new PropertyMetadataItem
+            {
+                Message = message,
+                ErrorLevel = 1,
+                PropertyName = propertyName
+            };
         }
 
         #endregion

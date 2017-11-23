@@ -1,6 +1,6 @@
 {
   "Uri": "",
-  "Html": "/SignIn/viewmodels/SignInPage.html",
+  "Html": "/SignIn/views/SignInPage.html",
   "IsSignedIn": false,
   "Message": "",
   "FullName": "",

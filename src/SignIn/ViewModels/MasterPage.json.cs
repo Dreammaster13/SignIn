@@ -2,21 +2,17 @@ using Starcounter;
 using Simplified.Ring3;
 using Simplified.Ring5;
 
-namespace SignIn
+namespace SignIn.ViewModels
 {
     partial class MasterPage : Json
     {
-        public SignInPage SignInPage {
-            get {
-                return Session.Current.Store[nameof(SignInPage)] as SignInPage;
-            }
-        }
+        public SignInPage SignInPage => Session.Current.Store[nameof(SignInPage)] as SignInPage;
 
-        protected string url;
+        protected string Url;
 
         public void Open(string contentUri)
         {
-            this.url = contentUri;
+            this.Url = contentUri;
             this.RedirectUrl = null;
             this.RefreshSignInState();
         }
@@ -33,15 +29,15 @@ namespace SignIn
 
             if (this.RequireSignIn && userSession != null)
             {
-                this.Partial = Self.GET(this.url);
+                this.Partial = Self.GET(this.Url);
             }
             else if (this.RequireSignIn && userSession == null)
             {
                 this.Partial = Self.GET("/signin/partial/accessdenied-form");
             }
-            else if (userSession == null && !string.IsNullOrEmpty(this.url))
+            else if (userSession == null && !string.IsNullOrEmpty(this.Url))
             {
-                this.Partial = Self.GET(this.url);
+                this.Partial = Self.GET(this.Url);
             }
             else if (!string.IsNullOrEmpty(this.OriginalUrl))
             {
