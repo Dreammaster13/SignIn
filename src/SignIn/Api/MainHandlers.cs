@@ -35,7 +35,7 @@ namespace SignIn.Api
                 SignInPage page = new SignInPage() { Data = null };
 
                 Session.Current.Store[nameof(SignInPage)] = page;
-                
+
                 if (cookie != null)
                 {
                     SystemUser.SignInSystemUser(cookie.Value);
@@ -58,10 +58,10 @@ namespace SignIn.Api
                 return master;
             });
 
-            Handle.GET("/signin/generateadminuser", (Request request) => 
+            Handle.GET("/signin/generateadminuser", (Request request) =>
                 new Response()
                 {
-                     Body = "Create the admin user by going to '/signin/signinuser' and " +
+                    Body = "Create the admin user by going to '/signin/signinuser' and " +
                             "pressing the 'Create Admin' button.",
                 }, new HandlerOptions() { SkipRequestFilters = true });
 
@@ -111,7 +111,7 @@ namespace SignIn.Api
 
                 // Retrive the resetPassword instance
                 var resetPassword = Db.SQL<ResetPassword>(
-                    "SELECT o FROM Simplified.Ring6.ResetPassword o WHERE o.Token=? AND o.Expire>?", 
+                    "SELECT o FROM Simplified.Ring6.ResetPassword o WHERE o.Token=? AND o.Expire>?",
                     token, DateTime.UtcNow).FirstOrDefault();
 
                 if (resetPassword == null)
@@ -214,7 +214,7 @@ namespace SignIn.Api
         internal MasterPage GetMaster()
         {
             MasterPage master = Session.Ensure().Store[nameof(MasterPage)] as MasterPage;
-            if (master == null) 
+            if (master == null)
             {
                 master = new MasterPage();
                 Session.Current.Store[nameof(MasterPage)] = master;
@@ -234,7 +234,7 @@ namespace SignIn.Api
             MasterPage master = this.GetMaster();
             master.RequireSignIn = false;
 
-            if (settings.SignInFormAsFullPage && Handle.CallLevel > 0 && 
+            if (settings.SignInFormAsFullPage && Handle.CallLevel > 0 &&
                 !string.IsNullOrEmpty(OriginalUrl))
             {
                 master.Redirect("/signin/signinuser?" + OriginalUrl);

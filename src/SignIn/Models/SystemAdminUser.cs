@@ -16,14 +16,14 @@ namespace SignIn.Models
         private const string AdminGroupDescription = "System User Administrator Group";
         private const string AdminUsername = "admin";
         private const string AdminEmail = "admin@starcounter.com";
-        
+
         public bool CanCreateAdminUser => GetCanCreateAdminUser(this.ClientRootAddress);
-     
+
         public bool IsAdminCreated => !this.CanCreateAdminUser;
-        
+
         public IPAddress ClientRootAddress { get; private set; }
         public string Username { get; private set; }
-        public string Password { get;  set; }
+        public string Password { get; set; }
 
         public string PasswordRepeat { get; set; }
 
@@ -46,11 +46,10 @@ namespace SignIn.Models
         /// </summary>
         /// <param name="clientRootAddress"></param>
         /// <returns></returns>
-        internal static  bool GetCanCreateAdminUser(IPAddress clientRootAddress)
+        internal static bool GetCanCreateAdminUser(IPAddress clientRootAddress)
         {
             return IPAddress.IsLoopback(clientRootAddress) && !HasUsers() && !HasAdminUser();
         }
-
 
         internal void CreateAdminUser(out string message, out bool isAlert)
         {
@@ -70,7 +69,6 @@ namespace SignIn.Models
             CreateAdminSystemUserIfMissing(this.Password, out message, out isAlert);
         }
 
-      
         /// <summary>
         /// Creates Admin User if missing and adds it to the admin group.  
         /// </summary>
@@ -120,35 +118,34 @@ namespace SignIn.Models
             });
             message = $"Admin user with username = '{AdminUsername}' was created";
         }
-       
-        internal string GetPasswordRepeatValidationMessage() => 
+
+        internal string GetPasswordRepeatValidationMessage() =>
             this.Password != this.PasswordRepeat ? "Passwords do not match" : null;
 
-        internal string GetPasswordValidationMessage() => 
+        internal string GetPasswordValidationMessage() =>
             string.IsNullOrEmpty(this.Password) ? "Password cannot be empty" : null;
 
-        private static bool HasUsers() => 
+        private static bool HasUsers() =>
             Db.SQL($"SELECT o FROM {typeof(SystemUser).FullName} o").Any();
-        
-        private static bool HasAdminUser() => 
+
+        private static bool HasAdminUser() =>
             IsInGroup(GetAdminUser(), GetAdminUserGroup());
 
-        private static bool IsInGroup(SystemUser user, SystemUserGroup group) => 
-            group != null && 
-            user != null && 
+        private static bool IsInGroup(SystemUser user, SystemUserGroup group) =>
+            group != null &&
+            user != null &&
             SystemUser.IsMemberOfGroup(user, group);
-       
-        private static SystemUser GetAdminUser() => 
+
+        private static SystemUser GetAdminUser() =>
             Db.SQL<SystemUser>(
                 $"SELECT o FROM {typeof(SystemUser).FullName} o " +
                 $"WHERE o.{nameof(SystemUser.Username)} = ?", AdminUsername)
             .FirstOrDefault();
 
-        private static SystemUserGroup GetAdminUserGroup() => 
+        private static SystemUserGroup GetAdminUserGroup() =>
             Db.SQL<SystemUserGroup>(
                 $"SELECT o FROM {typeof(SystemUserGroup).FullName} o " +
                 $"WHERE o.{nameof(SystemUser.Name)} = ?", AdminGroupName)
             .FirstOrDefault();
-        
     }
 }

@@ -1,5 +1,4 @@
-﻿using SignIn.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,8 +11,8 @@ namespace SignIn.Helpers
     /// </summary>
     public static class JsonWebToken
     {
-        private readonly static Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>> HashAlgorithms;
-        private readonly static JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+        private static readonly Dictionary<JwtHashAlgorithm, Func<byte[], byte[], byte[]>> HashAlgorithms;
+        private static readonly JavaScriptSerializer JsonSerializer = new JavaScriptSerializer();
 
         static JsonWebToken()
         {
@@ -59,10 +58,10 @@ namespace SignIn.Helpers
         public static string Encode(object payload, byte[] key, JwtHashAlgorithm algorithm)
         {
             var segments = new List<string>();
-            var header = new {typ = "JWT", alg = algorithm.ToString()};
+            var header = new { typ = "JWT", alg = algorithm.ToString() };
 
-            byte[] headerBytes = Encoding.UTF8.GetBytes(jsonSerializer.Serialize(header));
-            byte[] payloadBytes = Encoding.UTF8.GetBytes(jsonSerializer.Serialize(payload));
+            byte[] headerBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(header));
+            byte[] payloadBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(payload));
 
             segments.Add(Base64UrlEncode(headerBytes));
             segments.Add(Base64UrlEncode(payloadBytes));
@@ -109,13 +108,13 @@ namespace SignIn.Helpers
             byte[] crypto = Base64UrlDecode(parts[2]);
 
             var headerJson = Encoding.UTF8.GetString(Base64UrlDecode(header));
-            var headerData = jsonSerializer.Deserialize<Dictionary<string, object>>(headerJson);
+            var headerData = JsonSerializer.Deserialize<Dictionary<string, object>>(headerJson);
             var payloadJson = Encoding.UTF8.GetString(Base64UrlDecode(payload));
 
             if (verify)
             {
                 var bytesToSign = Encoding.UTF8.GetBytes(string.Concat(header, ".", payload));
-                var algorithm = (string) headerData["alg"];
+                var algorithm = (string)headerData["alg"];
 
                 var signature = HashAlgorithms[GetHashAlgorithm(algorithm)](key, bytesToSign);
                 var decodedCrypto = Convert.ToBase64String(crypto);
@@ -124,19 +123,18 @@ namespace SignIn.Helpers
                 if (decodedCrypto != decodedSignature)
                 {
                     throw new SignatureVerificationException(
-                        string.Format("Invalid signature. Expected {0} got {1}",
-                        decodedCrypto, decodedSignature));
+                        $"Invalid signature. Expected {decodedCrypto} got {decodedSignature}");
                 }
 
                 // verify exp claim https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32#section-4.1.4
-                var payloadData = jsonSerializer.Deserialize<Dictionary<string, object>>(payloadJson);
+                var payloadData = JsonSerializer.Deserialize<Dictionary<string, object>>(payloadJson);
                 if (payloadData.ContainsKey("exp") && payloadData["exp"] != null)
                 {
                     // safely unpack a boxed int 
                     int exp;
                     try
                     {
-                        exp = (int) payloadData["exp"];
+                        exp = (int)payloadData["exp"];
                     }
                     catch (Exception)
                     {
@@ -178,8 +176,8 @@ namespace SignIn.Helpers
         /// <exception cref="SignatureVerificationException">Thrown if the verify parameter was true and the signature was NOT valid or if the JWT was signed with an unsupported algorithm.</exception>
         public static object DecodeToObject(string token, string key, bool verify = true)
         {
-            var payloadJson = JsonWebToken.Decode(token, key, verify);
-            var payloadData = jsonSerializer.Deserialize<Dictionary<string, object>>(payloadJson);
+            var payloadJson = Decode(token, key, verify);
+            var payloadData = JsonSerializer.Deserialize<Dictionary<string, object>>(payloadJson);
             return payloadData;
         }
 
@@ -194,8 +192,8 @@ namespace SignIn.Helpers
         /// <exception cref="SignatureVerificationException">Thrown if the verify parameter was true and the signature was NOT valid or if the JWT was signed with an unsupported algorithm.</exception>
         public static T DecodeToObject<T>(string token, string key, bool verify = true)
         {
-            var payloadJson = JsonWebToken.Decode(token, key, verify);
-            var payloadData = jsonSerializer.Deserialize<T>(payloadJson);
+            var payloadJson = Decode(token, key, verify);
+            var payloadData = JsonSerializer.Deserialize<T>(payloadJson);
             return payloadData;
         }
 
@@ -230,7 +228,7 @@ namespace SignIn.Helpers
             var output = input;
             output = output.Replace('-', '+'); // 62nd char of encoding
             output = output.Replace('_', '/'); // 63rd char of encoding
-            switch (output.Length%4) // Pad with trailing '='s
+            switch (output.Length % 4) // Pad with trailing '='s
             {
                 case 0:
                     break; // No pad chars in this case
