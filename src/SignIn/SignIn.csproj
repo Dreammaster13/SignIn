@@ -47,16 +47,16 @@
       <HintPath>..\..\packages\Starcounter.Simplified.Data.Model.1.0.1\lib\net45\Simplified.Data.Model.dll</HintPath>
     </Reference>
     <Reference Include="Starcounter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Starcounter.Internal, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Starcounter.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Starcounter.XSON, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
