@@ -1,6 +1,11 @@
 ﻿<link rel="import" href="/sys/palindrom-redirect/palindrom-redirect.html" />
 
 <template>
+    <style>
+        .signin-form__label {
+            font-weight: bold;
+        }
+    </style>
     <template is="dom-bind">
         <starcounter-include slot="SignIn/current-partial-page" partial="{{model.Partial}}"></starcounter-include>
         <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}" />
