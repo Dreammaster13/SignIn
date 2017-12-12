@@ -74,13 +74,13 @@
                 <juicy-popover>
                     <div slot="handle" class="signin-popup-handle">
                         <div class="signin-popup-user-image">
-                            <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
+                            <starcounter-include view-model="{{model.UserImage}}"></starcounter-include>
                         </div>
                         <div class="signin-popup-user-name">{{model.FullName}}</div>
                     </div>
                     <div slot="expandable" class="signin-popup-window">
                         <div class="signin-popup-window__user-image">
-                            <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
+                            <starcounter-include view-model="{{model.UserImage}}"></starcounter-include>
                         </div>
                         <p class="signin-popup-window__user-name">
                             <a href="/signin/profile">{{model.FullName}}</a>
@@ -93,7 +93,7 @@
             <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
                 <juicy-popover class="signin-popover">
                     <div slot="handle" class="signin-popup-handle signin-popup-user-image">
-                        <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
+                        <starcounter-include view-model="{{model.UserImage}}"></starcounter-include>
                     </div>
                     <div slot="expandable" class="signin-popup-window">
                         <form on-submit="preventSubmit">
