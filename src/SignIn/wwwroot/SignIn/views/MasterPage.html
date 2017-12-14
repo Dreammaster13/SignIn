@@ -2,7 +2,7 @@
 
 <template>
     <template is="dom-bind">
-        <starcounter-include slot="SignIn/current-partial-page" partial="{{model.Partial}}"></starcounter-include>
+        <starcounter-include slot="SignIn/current-partial-page" view-model="{{model.Partial}}"></starcounter-include>
         <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}" />
     </template>
     <template is="declarative-shadow-dom">
