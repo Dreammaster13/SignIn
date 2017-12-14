@@ -1,5 +1,5 @@
-﻿<link rel="import" href="/sys/polymer/polymer.html">
-<link rel="import" href="/sys/sgb-property-metadata/sgb-property-metadata.html" />
+<link rel="import" href="/sys/polymer/polymer.html">
+<link rel="import" href="/sys/sgb-property-metadata/sgb-property-metadata.html">
 
 <style>
     .signin-auth-settings {
@@ -8,7 +8,7 @@
 </style>
 
 <template>
-    <template is="dom-bind">
+    <dom-bind><template is="dom-bind">
         <div slot="SignIn/auth-settings" class="signin-auth-settings">
             <sgb-property-metadata items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
 
@@ -27,7 +27,7 @@
                 <starcounter-include partial="{{model.UserPassword}}"></starcounter-include>
             </template>
         </div>
-    </template>
+    </template></dom-bind>
     <template is="declarative-shadow-dom">
         <slot name="SignIn/auth-settings"></slot>
     </template>

@@ -1,8 +1,8 @@
-﻿<template>
-    <template is="dom-bind">
+<template>
+    <dom-bind><template is="dom-bind">
         <p slot="SignIn/already-signed-in-message" class="alert alert-success">You are signed in as <a href="/signin/profile"><b>{{model.Username}}</b></a>!</p>
         <button slot="SignIn/sign-out-button" class="btn btn-primary" on-click="signOut">Sign out</button>
-    </template>
+    </template></dom-bind>
     <script>
         (function () {
             var script = document._currentScript || document.currentScript;
