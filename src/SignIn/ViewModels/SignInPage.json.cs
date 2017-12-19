@@ -8,7 +8,7 @@ namespace SignIn
 
         static SignInPage()
         {
-            DefaultTemplate.FullName.Bind = "Token.User.WhoIs.FullName";
+            DefaultTemplate.FullName.Bind = "User.Username";
         }
 
         protected override void OnData()
