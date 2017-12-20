@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Starcounter;
 using Starcounter.Internal;
+using System.Linq;
 
 namespace SignIn
 {
@@ -15,7 +16,7 @@ namespace SignIn
         public static SettingsMailServer GetSettings()
         {
             var name = "SignInMailSettings";
-            SettingsMailServer settings = Db.SQL<SettingsMailServer>($"SELECT s FROM {typeof(SettingsMailServer)} s WHERE s.Name = ?", name).First;
+            SettingsMailServer settings = Db.SQL<SettingsMailServer>($"SELECT s FROM {typeof(SettingsMailServer)} s WHERE s.Name = ?", name).FirstOrDefault();
 
             if (settings == null)
             {

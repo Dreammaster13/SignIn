@@ -38,7 +38,7 @@ namespace SignIn
         static public SystemUserSession SignInSystemUser(string Username, string Password)
         {
             string newHash = null;
-            SystemUser systemUser = Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser)} o WHERE o.Username = ?", Username).First;
+            SystemUser systemUser = Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser)} o WHERE o.Username = ?", Username).FirstOrDefault();
 
             if (systemUser == null)
             {
@@ -96,7 +96,7 @@ namespace SignIn
 
         static public SystemUserSession SignInSystemUser(string Username)
         {
-            SystemUser systemUser = Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser)} o WHERE o.Username = ?", Username).First;
+            SystemUser systemUser = Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser)} o WHERE o.Username = ?", Username).FirstOrDefault();
 
             if (systemUser == null)
             {
@@ -125,7 +125,7 @@ namespace SignIn
             Db.Transact(() =>
             {
                 userSession = Db.SQL<SystemUserSession>($"SELECT o FROM {typeof(SystemUserSession)} o WHERE o.SessionId=? and o.ExpiresAt > ?",
-                    Session.Current?.SessionId, DateTime.UtcNow).First;
+                    Session.Current?.SessionId, DateTime.UtcNow).FirstOrDefault();
                 if (userSession == null)
                 {
                     userSession = new SystemUserSession();
@@ -323,7 +323,7 @@ namespace SignIn
             }
 
             return Db.SQL<SystemUserSession>($"SELECT o FROM {typeof(SystemUserSession)} o WHERE o.SessionId=? and o.ExpiresAt > ?",
-                    Session.Current?.SessionId, DateTime.UtcNow).First;
+                    Session.Current?.SessionId, DateTime.UtcNow).FirstOrDefault();
         }
         static public SystemUser GetSystemUser(string Username)
         {
@@ -332,7 +332,7 @@ namespace SignIn
                 return null;
             }
 
-            return Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser)} o WHERE o.UserName=?", Username).First;
+            return Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser)} o WHERE o.UserName=?", Username).FirstOrDefault();
         }
 
     }

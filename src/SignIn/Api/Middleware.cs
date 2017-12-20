@@ -65,7 +65,7 @@ namespace SignIn.Api
                 if (cookie != null)
                 {
                     Session.Ensure();
-                    var us = Db.SQL<SystemUserSession>($"SELECT o FROM {typeof(SystemUserSession)} o WHERE o.SessionId=? and o.ExpiresAt > ?", cookie.Value, DateTime.Now).First;
+                    var us = Db.SQL<SystemUserSession>($"SELECT o FROM {typeof(SystemUserSession)} o WHERE o.SessionId=? and o.ExpiresAt > ?", cookie.Value, DateTime.Now).FirstOrDefault();
                     if (us != null && us.User != null)
                     {
                         SystemUserSession session = SystemUser.SignInSystemUser(us.User.Username);

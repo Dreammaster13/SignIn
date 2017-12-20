@@ -36,7 +36,7 @@ namespace SignIn
 
                 if (cookie != null)
                 {
-                    var us = Db.SQL<SystemUserSession>($"SELECT o FROM {typeof(SystemUserSession)} o WHERE o.SessionId=? and o.ExpiresAt > ?", cookie.Value, DateTime.Now).First;
+                    var us = Db.SQL<SystemUserSession>($"SELECT o FROM {typeof(SystemUserSession)} o WHERE o.SessionId=? and o.ExpiresAt > ?", cookie.Value, DateTime.Now).FirstOrDefault();
 
                     if (us == null)
                     {
@@ -102,7 +102,7 @@ namespace SignIn
                 }
 
                 // Retrive the resetPassword instance
-                ResetPassword resetPassword = Db.SQL<ResetPassword>($"SELECT o FROM {typeof(ResetPassword)} o WHERE o.Token=? AND o.Expire>?", token, DateTime.UtcNow).First;
+                ResetPassword resetPassword = Db.SQL<ResetPassword>($"SELECT o FROM {typeof(ResetPassword)} o WHERE o.Token=? AND o.Expire>?", token, DateTime.UtcNow).FirstOrDefault();
 
                 if (resetPassword == null)
                 {
