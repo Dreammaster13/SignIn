@@ -1,35 +1,34 @@
-﻿<link rel="import" href="/sys/polymer/polymer.html">
-<link rel="import" href="/sys/palindrom-redirect/palindrom-redirect.html" />
+<link rel="import" href="/sys/polymer/polymer.html">
+<link rel="import" href="/sys/palindrom-redirect/palindrom-redirect.html">
 
 <template>
-    <template is="dom-bind">
+    <dom-bind><template is="dom-bind">
         <h2 slot="SignIn/header">Create Admin user</h2>
         <template is="dom-if" if="{{model.Message}}">
-            <p slot="SignIn/message" class$="{{setMessageStyle(model.IsAlert, model.Message)}}" >{{model.Message}}</p>
+            <p slot="SignIn/message" class$="{{setMessageStyle(model.IsAlert, model.Message)}}">{{model.Message}}</p>
         </template>
         <label slot="SignIn/username-label" for="txtUsername">Username</label>
-        <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{model.Username}}" disabled="disabled" placeholder="Username" class="form-control"  />
+        <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{model.Username}}" disabled="disabled" placeholder="Username" class="form-control">
         <template is="dom-if" if="{{model.CanCreateAdminUser$}}">
 
             <label slot="SignIn/password-label" class="control-label" for="Password">Password</label>
-            <input slot="SignIn/password-input" id="Password" type="password" value="{{model.Password$::input}}" placeholder="Password" class="form-control" />
+            <input slot="SignIn/password-input" id="Password" type="password" value="{{model.Password$::input}}" placeholder="Password" class="form-control">
             <label slot="SignIn/password-repeat-label" class="control-label" for="PasswordRepeat">Repeat Password</label>
-            <input slot="SignIn/password-repeat-input" id="PasswordRepeat" type="password" value="{{model.PasswordRepeat$::input}}" placeholder="Repeat Password" class="form-control" />
+            <input slot="SignIn/password-repeat-input" id="PasswordRepeat" type="password" value="{{model.PasswordRepeat$::input}}" placeholder="Repeat Password" class="form-control">
             <template is="dom-if" if="{{model.CanCreateAdminUser$}}">
-                <button slot="SignIn/ok-button" type="submit" class="btn btn-primary" value="{{model.OkTrigger$::click}}"  onmouseup="++this.value;">Ok</button>
+                <button slot="SignIn/ok-button" type="submit" class="btn btn-primary" value="{{model.OkTrigger$::click}}" onmouseup="++this.value;">Ok</button>
                 <button slot="SignIn/cancel-button" type="button" class="btn btn-link" value="{{model.CancelTrigger$::click}}" onmouseup="++this.value;">Cancel</button>
             </template>
         </template>
         <template is="dom-if" if="{{model.IsAdminCreated$}}">
             <button slot="SignIn/back-button" type="submit" class="btn btn-primary" value="{{model.BackTrigger$::click}}" onmouseup="++this.value;">Back</button>
         </template>
-        <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}" />
-    </template>
+        <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}">
+    </template></dom-bind>
     <script>
         (function () {
             var script = document._currentScript || document.currentScript;
-            var template = script.previousElementSibling;
-
+            var template = Polymer.Element ? script.previousElementSibling : script.previousElementSibling.firstElementChild;
       
             template.txtKeypress = function (e) {
                 if (e.which != 13) {

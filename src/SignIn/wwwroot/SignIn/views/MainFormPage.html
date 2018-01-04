@@ -1,7 +1,7 @@
-﻿<template>
-    <template is="dom-bind">
-        <starcounter-include slot="SignIn/current-page" partial="{{model.CurrentForm}}"></starcounter-include>
-    </template>
+<template>
+    <dom-bind><template is="dom-bind">
+        <starcounter-include slot="SignIn/current-page" view-model="{{model.CurrentForm}}"></starcounter-include>
+    </template></dom-bind>
     <template is="declarative-shadow-dom">
         <slot name="SignIn/current-page"></slot>
     </template>
