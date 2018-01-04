@@ -13,7 +13,7 @@ namespace SignIn.ViewModels
         public void Open(string contentUri)
         {
             this.Url = contentUri;
-            this.RedirectUrl = null;
+            this.RedirectUrl = "";
             this.RefreshSignInState();
         }
 
