@@ -1,10 +1,18 @@
 <link rel="import" href="/sys/palindrom-redirect/palindrom-redirect.html">
 
 <template>
-    <dom-bind><template is="dom-bind">
-        <starcounter-include slot="SignIn/current-partial-page" view-model="{{model.Partial}}"></starcounter-include>
-        <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}">
-    </template></dom-bind>
+    <style>
+        /** This should be kept in Shadow DOM, but it's needed here to overwrite bootstrap rules. To be fixed after Starcounter/RebelsLounge#75 */
+        .signin-form__label {
+            font-weight: bold;
+        }
+    </style>
+    <dom-bind>
+        <template is="dom-bind">
+            <starcounter-include slot="SignIn/current-partial-page" partial="{{model.Partial}}"></starcounter-include>
+            <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}" />
+        </template>
+    </dom-bind>
     <template is="declarative-shadow-dom">
         <slot name="SignIn/current-partial-page"></slot>
     </template>
