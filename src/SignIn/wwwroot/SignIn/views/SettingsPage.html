@@ -1,9 +1,9 @@
-﻿<link rel="import" href="/sys/palindrom-redirect/palindrom-redirect.html" />
-<link rel="import" href="/sys/sgb-property-metadata/sgb-property-metadata.html" />
+<link rel="import" href="/sys/palindrom-redirect/palindrom-redirect.html">
+<link rel="import" href="/sys/sgb-property-metadata/sgb-property-metadata.html">
 <link rel="import" href="/sys/bootstrap.html">
 
 <template>
-    <template is="dom-bind">
+    <dom-bind><template is="dom-bind">
         <sgb-property-metadata slot="SignIn/settings-property-metadata" items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
         <template is="dom-if" if="{{model.SuccessMessage}}">
             <div slot="SignIn/settings-success-message" class="alert alert-success">
@@ -15,18 +15,18 @@
             <label class="control-label" for="SiteHost$">Site Host</label>
         </div>
         <div slot="SignIn/settings-site-host-input">
-            <input id="SiteHost$" type="text" value="{{model.SiteHost$::change}}" placeholder="Site host name" class="form-control" />
+            <input id="SiteHost$" type="text" value="{{model.SiteHost$::change}}" placeholder="Site host name" class="form-control">
         </div>
         <div slot="SignIn/settings-site-port-label" class="form-horizontal">
             <label class="control-label" for="SitePort$">Site Port</label>
         </div>
         <div slot="SignIn/settings-site-port-input">
-            <input id="SitePort$" type="number" value="{{model.SitePort$::change}}" placeholder="Site Port" class="form-control" />
+            <input id="SitePort$" type="number" value="{{model.SitePort$::change}}" placeholder="Site Port" class="form-control">
         </div>
         <h3 slot="SignIn/settings-mail-servel-header">Mail Server</h3>
         <div slot="SignIn/settings-mail-server-enabled">
             <label>
-                <input id="Enabled$" type="checkbox" checked="{{model.Enabled$::change}}" />
+                <input id="Enabled$" type="checkbox" checked="{{model.Enabled$::change}}">
                 <span>Enabled</span>
             </label>
         </div>
@@ -34,13 +34,13 @@
             <label class="control-label" for="Host$">Host</label>
         </div>
         <div slot="SignIn/settings-host-input">
-            <input id="Host$" type="text" disabled$="{{!model.Enabled$}}" value="{{model.Host$::change}}" placeholder="Host" class="form-control" />
+            <input id="Host$" type="text" disabled$="{{!model.Enabled$}}" value="{{model.Host$::change}}" placeholder="Host" class="form-control">
         </div>
         <div slot="SignIn/settings-port-label" class="form-horizontal">
             <label class="control-label" for="Port$">Port</label>
         </div>
         <div slot="SignIn/settings-port-input">
-            <input id="Port$" type="number" disabled$="{{!model.Enabled$}}" value="{{model.Port$::change}}" placeholder="Port" class="form-control" />
+            <input id="Port$" type="number" disabled$="{{!model.Enabled$}}" value="{{model.Port$::change}}" placeholder="Port" class="form-control">
         </div>
         <div slot="SignIn/settings-port-feedback-message">
             <template is="dom-if" if="{{isFeedbackVisible(model.Port_Feedback.TypeNo)}}">
@@ -49,7 +49,7 @@
         </div>
         <div slot="SignIn/enable-ssl">
             <label for="EnableSsl$">
-                <input id="EnableSsl$" type="checkbox" disabled$="{{!model.Enabled$}}" checked="{{model.EnableSsl$::change}}" />
+                <input id="EnableSsl$" type="checkbox" disabled$="{{!model.Enabled$}}" checked="{{model.EnableSsl$::change}}">
                 <span>Enable SSL</span>
             </label>
         </div>
@@ -57,21 +57,24 @@
             <label class="control-label" for="Username$">Username</label>
         </div>
         <div slot="SignIn/settings-username-input">
-            <input id="Username$" type="text" disabled$="{{!model.Enabled$}}" value="{{model.Username$::change}}" placeholder="Username" class="form-control" />
+            <input id="Username$" type="text" disabled$="{{!model.Enabled$}}" value="{{model.Username$::change}}" placeholder="Username" class="form-control">
         </div>
         <div slot="SignIn/settings-password-label" class="form-horizontal">
             <label class="control-label" for="Password$">Password</label>
         </div>
         <div slot="SignIn/settings-password-input">
-            <input id="Password$" type="password" disabled$="{{!model.Enabled$ }}" value="{{model.Password$::change}}" placeholder="Password" class="form-control" />
+            <input id="Password$" type="password" disabled$="{{!model.Enabled$ }}" value="{{model.Password$::change}}" placeholder="Password" class="form-control">
         </div>
         <button slot="SignIn/settings-save-btn" class="btn btn-primary" disabled$="{{isSaveDisabled(model.IsInvalid, model.IsPristine)}}" onmousedown="++this.value;" value="{{model.Save$::click}}">Save</button>
         <button slot="SignIn/settings-undo-btn" class="btn btn-default" disabled$="{{model.IsPristine}}" onmousedown="++this.value;" value="{{model.Rollback$::click}}">Undo</button>
         <button slot="SignIn/settings-close-btn" class="btn btn-default" onmousedown="++this.value;" value="{{model.Close$::click}}">Close</button>
-        <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}" />
-    </template>
+        <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}">
+    </template></dom-bind>
     <script>
-        (function (template) {
+        (function () {
+            var script = document._currentScript || document.currentScript;
+            var template = Polymer.Element ? script.previousElementSibling : script.previousElementSibling.firstElementChild;
+            
             template.isFeedbackVisible = function (type) {
                 return type >= 0;
             };
@@ -83,7 +86,7 @@
             template.isSaveDisabled = function (IsInvalid, IsPristine) {
                 return IsInvalid || IsPristine;
             };
-        })(document.currentScript.previousElementSibling);
+        })();
     </script>
     <template is="declarative-shadow-dom">
         <slot name="SignIn/settings-property-metadata"></slot>

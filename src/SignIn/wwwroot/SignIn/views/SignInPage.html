@@ -1,5 +1,5 @@
-﻿<link rel="import" href="/sys/juicy-popover/src/juicy-popover.html" />
-<link rel="import" href="/SignIn/elements/signin-element.html" />
+<link rel="import" href="/sys/juicy-popover/src/juicy-popover.html">
+<link rel="import" href="/SignIn/elements/signin-element.html">
 
 <style>
     .signin-detailed {
@@ -66,21 +66,21 @@
 </style>
 
 <template>
-    <template is="dom-bind" strip-whitespace>
+    <dom-bind><template is="dom-bind" strip-whitespace="">
 
         <div class="signin-detailed" slot="SignIn/current-user">
             <!-- User signed in -->
-            <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
+            <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace="">
                 <juicy-popover>
                     <div slot="handle" class="signin-popup-handle">
                         <div class="signin-popup-user-image">
-                            <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
+                            <starcounter-include view-model="{{model.UserImage}}"></starcounter-include>
                         </div>
                         <div class="signin-popup-user-name">{{model.FullName}}</div>
                     </div>
                     <div slot="expandable" class="signin-popup-window">
                         <div class="signin-popup-window__user-image">
-                            <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
+                            <starcounter-include view-model="{{model.UserImage}}"></starcounter-include>
                         </div>
                         <p class="signin-popup-window__user-name">
                             <a href="/signin/profile">{{model.FullName}}</a>
@@ -90,27 +90,27 @@
                 </juicy-popover>
             </template>
             <!-- User NOT signed in -->
-            <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
+            <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace="">
                 <juicy-popover class="signin-popover">
                     <div slot="handle" class="signin-popup-handle signin-popup-user-image">
-                        <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
+                        <starcounter-include view-model="{{model.UserImage}}"></starcounter-include>
                     </div>
                     <div slot="expandable" class="signin-popup-window">
                         <form on-submit="preventSubmit">
                             <div>
-                                <template is="dom-if" if="{{model.Message}}" strip-whitespace restamp>
+                                <template is="dom-if" if="{{model.Message}}" strip-whitespace="" restamp>
                                     <div class="signin-popup-window__error">{{model.Message}}</div>
                                 </template>
                             </div>
                             <div>
-                                <input name="username" class="form-control signin-popup-window__control" type="text" placeholder="Username" value="{{local.username::input}}" on-keypress="txtKeypress" />
+                                <input name="username" class="form-control signin-popup-window__control" type="text" placeholder="Username" value="{{local.username::input}}" on-keypress="txtKeypress">
                             </div>
                             <div>
-                                <input name="password" class="form-control signin-popup-window__control" type="password" placeholder="Password" value="{{local.password::input}}" on-keypress="txtKeypress" />
+                                <input name="password" class="form-control signin-popup-window__control" type="password" placeholder="Password" value="{{local.password::input}}" on-keypress="txtKeypress">
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" checked="{{local.rememberMe::change}}" />
+                                    <input type="checkbox" checked="{{local.rememberMe::change}}">
                                     <span>Remember me</span>
                                 </label>
                             </div>
@@ -127,12 +127,12 @@
             </template>
         </div>
 
-    </template>
+    </template></dom-bind>
 
     <script>
         (function () {
             var script = document._currentScript || document.currentScript;
-            var template = script.previousElementSibling;
+            var template = Polymer.Element ? script.previousElementSibling : script.previousElementSibling.firstElementChild;
 
             template.local = {
                 username: "",
