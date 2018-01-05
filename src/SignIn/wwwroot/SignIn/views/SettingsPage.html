@@ -68,13 +68,13 @@
         <button slot="SignIn/settings-save-btn" class="btn btn-primary" disabled$="{{isSaveDisabled(model.IsInvalid, model.IsPristine)}}" onmousedown="++this.value;" value="{{model.Save$::click}}">Save</button>
         <button slot="SignIn/settings-undo-btn" class="btn btn-default" disabled$="{{model.IsPristine}}" onmousedown="++this.value;" value="{{model.Rollback$::click}}">Undo</button>
         <button slot="SignIn/settings-close-btn" class="btn btn-default" onmousedown="++this.value;" value="{{model.Close$::click}}">Close</button>
-        <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}">
+        <palindrom-redirect history url="{{model.RedirectUrl$}}"></palindrom-redirect>
     </template></dom-bind>
     <script>
         (function () {
             var script = document._currentScript || document.currentScript;
             var template = Polymer.Element ? script.previousElementSibling : script.previousElementSibling.firstElementChild;
-            
+
             template.isFeedbackVisible = function (type) {
                 return type >= 0;
             };
