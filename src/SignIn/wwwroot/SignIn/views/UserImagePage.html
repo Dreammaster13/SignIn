@@ -1,8 +1,16 @@
 <link rel="import" href="/sys/polymer/polymer.html">
 
 <template>
-    <svg slot="SignIn/empty-user" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-        <use xlink:href="/SignIn/css/empty_user.svg#empty-user"></use>
+    <style>
+        /** This should be kept in Shadow DOM, but it's needed here to overwrite bootstrap rules. To be fixed after https://github.com/Starcounter/RebelsLounge/issues/75 */
+        .signin-user-image {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+        }
+    </style>
+    <svg class="signin-user-image" slot="SignIn/empty-user" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <use xlink:href="/SignIn/css/empty_user.svg#empty-user" />
     </svg>
     <template is="declarative-shadow-dom">
         <slot name="SignIn/empty-user"></slot>

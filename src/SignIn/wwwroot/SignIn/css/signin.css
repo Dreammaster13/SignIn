@@ -20,10 +20,6 @@
     margin: 0 5px;
 }
 
-.signin-form__label ::slotted(label) {
-    font-weight: bold;
-}
-
 .signin-form__toolbar {
     display: flex;
     flex-direction: row;
