@@ -159,7 +159,8 @@
             };
 
             template.signOut = function (e) {
-                document.querySelector("puppet-client").network.changeState("/signin/partial/signout");
+                // puppet-client is deprecated, and will be removed in Starcounter 2.4
+                document.querySelector("palindrom-client, puppet-client").network.changeState("/signin/partial/signout");
             };
 
             template.btnFormHover = function (e) {
