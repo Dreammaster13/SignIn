@@ -3,12 +3,11 @@
   "ignoredDependencies": [
     "webcomponentsjs",
     "palindrom-redirect",
-    "PuppetJs",
+    "Palindrom",
     "imported-template",
-    "puppet-redirect",
     "juicy-redirect",
     "starcounter-debug-aid",
-    "puppet-client",
+    "palindrom-client",
     "bootswatch",
     "polymer"
   ]
