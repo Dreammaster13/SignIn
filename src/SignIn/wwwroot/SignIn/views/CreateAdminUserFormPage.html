@@ -23,13 +23,13 @@
         <template is="dom-if" if="{{model.IsAdminCreated$}}">
             <button slot="SignIn/back-button" type="submit" class="btn btn-primary" value="{{model.BackTrigger$::click}}" onmouseup="++this.value;">Back</button>
         </template>
-        <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}">
+        <palindrom-redirect history url="{{model.RedirectUrl$}}"></palindrom-redirect>
     </template></dom-bind>
     <script>
         (function () {
             var script = document._currentScript || document.currentScript;
             var template = Polymer.Element ? script.previousElementSibling : script.previousElementSibling.firstElementChild;
-      
+
             template.txtKeypress = function (e) {
                 if (e.which != 13) {
                     return;
@@ -82,7 +82,7 @@
                     </div>
                 </div>
             </div>
-           
+
             <div class="signin-form__toolbar">
                 <slot name="SignIn/ok-button"></slot>
                 <slot name="SignIn/cancel-button"></slot>
