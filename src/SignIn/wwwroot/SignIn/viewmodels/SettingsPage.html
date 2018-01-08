@@ -71,7 +71,7 @@
         <palindrom-redirect history url="{{model.RedirectUrl}}"></palindrom-redirect>
     </template></dom-bind>
     <script>
-        (function (tmpl) {
+        (function (script) {
             var template = Polymer.Element ? tmpl : tmpl.firstElementChild;
             template.isFeedbackVisible = function (type) {
                 return type >= 0;
@@ -84,7 +84,7 @@
             template.isSaveDisabled = function (IsInvalid, IsPristine) {
                 return IsInvalid || IsPristine;
             };
-        })(document.currentScript.previousElementSibling);
+        })(document.currentScript);
     </script>
     <template is="declarative-shadow-dom">
         <slot name="SignIn/settings-property-metadata"></slot>
