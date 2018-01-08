@@ -14,7 +14,7 @@
         <button slot="SignIn/submit-button" type="submit" class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;">Sign in</button>
         <button slot="SignIn/forgot-button" type="button" class="btn btn-link" value="{{model.RestoreClick$::click}}" disabled="{{model.RestoreClick$::click}}" onmouseup="++this.value;">Forgot password?</button>
         <signin-element slot="SignIn/signin-element" username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
-        <link is="puppet-redirect" history="" url$="{{model.RedirectUrl}}">
+        <palindrom-redirect history url="{{model.RedirectUrl}}"></palindrom-redirect>
     </template></dom-bind>
     <script>
         (function () {

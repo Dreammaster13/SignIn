@@ -159,7 +159,7 @@
             };
 
             template.signOut = function (e) {
-                document.querySelector("puppet-client").network.changeState("/signin/partial/signout");
+                document.querySelector("palindrom-client, puppet-client").network.changeState("/signin/partial/signout");
             };
 
             template.btnFormHover = function (e) {

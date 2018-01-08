@@ -2,12 +2,13 @@
   "directory": "wwwroot/sys",
   "ignoredDependencies": [
     "webcomponentsjs",
-    "PuppetJs",
+    "Palindrom",
     "imported-template",
     "puppet-redirect",
+    "palindrom-redirect",
     "juicy-redirect",
     "starcounter-debug-aid",
-    "puppet-client",
+    "palindrom-client",
     "bootswatch",
     "polymer"
   ]
