@@ -15,6 +15,7 @@ namespace SignIn
         {
             base.OnData();
             this.SessionUri = Session.Current.SessionUri;
+            this.UserImage = Self.GET<Json>("/signin/partial/user/image");
         }
 
         void Handle(Input.SignInClick action)
