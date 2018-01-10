@@ -322,8 +322,8 @@ namespace SignIn
                 return null;
             }
 
-            return Db.SQL<SystemUserSession>($"SELECT o FROM {typeof(SystemUserSession)} o WHERE o.SessionId=? and o.ExpiresAt > ?",
-                    Session.Current?.SessionId, DateTime.UtcNow).FirstOrDefault();
+            return Db.SQL<SystemUserSession>($"SELECT o FROM {typeof(SystemUserSession)} o").FirstOrDefault(o => o.SessionId == Session.Current?.SessionId && o.ExpiresAt > DateTime.UtcNow);
+
         }
         static public SystemUser GetSystemUser(string Username)
         {
