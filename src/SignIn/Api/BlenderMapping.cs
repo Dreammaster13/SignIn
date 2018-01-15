@@ -12,8 +12,8 @@ namespace SignIn.Api
             Blender.MapUri("/signin/signinuser", string.Empty, new string[] { "userform" }); //inline form
             Blender.MapUri("/signin/signinuser?{?}", string.Empty, new string[] { "redirection" }); //inline form
             Blender.MapUri("/signin/settings", string.Empty, new string[] { "settings" });
-            Blender.MapUri("/signin/user/authentication/password/{?}", string.Empty, new string[] { "authentication-password" });
-            Blender.MapUri("/signin/user/authentication/settings/{?}", string.Empty, new string[] { "authentication-settings" });
+            Blender.MapUri2<SystemUser>("/signin/user/authentication/password/{?}", new string[] { "authentication-password" });
+            Blender.MapUri2<SystemUser>("/signin/user/authentication/settings/{?}", new string[] { "authentication-settings" });
             //can't find "userimage-default" token anywhere inside StarcounterApps
             Blender.MapUri("/signin/partial/user/image", string.Empty, new string[] { "userimage-default" });  // default user image
         }
