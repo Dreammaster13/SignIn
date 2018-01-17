@@ -95,6 +95,12 @@ namespace SignIn.Api
             SystemUser.SignOutSystemUser();
             cookieHelper.ClearAuthCookie();
 
+            var page = (SignInPage)Session.Current.Store[nameof(SignInPage)];
+            if (page != null)
+            {
+                page.Submit++;
+            }
+
             return 200;
         }
     }

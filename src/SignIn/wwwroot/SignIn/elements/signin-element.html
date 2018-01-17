@@ -39,6 +39,10 @@
                 http.setRequestHeader("X-Referer", this.sessionUri);
 
                 http.onreadystatechange = function () {
+                    if (http.readyState === 4 && http.status === 200) {
+                        //when requst is complete and there is no error, reload the page
+                        location.reload();
+                    }
                 };
 
                 http.send(params);
