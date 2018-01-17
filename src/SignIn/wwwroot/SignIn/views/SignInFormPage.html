@@ -20,7 +20,7 @@
             <button slot="SignIn/create-Admin-User-button" type="button" class="btn btn-link" value="{{model.CreateAdminClick$::click}}" onmousedown="++this.value;">Create Admin Account</button>
         </template>
         <signin-element slot="SignIn/signin-element" username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
-        <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}">
+        <palindrom-redirect history url="{{model.RedirectUrl$}}"></palindrom-redirect>
     </template></dom-bind>
     <script>
         (function () {

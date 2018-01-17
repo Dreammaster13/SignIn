@@ -15,7 +15,7 @@
     <FileAlignment>512</FileAlignment>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <StartWorkingDirectory>$(MSBuildProjectDirectory)</StartWorkingDirectory>
-    <TargetFrameworkProfile />
+    <StarcounterVersionCompatibility>2.4</StarcounterVersionCompatibility>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,20 +43,21 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Simplified.Data.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <Private>False</Private>
+    <Reference Include="Simplified.Data.Model, Version=1.0.4.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\..\packages\Starcounter.Simplified.Data.Model.1.0.4\lib\net45\Simplified.Data.Model.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Starcounter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Starcounter.Internal, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Starcounter.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Starcounter.XSON, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
