@@ -23,7 +23,7 @@
         <template is="dom-if" if="{{model.IsAdminCreated$}}">
             <button slot="SignIn/back-button" type="submit" class="btn btn-primary" value="{{model.BackTrigger$::click}}" onmouseup="++this.value;">Back</button>
         </template>
-        <palindrom-redirect history url="{{model.RedirectUrl$}}"></palindrom-redirect>
+        <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}"></link>
     </template></dom-bind>
     <script>
         (function () {

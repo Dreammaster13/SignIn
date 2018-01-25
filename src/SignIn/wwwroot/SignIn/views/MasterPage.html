@@ -10,7 +10,7 @@
     <dom-bind>
         <template is="dom-bind">
             <starcounter-include slot="SignIn/current-partial-page" view-model="{{model.Partial}}"></starcounter-include>
-            <palindrom-redirect history url="{{model.RedirectUrl$}}"></palindrom-redirect>
+            <link is="palindrom-redirect" history url="{{model.RedirectUrl$}}"></link>
         </template>
     </dom-bind>
     <template is="declarative-shadow-dom">
