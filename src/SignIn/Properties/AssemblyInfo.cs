@@ -34,8 +34,8 @@ using Starcounter.Internal;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("6.1.1")]
-[assembly: AssemblyFileVersion("6.1.1")]
+[assembly: AssemblyVersion("6.1.2")]
+[assembly: AssemblyFileVersion("6.1.2")]
 
 
 // Starcounter Package information
