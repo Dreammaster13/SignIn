@@ -64,16 +64,22 @@ namespace SignIn.Api
 
             Application.Current.Use((Request req) =>
             {
-                Cookie cookie = cookieHelpers.GetSignInCookie();
-
-                if (cookie != null)
+                //filter out requests that are for resource files
+                if (!(req.Uri.StartsWith("/sys") || req.Uri.Contains(".html") || req.Uri.Contains(".js") || req.Uri.Contains(".css")))
                 {
-                    Session.Ensure();
-                    var us = Db.SQL<SystemUserSession>($"SELECT o FROM {typeof(SystemUserSession)} o WHERE o.SessionId=? and o.ExpiresAt > ?", cookie.Value, DateTime.Now).FirstOrDefault();
-                    if (us != null && us.User != null)
+                    Cookie cookie = cookieHelpers.GetSignInCookie();
+
+                    if (cookie != null)
                     {
-                        SystemUserSession session = SystemUser.SignInSystemUser(us.User.Username);
-                        cookieHelpers.RefreshAuthCookie(us);
+                        Session.Ensure();
+                        var us = Db.SQL<SystemUserSession>(
+                            $"SELECT o FROM {typeof(SystemUserSession)} o WHERE o.SessionId=? and o.ExpiresAt > ?",
+                            cookie.Value, DateTime.Now).FirstOrDefault();
+                        if (us != null && us.User != null)
+                        {
+                            SystemUserSession session = SystemUser.SignInSystemUser(us.User.Username);
+                            cookieHelpers.RefreshAuthCookie(us);
+                        }
                     }
                 }
 
