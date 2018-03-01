@@ -12,6 +12,8 @@ namespace SignIn
             new MainHandlers().Register();
             new PartialHandlers().Register();
             new BlenderMapping().Register();
+
+            new Schedular().SetupSessionCleanupTimer();
         }
     }
 }
