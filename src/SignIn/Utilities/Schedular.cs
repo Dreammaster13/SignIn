@@ -22,8 +22,19 @@ namespace SignIn
             {
                 Scheduling.RunTask(() =>
                 {
-                    //remove all the expired sessions
-                    Db.SQL($"DELETE FROM {typeof(SystemUserSession)} WHERE ExpiresAt < ?", DateTime.Now);
+                    try
+                    {
+                        Db.TransactAsync(() =>
+                        {
+                            //remove all the expired sessions
+                            Db.SQL($"DELETE FROM {typeof(SystemUserSession)} WHERE ExpiresAt < ?", DateTime.Now);
+                        });
+                    }
+                    catch (Exception exp)
+                    {
+                        Starcounter.Logging.LogSource log = new Starcounter.Logging.LogSource(Application.Current.Name);
+                        log.LogException(exp);
+                    }
                 });
             }
         }
