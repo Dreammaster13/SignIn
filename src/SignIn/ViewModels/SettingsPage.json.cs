@@ -30,9 +30,9 @@ namespace SignIn.ViewModels
                 return;
             }
 
-            if (this.Transaction.IsDirty)
+            if (this.AttachedScope.IsDirty)
             {
-                this.Transaction.Commit();
+                this.AttachedScope.Commit();
             }
 
             this.SuccessMessage = "Changes saved";
@@ -40,9 +40,9 @@ namespace SignIn.ViewModels
 
         void Handle(Input.Close action)
         {
-            if (this.Transaction.IsDirty)
+            if (this.AttachedScope.IsDirty)
             {
-                this.Transaction.Rollback();
+                this.AttachedScope.Rollback();
             }
 
             this.RedirectUrl = "/signin/profile";

@@ -62,7 +62,7 @@ namespace SignIn.ViewModels
                 return;
             }
 
-            var transaction = this.Transaction;
+            var transaction = this.AttachedScope;
             transaction.Scope(() =>
             {
                 SystemUser systemUser = this.Data;
