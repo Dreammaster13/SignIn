@@ -1,11 +1,17 @@
 {
   "name": "juicy-popover",
-  "version": "1.2.0",
+  "version": "2.1.0",
   "description": "Custom Element that expands an area when clicked on a handle",
   "main": "src/juicy-popover.html",
   "dependencies": {
     "grunt": "^1.0.1",
     "grunt-bump": "^0.8.0"
+  },
+  "scripts": {
+    "test": "wct --skip-plugin sauce"    
+  },
+  "devDependencies": {
+    "web-component-tester": "^6.4.1"
   },
   "repository": {
     "type": "git",

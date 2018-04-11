@@ -21,7 +21,7 @@ It is flexible enough to be used to create dropdowns, combo boxes, tooltips, etc
 2. Import Web Components' polyfill (optional, allows to run it in old browsers):
 
     ```html
-    <script src="//cdn.jsdelivr.net/webcomponentsjs/0.5.5/webcomponents.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@1.0.17/webcomponents-lite.min.js"></script>
     ```
 
 3. Import Custom Element:
@@ -47,6 +47,7 @@ Attribute            | Type           | Default       | Description
 `position`           | *String*       | `bottom left, bottom beforeright, beforetop left, beforetop beforeright` | Position of the expandable after the handler is pressed. If multiple positions are provided (separated by comma), the first position that fits within the viewport will be used.
 `disabled`           | *Bool*         | `false`       | If true, element won't expand. If already expanded, it will collapse once set to true. Synchronised with property `disabled`
 `expanded`           | *Bool*         | `false`       | Determines whether it's expanded. Synchronised with property `expanded` and event `expanded-changed`
+`expand-on`          | *String*       | `click`       | If the value is `click` element will be expanded by clicking on it. If It's `hover` it will expand on mouse hovering it and collapse on moving mouse out.
 
 ## Positions
 
@@ -60,6 +61,7 @@ Positon              | Description
 `beforeleft`         | Position the right of the expandable at the left of the handler
 `right`              | Position the left of the expandable at the right of the handler
 `beforeright`        | Position the right of the expandable at the right of the handler
+`middle`			 | Position the middle of the expandable at the center of the handler
 
 ## Slots
 Name                 | Description
