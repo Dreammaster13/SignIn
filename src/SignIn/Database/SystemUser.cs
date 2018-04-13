@@ -12,11 +12,11 @@ namespace SignIn
     [Database]
     public class SystemUser
     {
-        public string Username;
-        public string Password;
-        public string PasswordSalt;
-        public string Email;
-        
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string PasswordSalt { get; set; }
+        public string Email { get; set; }
+
         static public SystemUser RegisterSystemUser(string Username, string Email, string Password)
         {
             string hash;
