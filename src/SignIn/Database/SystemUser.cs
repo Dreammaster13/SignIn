@@ -6,16 +6,24 @@ using System.Threading.Tasks;
 using SignIn;
 using Starcounter;
 using System.Security.Cryptography;
+using Starcounter.Authorization.Authentication;
+using Starcounter.Linq;
 
 namespace SignIn
 {
     [Database]
-    public class SystemUser
+    public class SystemUser : IUser
     {
         public string Username { get; set; }
         public string Password { get; set; }
         public string PasswordSalt { get; set; }
         public string Email { get; set; }
+
+        public IEnumerable<IClaimDb> AssociatedClaims => DbLinq.Objects<UserClaimRelation>()
+            .Where(relation => relation.Subject == this)
+            .Select(relation => relation.Object);
+
+        public IEnumerable<IUserGroup> Groups => Enumerable.Empty<IUserGroup>();
 
         static public SystemUser RegisterSystemUser(string Username, string Email, string Password)
         {
@@ -133,6 +141,7 @@ namespace SignIn
                 userSession.ExpiresAt = DateTime.UtcNow.AddDays(7);
                 userSession.User = systemUser;
                 userSession.SessionId = Session.Current.SessionId;
+                
 
             });
 
