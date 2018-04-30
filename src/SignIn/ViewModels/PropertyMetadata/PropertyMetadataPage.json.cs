@@ -47,8 +47,8 @@ namespace Smorgasbord.PropertyMetadata {
         /// <returns></returns>
         public virtual bool GetIsDiryFlag() {
 
-            if (this.Transaction != null) {
-                return this.Transaction.IsDirty;
+            if (AttachedScope != null) {
+                return AttachedScope.IsDirty;
             }
             return false;
         }
@@ -59,8 +59,8 @@ namespace Smorgasbord.PropertyMetadata {
         /// </summary>
         public void SetPristine() {
 
-            if (this.Transaction != null && this.Transaction.IsDirty) {
-                this.Transaction.Rollback();
+            if (AttachedScope != null && AttachedScope.IsDirty) {
+                AttachedScope.Rollback();
                 this.ClearAllPropertiesMetadata();
             }
         }

@@ -51,7 +51,7 @@ namespace SignIn
                 return;
             }
 
-            var transaction = this.Transaction;
+            var transaction = AttachedScope;
             transaction.Scope(() =>
             {
                 SystemUser systemUser = this.Data;
