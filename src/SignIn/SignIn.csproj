@@ -44,11 +44,23 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.Internal, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNetCore.Cryptography.Internal.2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Cryptography.Internal.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNetCore.Cryptography.KeyDerivation.2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Extensions.Configuration.Abstractions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.DependencyInjection.2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Extensions.Identity.Core.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Identity.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Extensions.Logging.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
@@ -83,10 +95,17 @@
     <Reference Include="Starcounter.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
       <Private>False</Private>
     </Reference>
+    <Reference Include="Starcounter.Startup, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Starcounter.Startup.0.2.0\lib\net462\Starcounter.Startup.dll</HintPath>
+    </Reference>
     <Reference Include="Starcounter.XSON, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.ComponentModel.Annotations.4.4.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -98,149 +117,47 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\CommitHooks.cs" />
-    <Compile Include="Api\MainHandlers.cs" />
-    <Compile Include="Api\BlenderMapping.cs" />
-    <Compile Include="Api\Middleware.cs" />
-    <Compile Include="Api\PartialHandlers.cs" />
+    <Compile Include="DatabaseAccess\ISignInUnitOfWork.cs" />
+    <Compile Include="DatabaseAccess\ITransactionControl.cs" />
+    <Compile Include="DatabaseAccess\IUsersRepository.cs" />
+    <Compile Include="DatabaseAccess\SignInUnitOfWork.cs" />
+    <Compile Include="DatabaseAccess\TransactionControl.cs" />
+    <Compile Include="DatabaseAccess\UsersRepository.cs" />
     <Compile Include="Database\ClaimDb.cs" />
     <Compile Include="Database\ResetPassword.cs" />
     <Compile Include="Database\SettingsMailServer.cs" />
     <Compile Include="Database\SystemUser.cs" />
     <Compile Include="Database\SystemUserSession.cs" />
     <Compile Include="Database\UserClaimRelation.cs" />
-    <Compile Include="Helpers\AuthorizationHelper.cs" />
-    <Compile Include="Helpers\CookieHelpers.cs" />
-    <Compile Include="Helpers\DataHelper.cs" />
-    <Compile Include="Helpers\MailSettingsHelper.cs" />
-    <Compile Include="Helpers\SignInJwt.cs" />
-    <Compile Include="Helpers\UserHelper.cs" />
-    <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="Domain\AdminCreator.cs" />
+    <Compile Include="Domain\ISignInManager.cs" />
+    <Compile Include="Domain\SignInManager.cs" />
+    <Compile Include="Domain\SignInResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\AccessDeniedPage.json.cs">
-      <DependentUpon>AccessDeniedPage.json</DependentUpon>
+    <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\ManageUserViewModel.json.cs">
+      <DependentUpon>ManageUserViewModel.json</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\AlreadyInPage.json.cs">
-      <DependentUpon>AlreadyInPage.json</DependentUpon>
+    <Compile Include="ViewModels\SignInFormViewModel.json.cs">
+      <DependentUpon>SignInFormViewModel.json</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\MainFormPage.json.cs">
-      <DependentUpon>MainFormPage.json</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\MasterPage.json.cs">
-      <DependentUpon>MasterPage.json</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\ProfileFormPage.json.cs">
-      <DependentUpon>ProfileFormPage.json</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\PropertyMetadata\PropertyMetadataPage.json.cs">
-      <DependentUpon>PropertyMetadataPage.json</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\ResetPasswordPage.json.cs">
-      <DependentUpon>ResetPasswordPage.json</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\RestorePasswordFormPage.json.cs">
-      <DependentUpon>RestorePasswordFormPage.json</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\SetPasswordPage.json.cs">
-      <DependentUpon>SetPasswordPage.json</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\SettingsPage.json.cs">
-      <DependentUpon>SettingsPage.json</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\SignInFormPage.json.cs">
-      <DependentUpon>SignInFormPage.json</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\SignInPage.json.cs">
-      <DependentUpon>SignInPage.json</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\SystemUserAuthenticationSettings.json.cs">
-      <DependentUpon>SystemUserAuthenticationSettings.json</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\UserImagePage.json.cs">
-      <DependentUpon>UserImagePage.json</DependentUpon>
-    </Compile>
+    <Compile Include="ViewModels\SignInMessages.cs" />
   </ItemGroup>
   <ItemGroup>
-    <TypedJSON Include="ViewModels\SetPasswordPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <TypedJSON Include="ViewModels\AppName.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
+    <None Include=".bowerrc" />
     <None Include="app.config" />
+    <None Include="bower.json" />
     <None Include="packages.config" />
-    <None Include="wwwroot\SignIn\viewmodels\ResetPasswordPage.html" />
-    <Content Include="wwwroot\SignIn\css\empty_user.svg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="wwwroot\SignIn\css\signin.css" />
-    <Content Include="wwwroot\SignIn\elements\signin-element.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\AccessDeniedPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\AlreadyInPage.html" />
-    <None Include="wwwroot\SignIn\viewmodels\AppIcon.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\MainFormPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\MasterPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\ProfileFormPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\RestorePasswordFormPage.html" />
-    <TypedJSON Include="ViewModels\ResetPasswordPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <None Include="wwwroot\SignIn\viewmodels\SystemUserAuthenticationSettings.html" />
-    <TypedJSON Include="ViewModels\SystemUserAuthenticationSettings.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <None Include="wwwroot\SignIn\viewmodels\SettingsPage.html" />
-    <None Include="wwwroot\SignIn\viewmodels\SetPasswordPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\SignInPage.html" />
-    <Content Include="wwwroot\SignIn\viewmodels\UserImagePage.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <TypedJSON Include="ViewModels\SignInFormPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-  </ItemGroup>
-  <ItemGroup>
-    <TypedJSON Include="ViewModels\SignInPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <TypedJSON Include="ViewModels\MasterPage.json">
+    <TypedJSON Include="ViewModels\SignInFormViewModel.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
-    <TypedJSON Include="ViewModels\AlreadyInPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <TypedJSON Include="ViewModels\RestorePasswordFormPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <TypedJSON Include="ViewModels\ProfileFormPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <TypedJSON Include="ViewModels\AccessDeniedPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <TypedJSON Include="ViewModels\MainFormPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <TypedJSON Include="ViewModels\SettingsPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <TypedJSON Include="ViewModels\PropertyMetadata\PropertyMetadataItem.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <TypedJSON Include="ViewModels\PropertyMetadata\PropertyMetadataItems.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <TypedJSON Include="ViewModels\PropertyMetadata\PropertyMetadataPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <TypedJSON Include="ViewModels\UserImagePage.json">
+    <TypedJSON Include="ViewModels\ManageUserViewModel.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <None Include="weaver.ignore">
@@ -248,17 +165,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SignIn.png" />
+    <Content Include="wwwroot\SignIn\viewmodels\ManageUserPage.html" />
+    <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\authorization\Authorization\Authorization.csproj">
       <Project>{48cf4a36-c006-4649-bad6-027e7962efae}</Project>
       <Name>Authorization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\authorization\Starcounter.Authentication\Starcounter.Authentication.csproj">
-      <Project>{43590212-4e26-4e33-bd46-f1abe34697bb}</Project>
-      <Name>Starcounter.Authentication</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\authorization\Starcounter.Startup\Starcounter.Startup.csproj">
-      <Project>{e6b5b37f-bf51-4a88-b10c-33ddf392701c}</Project>
-      <Name>Starcounter.Startup</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,16 @@
+<template>
+    <dom-bind><template is="dom-bind">
+        <span slot="SignIn/ManageUser/Message">{{model.Message}}</span>
+        <input type="password" slot="SignIn/ManageUser/Password" value="{{model.NewPassword$::change}}"/>
+        <input type="password" slot="SignIn/ManageUser/PasswordRepeat" value="{{model.NewPasswordRepeat$::change}}"/>
+        <button slot="SignIn/ManageUser/Apply" type="button" value="{{model.ApplyTrigger$::click}}" onmouseup="++this.value;">Apply</button>
+    </template></dom-bind>
+    <template is="declarative-shadow-dom">
+        <span>Password: </span>
+        <slot name="SignIn/ManageUser/Password"></slot>
+        <span>Repeat password: </span>
+        <slot name="SignIn/ManageUser/PasswordRepeat"></slot>
+        <slot name="SignIn/ManageUser/Apply"></slot>
+        <slot name="SignIn/ManageUser/Message"></slot>
+    </template>
+</template>

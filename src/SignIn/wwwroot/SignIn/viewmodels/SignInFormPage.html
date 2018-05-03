@@ -1,4 +1,5 @@
 <link rel="import" href="/SignIn/elements/signin-element.html">
+<link rel="import" href="/sys/palindrom-redirect/palindrom-redirect.html">
 
 <template>
     <dom-bind><template is="dom-bind">
@@ -9,12 +10,10 @@
         <label slot="SignIn/username-label" for="txtUsername">Username</label>
         <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{local.username::input}}" placeholder="Username" class="form-control" on-keypress="txtKeypress">
         <label slot="SignIn/password-label" for="txtPassword">Password</label>
-        <assas action="{{thing}}"></assas>
         <input slot="SignIn/password-input" id="txtPassword" name="password" type="password" value="{{local.password::input}}" placeholder="Password" class="form-control" on-keypress="txtKeypress">
-        <button slot="SignIn/submit-button" type="submit" class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;">Sign in</button>
+        <button slot="SignIn/submit-button" type="button" class="btn btn-primary" disabled="{{model.SignInTrigger}}" on-click="submitClick">Sign in</button>
         <button slot="SignIn/forgot-button" type="button" class="btn btn-link" value="{{model.RestoreClick$::click}}" disabled="{{model.RestoreClick$::click}}" onmouseup="++this.value;">Forgot password?</button>
-        <signin-element slot="SignIn/signin-element" username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
-        <palindrom-redirect history url="{{model.RedirectUrl}}"></palindrom-redirect>
+        <palindrom-redirect history url$="{{model.RedirectUrl$}}"></palindrom-redirect>
     </template></dom-bind>
     <script>
         (function () {
@@ -27,15 +26,25 @@
                 rememberMe: false
             };
 
+            function submitCredentials() {
+                setTimeout(function () {
+                    template.set("model.Username$", template.local.username);
+                    template.set("model.Password$", template.local.password);
+                    template.set("model.SignInTrigger$", template.model.SignInTrigger$ + 1);
+                });
+            }
+
             template.txtKeypress = function (e) {
                 if (e.which != 13) {
                     return;
                 }
 
-                setTimeout(function () {
-                    template.set("model.SignInClick$", template.model.SignInClick$ + 1);
-                });
+                submitCredentials();
             };
+
+            template.submitClick = function() {
+                submitCredentials();
+            }
         })();
     </script>
 
@@ -64,17 +73,13 @@
                     </div>
                 </div>
             </div>
-<!--            <div class="signin-form__toolbar">
-                <label>
-                    <slot name="SignIn/rememberme-checkbox"></slot>
-                    <slot name="SignIn/rememberme-label"></slot>
-                </label>
-            </div>-->
             <div class="signin-form__toolbar">
                 <slot name="SignIn/submit-button"></slot>
                 <slot name="SignIn/forgot-button"></slot>
             </div>
         </div>
         <slot name="SignIn/signin-element"></slot>
+        <slot name="SignIn/redirection"></slot>
+
     </template>
 </template>

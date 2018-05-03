@@ -1,0 +1,9 @@
+{
+  "Html": "/SignIn/viewmodels/SignInFormPage.html",
+  "Username$": "",
+  "Password$": "",
+  "SignInTrigger$": 0,
+  "RedirectUrl$":"",
+  "Message": "",
+  "IsSignedIn": false
+}

@@ -1,11 +1,11 @@
 ﻿using System;
 using Starcounter;
-using Starcounter.Authorization.Authentication;
+using Starcounter.Authorization.Model;
 
 namespace SignIn
 {
     [Database]
-    public class SystemUserSession : IUserSession<SystemUser>
+    public class SystemUserSession : IScUserAuthenticationTicket<SystemUser>
     {
         public string SessionId { get; set; }
         public SystemUser User { get; set; }

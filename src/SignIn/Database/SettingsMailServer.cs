@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Starcounter;
 
-namespace SignIn
+namespace SignIn.Database
 {
     [Database]
     public class SettingsMailServer
