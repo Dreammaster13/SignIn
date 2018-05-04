@@ -147,7 +147,6 @@
     <Compile Include="Database\SystemUser.cs" />
     <Compile Include="Database\SystemUserSession.cs" />
     <Compile Include="Database\UserClaimRelation.cs" />
-    <Compile Include="Domain\AdminCreator.cs" />
     <Compile Include="Domain\ISignInManager.cs" />
     <Compile Include="Domain\SignInManager.cs" />
     <Compile Include="Domain\SignInResult.cs" />

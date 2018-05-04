@@ -27,7 +27,6 @@ namespace SignIn
                 .AddTransient<ISignInManager, SignInManager>()
                 .AddTransient<ITransactionControl, TransactionControl>()
                 .AddTransient<IPasswordHasher<SystemUser>, PasswordHasher<SystemUser>>()
-                .AddTransient<AdminCreator>()
                 .AddUserManagement<SystemUser, ManageUserViewModel>()
                 ;
         }
@@ -37,11 +36,6 @@ namespace SignIn
             applicationBuilder.ApplicationServices.GetRouter()
                 .RegisterAllFromCurrentAssembly();
 
-            RegisterUri<AdminCreator>(applicationBuilder.ApplicationServices, "/SignIn/CreateAdmin",
-                adminCreator => {
-                    Db.Transact(adminCreator.CreateAdmin);
-                    return "Admin created";
-                });
             Handle.GET("/SignIn/SignIn?returnTo={?}",
                 (string returnUri, Request request) => applicationBuilder.ApplicationServices.GetRequiredService<IPageCreator>().Create(
                     new RoutingInfo()
@@ -52,15 +46,6 @@ namespace SignIn
                         SelectedPageType = typeof(SignInFormViewModel)
                     }));
             Blender.MapUri("/SignIn/SignIn?returnTo={?}", string.Empty, new []{"redirection"});
-        }
-
-        private void RegisterUri<THandler>(IServiceProvider serviceProvider, string uri, Func<THandler, Response> handlerAction)
-        {
-            Handle.GET(uri,
-                () => {
-                    var handler = serviceProvider.GetRequiredService<THandler>();
-                    return handlerAction(handler);
-                });
         }
     }
 }
