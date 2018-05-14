@@ -9,9 +9,10 @@ using Starcounter.Startup.Routing.Activation;
 
 namespace SignIn.ViewModels
 {
-    [Url("/SignIn/SignIn")]
+    [Url(UriTemplate)]
     partial class SignInFormViewModel : Json, IInitPageWithDependencies, IPageContext<string>
     {
+        private const string UriTemplate = "/SignIn/SignIn?returnTo={?}";
         private ISignInManager _signInManager;
         private ITransactionControl _transactionControl;
         private string _returnUrl;
@@ -24,6 +25,12 @@ namespace SignIn.ViewModels
             _logger = logger;
             _transactionControl = transactionControl;
             _signInManager = signInManager;
+        }
+
+        [UriToContext]
+        public static string UriToContext(string[] uriParameters)
+        {
+            return uriParameters[0];
         }
 
         public void Handle(Input.SignInTrigger input)

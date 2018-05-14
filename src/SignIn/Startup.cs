@@ -42,15 +42,7 @@ namespace SignIn
                     Db.Transact(adminCreator.CreateAdmin);
                     return "Admin created. Username: 'admin', password: 'admin'";
                 });
-            Handle.GET("/SignIn/SignIn?returnTo={?}",
-                (string returnUri, Request request) => applicationBuilder.ApplicationServices.GetRequiredService<IPageCreator>().Create(
-                    new RoutingInfo()
-                    {
-                        Request = request,
-                        Arguments = new string[0],
-                        Context = returnUri,
-                        SelectedPageType = typeof(SignInFormViewModel)
-                    }));
+
             Blender.MapUri("/SignIn/SignIn?returnTo={?}", string.Empty, new []{"redirection"});
         }
 
