@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using SignIn.DatabaseAccess;
 using SignIn.Domain;
 using SignIn.ViewModels;
@@ -29,6 +30,7 @@ namespace SignIn
                 .AddTransient<IPasswordHasher<SystemUser>, PasswordHasher<SystemUser>>()
                 .AddTransient<AdminCreator>()
                 .AddUserManagement<SystemUser, ManageUserViewModel>()
+                .AddAuthentication<SystemUserSession>()
                 ;
         }
 

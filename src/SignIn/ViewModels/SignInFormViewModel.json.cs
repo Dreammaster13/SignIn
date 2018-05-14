@@ -1,9 +1,11 @@
 using System;
+using System.Text.RegularExpressions;
 using System.Web;
 using Microsoft.Extensions.Logging;
 using SignIn.DatabaseAccess;
 using SignIn.Domain;
 using Starcounter;
+using Starcounter.Authorization.Authentication;
 using Starcounter.Startup.Routing;
 using Starcounter.Startup.Routing.Activation;
 
@@ -15,13 +17,20 @@ namespace SignIn.ViewModels
         private const string UriTemplate = "/SignIn/SignIn?returnTo={?}";
         private ISignInManager _signInManager;
         private ITransactionControl _transactionControl;
-        private string _returnUrl;
+
+        /// <summary>
+        /// This is URL-encoded
+        /// </summary>
+        private string _returnUrlEncoded;
         private ILogger _logger;
+        private IAuthenticationUriProvider _authenticationUriProvider;
 
         public void Init(ISignInManager signInManager,
             ITransactionControl transactionControl,
-            ILogger<SignInFormViewModel> logger)
+            ILogger<SignInFormViewModel> logger,
+            IAuthenticationUriProvider authenticationUriProvider)
         {
+            _authenticationUriProvider = authenticationUriProvider;
             _logger = logger;
             _transactionControl = transactionControl;
             _signInManager = signInManager;
@@ -47,7 +56,7 @@ namespace SignIn.ViewModels
                 if (signInResult == SignInResult.Success)
                 {
                     Message = SignInMessages.SignedInSuccessfully;
-                    RedirectUrl = _returnUrl;
+                    RedirectUrl = _authenticationUriProvider.CreateSetTokenUri(_returnUrlEncoded);
                     _logger.LogInformation("Signed in user {0}. Redirecting to {1}", username, RedirectUrl);
                 }
             }
@@ -64,7 +73,8 @@ namespace SignIn.ViewModels
 
         public void HandleContext(string context)
         {
-            _returnUrl = HttpUtility.UrlDecode(context);
+            // doesn't need to decode it, as we'll pass it along in URL
+            _returnUrlEncoded = context;
         }
     }
 }

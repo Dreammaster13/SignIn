@@ -10,6 +10,7 @@ namespace SignIn
         public string SessionId { get; set; }
         public SystemUser User { get; set; }
         public DateTime ExpiresAt { get; set; }
+        public string PersistenceToken { get; set; }
         public string PrincipalSerialized { get; set; }
 
     }
