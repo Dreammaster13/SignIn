@@ -18,7 +18,7 @@ namespace SignIn.Api
             Application.Current.Use((Request req) =>
             {
                 //filter out requests that are for resource files
-                if (!(req.Uri.StartsWith("/sys") || req.Uri.Contains(".html") || req.Uri.Contains(".js") || req.Uri.Contains(".css")))
+                if (!req.IsStaticFileRequest)
                 {
                     Cookie cookie = cookieHelpers.GetSignInCookie();
 
