@@ -148,7 +148,7 @@ namespace SignIn
                 }
 
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser)} o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+                var user = Db.FromId<SystemUser>(userid);
 
                 if (user == null)
                 {
@@ -178,7 +178,7 @@ namespace SignIn
             Handle.GET("/signin/user/authentication/password/{?}", (string userid, Request request) =>
             {
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>($"SELECT o FROM {typeof(SystemUser)} o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+                var user = Db.FromId<SystemUser>(userid);
 
                 if (user == null)
                 {
