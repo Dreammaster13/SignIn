@@ -99,7 +99,8 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Starcounter.Authorization, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Starcounter.Authorization.3.0.0-rc2\lib\net462\Starcounter.Authorization.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\authorization\Authorization\bin\Debug\Starcounter.Authorization.dll</HintPath>
     </Reference>
     <Reference Include="Starcounter.Internal, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
       <Private>False</Private>
